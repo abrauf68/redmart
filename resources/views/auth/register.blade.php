@@ -10,8 +10,8 @@
         <div class="row">
             <div class="col">
                 <div class="logo-small">
-                    <img src="{{ asset(\App\Helpers\Helper::getLogoLight()) }}" alt="" class="rounded-circle">
-                    <h5>Red<br><span class="text-secondary fw-light">Mart</span></h5>
+                    <img style="width: 100px;" src="{{ asset(\App\Helpers\Helper::getLogoLight()) }}" alt="{{ env('APP_NAME') }}">
+                    <span>Red<span class="text-secondary fw-light">Mart</span></apan>
                 </div>
             </div>
             <div class="col-auto">

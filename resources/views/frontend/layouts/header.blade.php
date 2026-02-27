@@ -8,8 +8,8 @@
         </div>
         <div class="col">
             <div class="logo-small">
-                <img src="assets/img/logo.png" alt="" class="rounded-circle">
-                <h5>OneUIUX<br><span class="text-secondary fw-light">Shopping</span></h5>
+                <img src="{{ asset(\App\Helpers\Helper::getLogoLight()) }}" alt="{{ env('APP_NAME') }}">
+                <span>Red<span class="text-secondary fw-light">Mart</span></apan>
             </div>
         </div>
         <div class="col-auto">

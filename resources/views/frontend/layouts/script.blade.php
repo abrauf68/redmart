@@ -17,7 +17,7 @@
 <script src="{{ asset('frontAssets/vendor/swiperjs-6.6.2/swiper-bundle.min.js') }}"></script>
 
 <!-- daterange picker script -->
-<script src="momentjs/latest/moment.min.js') }}"></script>
+<script src="{{ asset('momentjs/latest/moment.min.js') }}"></script>
 <script src="{{ asset('frontAssets/vendor/daterangepicker/daterangepicker.js') }}"></script>
 
 <!-- nouislider js -->

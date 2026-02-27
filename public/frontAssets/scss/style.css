@@ -1,7 +1,7 @@
 @charset "UTF-8";
 /*
 ==================================
-Table of content 
+Table of content
 ==================================
 
 1. variable
@@ -17,7 +17,7 @@ Table of content
 11. sidebar
 12. card
 13. swiper sliders
-14. list 
+14. list
 15. footer
 16. dark mode
 17. filter
@@ -36,8 +36,8 @@ Table of content
   --oneuiux-input-rounded: 10px;
   /* radial gradient colors */
   --oneuiux-theme-color-grad-1: #57bdff;
-  --oneuiux-theme-color-grad-2: #4f77fb;
-  --oneuiux-theme-color-grad-3: #6528cf;
+  --oneuiux-theme-color-grad-2: #113622;
+  --oneuiux-theme-color-grad-3: #113622;
   /* color schemes */
   --oneuiux-theme-color: #0d6efd;
   --oneuiux-theme-text: #ffffff;
@@ -60,8 +60,8 @@ Table of content
 .theme-indigo {
   /* radial gradient colors */
   --oneuiux-theme-color-grad-1: #8b9dff;
-  --oneuiux-theme-color-grad-2: #5c00f1;
-  --oneuiux-theme-color-grad-3: #68008e;
+  --oneuiux-theme-color-grad-2: #113622;
+  --oneuiux-theme-color-grad-3: #113622;
   /* color schemes */
   --oneuiux-theme-color: #6610f2;
   --oneuiux-page-bg-1: #ffffff;
@@ -72,8 +72,8 @@ Table of content
 .theme-purple {
   /* radial gradient colors */
   --oneuiux-theme-color-grad-1: #e908d8;
-  --oneuiux-theme-color-grad-2: #5a2ab3;
-  --oneuiux-theme-color-grad-3: #300284;
+  --oneuiux-theme-color-grad-2: #113622;
+  --oneuiux-theme-color-grad-3: #113622;
   /* color schemes */
   --oneuiux-theme-color: #6f42c1;
   --oneuiux-page-bg-1: #ffffff;
@@ -84,10 +84,10 @@ Table of content
 .theme-pink {
   /* radial gradient colors */
   --oneuiux-theme-color-grad-1: #ff71c3;
-  --oneuiux-theme-color-grad-2: #e80075;
-  --oneuiux-theme-color-grad-3: #4d00da;
+  --oneuiux-theme-color-grad-2: #113622;
+  --oneuiux-theme-color-grad-3: #113622;
   /* color schemes */
-  --oneuiux-theme-color: #E50A8E;
+  --oneuiux-theme-color: #113622;
   --oneuiux-page-bg-1: #ffffff;
   --oneuiux-page-bg-2: #f4f8ff;
   --oneuiux-page-bg-3: #ffe9f7;
@@ -97,9 +97,9 @@ Table of content
   /* radial gradient colors */
   --oneuiux-theme-color-grad-1: #ffc699;
   --oneuiux-theme-color-grad-2: #ff5d83;
-  --oneuiux-theme-color-grad-3: #dc006a;
+  --oneuiux-theme-color-grad-3: #113622;
   /* color schemes */
-  --oneuiux-theme-color: #FF5465;
+  --oneuiux-theme-color: #113622;
   --oneuiux-page-bg-1: #ffffff;
   --oneuiux-page-bg-2: #fffbf2;
   --oneuiux-page-bg-3: #ffeeee;
@@ -109,7 +109,7 @@ Table of content
   /* radial gradient colors */
   --oneuiux-theme-color-grad-1: #ffda6b;
   --oneuiux-theme-color-grad-2: #ff7c15;
-  --oneuiux-theme-color-grad-3: #e80774;
+  --oneuiux-theme-color-grad-3: #113622;
   /* color schemes */
   --oneuiux-theme-color: #fd7e14;
   --oneuiux-page-bg-1: #ffffff;
@@ -121,7 +121,7 @@ Table of content
   /* radial gradient colors */
   --oneuiux-theme-color-grad-1: #ffdb6f;
   --oneuiux-theme-color-grad-2: #f0ac00;
-  --oneuiux-theme-color-grad-3: #f03000;
+  --oneuiux-theme-color-grad-3: #113622;
   /* color schemes */
   --oneuiux-theme-color: #ffc107;
   --oneuiux-page-bg-1: #ffffff;
@@ -133,7 +133,7 @@ Table of content
   /* radial gradient colors */
   --oneuiux-theme-color-grad-1: #bdffaa;
   --oneuiux-theme-color-grad-2: #04c5de;
-  --oneuiux-theme-color-grad-3: #00a0f5;
+  --oneuiux-theme-color-grad-3: #113622;
   /* color schemes */
   --oneuiux-theme-color: #21E985;
   --oneuiux-page-bg-1: #ffffff;
@@ -145,7 +145,7 @@ Table of content
   /* radial gradient colors */
   --oneuiux-theme-color-grad-1: #a2fffa;
   --oneuiux-theme-color-grad-2: #00a2ad;
-  --oneuiux-theme-color-grad-3: #3f51b5;
+  --oneuiux-theme-color-grad-3: #113622;
   /* color schemes */
   --oneuiux-theme-color: #20c997;
   --oneuiux-page-bg-1: #ffffff;
@@ -157,7 +157,7 @@ Table of content
   /* radial gradient colors */
   --oneuiux-theme-color-grad-1: #74e5fb;
   --oneuiux-theme-color-grad-2: #26F7FF;
-  --oneuiux-theme-color-grad-3: #2482FB;
+  --oneuiux-theme-color-grad-3: #113622;
   /* color schemes */
   --oneuiux-theme-color: #00C2FF;
   --oneuiux-page-bg-1: #ffffff;
@@ -181,7 +181,7 @@ Table of content
   --bs-blue: #0d6efd;
   --bs-indigo: #6610f2;
   --bs-purple: #6f42c1;
-  --bs-pink: #E50A8E;
+  --bs-pink: #113622;
   --bs-red: #f03d4f;
   --bs-orange: #fd7e14;
   --bs-yellow: #ffc107;
@@ -439,7 +439,7 @@ pre code {
 
 code {
   font-size: 0.875em;
-  color: #E50A8E;
+  color: #113622;
   word-wrap: break-word;
 }
 a > code {
@@ -11455,9 +11455,9 @@ textarea.form-control-lg {
   }
 }
 /*!
- oneuiux customize css starts here 
+ oneuiux customize css starts here
  * oneuiux v2 (https://maxartkiller.com/)
- * Copyright 2021 Maxartkiller 
+ * Copyright 2021 Maxartkiller
  */
 /* 2. variables */
 :root {
@@ -11467,7 +11467,7 @@ textarea.form-control-lg {
   /* radial gradient colors */
   --oneuiux-theme-color-grad-1: #57bdff;
   --oneuiux-theme-color-grad-2: #4f77fb;
-  --oneuiux-theme-color-grad-3: #6528cf;
+  --oneuiux-theme-color-grad-3: #113622;
   /* color schemes */
   --oneuiux-theme-color: #0d6efd;
   --oneuiux-theme-text: #ffffff;
@@ -11491,7 +11491,7 @@ textarea.form-control-lg {
   /* radial gradient colors */
   --oneuiux-theme-color-grad-1: #8b9dff;
   --oneuiux-theme-color-grad-2: #5c00f1;
-  --oneuiux-theme-color-grad-3: #68008e;
+  --oneuiux-theme-color-grad-3: #113622;
   /* color schemes */
   --oneuiux-theme-color: #6610f2;
   --oneuiux-page-bg-1: #ffffff;
@@ -11503,7 +11503,7 @@ textarea.form-control-lg {
   /* radial gradient colors */
   --oneuiux-theme-color-grad-1: #e908d8;
   --oneuiux-theme-color-grad-2: #5a2ab3;
-  --oneuiux-theme-color-grad-3: #300284;
+  --oneuiux-theme-color-grad-3: #113622;
   /* color schemes */
   --oneuiux-theme-color: #6f42c1;
   --oneuiux-page-bg-1: #ffffff;
@@ -11514,10 +11514,10 @@ textarea.form-control-lg {
 .theme-pink {
   /* radial gradient colors */
   --oneuiux-theme-color-grad-1: #ff71c3;
-  --oneuiux-theme-color-grad-2: #e80075;
-  --oneuiux-theme-color-grad-3: #4d00da;
+  --oneuiux-theme-color-grad-2: #113622;
+  --oneuiux-theme-color-grad-3: #113622;
   /* color schemes */
-  --oneuiux-theme-color: #E50A8E;
+  --oneuiux-theme-color: #113622;
   --oneuiux-page-bg-1: #ffffff;
   --oneuiux-page-bg-2: #f4f8ff;
   --oneuiux-page-bg-3: #ffe9f7;
@@ -11526,10 +11526,10 @@ textarea.form-control-lg {
 .theme-red {
   /* radial gradient colors */
   --oneuiux-theme-color-grad-1: #ffc699;
-  --oneuiux-theme-color-grad-2: #ff5d83;
-  --oneuiux-theme-color-grad-3: #dc006a;
+  --oneuiux-theme-color-grad-2: #113622;
+  --oneuiux-theme-color-grad-3: #113622;
   /* color schemes */
-  --oneuiux-theme-color: #FF5465;
+  --oneuiux-theme-color: #113622;
   --oneuiux-page-bg-1: #ffffff;
   --oneuiux-page-bg-2: #fffbf2;
   --oneuiux-page-bg-3: #ffeeee;
@@ -11538,8 +11538,8 @@ textarea.form-control-lg {
 .theme-orange {
   /* radial gradient colors */
   --oneuiux-theme-color-grad-1: #ffda6b;
-  --oneuiux-theme-color-grad-2: #ff7c15;
-  --oneuiux-theme-color-grad-3: #e80774;
+  --oneuiux-theme-color-grad-2: #113622;
+  --oneuiux-theme-color-grad-3: #113622;
   /* color schemes */
   --oneuiux-theme-color: #fd7e14;
   --oneuiux-page-bg-1: #ffffff;
@@ -11550,8 +11550,8 @@ textarea.form-control-lg {
 .theme-yellow {
   /* radial gradient colors */
   --oneuiux-theme-color-grad-1: #ffdb6f;
-  --oneuiux-theme-color-grad-2: #f0ac00;
-  --oneuiux-theme-color-grad-3: #f03000;
+  --oneuiux-theme-color-grad-2: #113622;
+  --oneuiux-theme-color-grad-3: #113622;
   /* color schemes */
   --oneuiux-theme-color: #ffc107;
   --oneuiux-page-bg-1: #ffffff;
@@ -11562,8 +11562,8 @@ textarea.form-control-lg {
 .theme-green {
   /* radial gradient colors */
   --oneuiux-theme-color-grad-1: #bdffaa;
-  --oneuiux-theme-color-grad-2: #04c5de;
-  --oneuiux-theme-color-grad-3: #00a0f5;
+  --oneuiux-theme-color-grad-2: #113622;
+  --oneuiux-theme-color-grad-3: #113622;
   /* color schemes */
   --oneuiux-theme-color: #21E985;
   --oneuiux-page-bg-1: #ffffff;
@@ -11574,8 +11574,8 @@ textarea.form-control-lg {
 .theme-teal {
   /* radial gradient colors */
   --oneuiux-theme-color-grad-1: #a2fffa;
-  --oneuiux-theme-color-grad-2: #00a2ad;
-  --oneuiux-theme-color-grad-3: #3f51b5;
+  --oneuiux-theme-color-grad-2: #113622;
+  --oneuiux-theme-color-grad-3: #113622;
   /* color schemes */
   --oneuiux-theme-color: #20c997;
   --oneuiux-page-bg-1: #ffffff;
@@ -11586,8 +11586,8 @@ textarea.form-control-lg {
 .theme-cyan {
   /* radial gradient colors */
   --oneuiux-theme-color-grad-1: #74e5fb;
-  --oneuiux-theme-color-grad-2: #26F7FF;
-  --oneuiux-theme-color-grad-3: #2482FB;
+  --oneuiux-theme-color-grad-2: #113622;
+  --oneuiux-theme-color-grad-3: #113622;
   /* color schemes */
   --oneuiux-theme-color: #00C2FF;
   --oneuiux-page-bg-1: #ffffff;
@@ -12363,7 +12363,7 @@ main.bg-3 {
 }
 
 .bg-pink {
-  background-color: #E50A8E;
+  background-color: #113622;
 }
 
 .bg-red {
@@ -14253,8 +14253,8 @@ a.card {
 .dark-mode .theme-indigo {
   /* radial gradient colors */
   --oneuiux-theme-color-grad-1: #8b9dff;
-  --oneuiux-theme-color-grad-2: #5c00f1;
-  --oneuiux-theme-color-grad-3: #68008e;
+  --oneuiux-theme-color-grad-2: #113622;
+  --oneuiux-theme-color-grad-3: #113622;
   /* color schemes */
   --oneuiux-theme-color: #6610f2;
   --oneuiux-theme-link: #a167ff;
@@ -14268,8 +14268,8 @@ a.card {
 .dark-mode .theme-purple {
   /* radial gradient colors */
   --oneuiux-theme-color-grad-1: #e908d8;
-  --oneuiux-theme-color-grad-2: #5a2ab3;
-  --oneuiux-theme-color-grad-3: #300284;
+  --oneuiux-theme-color-grad-2: #113622;
+  --oneuiux-theme-color-grad-3: #113622;
   /* color schemes */
   --oneuiux-theme-color: #6f42c1;
   --oneuiux-theme-link: #a883ee;
@@ -14283,10 +14283,10 @@ a.card {
 .dark-mode .theme-pink {
   /* radial gradient colors */
   --oneuiux-theme-color-grad-1: #ff71c3;
-  --oneuiux-theme-color-grad-2: #e80075;
-  --oneuiux-theme-color-grad-3: #4d00da;
+  --oneuiux-theme-color-grad-2: #113622;
+  --oneuiux-theme-color-grad-3: #113622;
   /* color schemes */
-  --oneuiux-theme-color: #E50A8E;
+  --oneuiux-theme-color: #113622;
   --oneuiux-theme-link: #fd46b4;
   --oneuiux-header-active: #680540;
   --oneuiux-footer: #680540;
@@ -14298,8 +14298,8 @@ a.card {
 .dark-mode .theme-red {
   /* radial gradient colors */
   --oneuiux-theme-color-grad-1: #ffc699;
-  --oneuiux-theme-color-grad-2: #ff5d83;
-  --oneuiux-theme-color-grad-3: #dc006a;
+  --oneuiux-theme-color-grad-2: #113622;
+  --oneuiux-theme-color-grad-3: #113622;
   /* color schemes */
   --oneuiux-theme-color: #f03d4f;
   --oneuiux-theme-link: #f46c7a;
@@ -14313,8 +14313,8 @@ a.card {
 .dark-mode .theme-orange {
   /* radial gradient colors */
   --oneuiux-theme-color-grad-1: #ffda6b;
-  --oneuiux-theme-color-grad-2: #ff7c15;
-  --oneuiux-theme-color-grad-3: #e80774;
+  --oneuiux-theme-color-grad-2: #113622;
+  --oneuiux-theme-color-grad-3: #113622;
   /* color schemes */
   --oneuiux-theme-color: #fd7e14;
   --oneuiux-theme-link: #fd9a47;
@@ -14328,8 +14328,8 @@ a.card {
 .dark-mode .theme-yellow {
   /* radial gradient colors */
   --oneuiux-theme-color-grad-1: #ffdb6f;
-  --oneuiux-theme-color-grad-2: #f0ac00;
-  --oneuiux-theme-color-grad-3: #f03000;
+  --oneuiux-theme-color-grad-2: #113622;
+  --oneuiux-theme-color-grad-3: #113622;
   /* color schemes */
   --oneuiux-theme-color: #ffc107;
   --oneuiux-theme-link: #ffce3a;
@@ -14343,8 +14343,8 @@ a.card {
 .dark-mode .theme-green {
   /* radial gradient colors */
   --oneuiux-theme-color-grad-1: #bdffaa;
-  --oneuiux-theme-color-grad-2: #04c5de;
-  --oneuiux-theme-color-grad-3: #00a0f5;
+  --oneuiux-theme-color-grad-2: #113622;
+  --oneuiux-theme-color-grad-3: #113622;
   /* color schemes */
   --oneuiux-theme-color: #12da76;
   --oneuiux-theme-link: #4fee9f;
@@ -14358,8 +14358,8 @@ a.card {
 .dark-mode .theme-teal {
   /* radial gradient colors */
   --oneuiux-theme-color-grad-1: #a2fffa;
-  --oneuiux-theme-color-grad-2: #00a2ad;
-  --oneuiux-theme-color-grad-3: #3f51b5;
+  --oneuiux-theme-color-grad-2: #113622;
+  --oneuiux-theme-color-grad-3: #113622;
   /* color schemes */
   --oneuiux-theme-color: #0ebbac;
   --oneuiux-theme-link: #3ce0af;
@@ -14373,8 +14373,8 @@ a.card {
 .dark-mode .theme-cyan {
   /* radial gradient colors */
   --oneuiux-theme-color-grad-1: #74e5fb;
-  --oneuiux-theme-color-grad-2: #258cd6;
-  --oneuiux-theme-color-grad-3: #3d00ab;
+  --oneuiux-theme-color-grad-2: #113622;
+  --oneuiux-theme-color-grad-3: #113622;
   /* color schemes */
   --oneuiux-theme-color: #00C2FF;
   --oneuiux-theme-link: #46d2fd;
@@ -14773,12 +14773,12 @@ a.card {
   line-height: 44px;
 }
 .logo-small img {
-  width: 40px;
+  width: 100px;
   margin: 0;
-  border-radius: calc(var(--oneuiux-rounded) - 8px);
+  /* border-radius: calc(var(--oneuiux-rounded) - 8px);
   box-shadow: 0 3px 5px rgba(0, 0, 0, 0.15);
   -webkit-box-shadow: 0 3px 5px rgba(0, 0, 0, 0.15);
-  -moz-box-shadow: 0 3px 5px rgba(0, 0, 0, 0.15);
+  -moz-box-shadow: 0 3px 5px rgba(0, 0, 0, 0.15); */
   margin-right: 8px;
   border: 0;
   vertical-align: middle;
