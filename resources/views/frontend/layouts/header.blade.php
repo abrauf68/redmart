@@ -10,7 +10,7 @@
             <a href="{{ route('frontend.home') }}">
                 <div class="logo-small">
                     <img src="{{ asset(\App\Helpers\Helper::getLogoLight()) }}" alt="{{ env('APP_NAME') }}">
-                    <span>Red<span class="text-secondary fw-light">Mart</span></apan>
+                    {{-- <span>Red<span class="text-secondary fw-light">Mart</span></apan> --}}
                 </div>
             </a>
         </div>
