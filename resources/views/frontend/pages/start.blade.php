@@ -245,7 +245,7 @@
                 let orderId = e.target.dataset.id;
                 const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 
-                fetch(`{{ route('frontend.order.proceed', '') }}`, {
+                fetch(`{{ route('frontend.order.proceed') }}`, {
                         method: "POST",
                         headers: {
                             "X-CSRF-TOKEN": "{{ csrf_token() }}",

@@ -190,7 +190,7 @@
                 const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 
                 // Use named route base and append orderId dynamically
-                fetch(`{{ route('frontend.order.proceed', '') }}`, {
+                fetch(`{{ route('frontend.order.proceed') }}`, {
                         method: "POST",
                         headers: {
                             "X-CSRF-TOKEN": "{{ csrf_token() }}",
