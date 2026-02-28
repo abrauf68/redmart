@@ -13,9 +13,9 @@
     <meta name="mobile-web-app-capable" content="yes">
 
     <!-- Favicons -->
-    <link rel="apple-touch-icon" href="assets/img/favicon180.png" sizes="180x180">
-    <link rel="icon" href="assets/img/favicon32.png" sizes="32x32" type="image/png">
-    <link rel="icon" href="assets/img/favicon16.png" sizes="16x16" type="image/png">
+    <link rel="apple-touch-icon" href="{{asset(\App\Helpers\Helper::getFavicon())}}" sizes="180x180">
+    <link rel="icon" href="{{asset(\App\Helpers\Helper::getFavicon())}}" sizes="32x32" type="image/png">
+    <link rel="icon" href="{{asset(\App\Helpers\Helper::getFavicon())}}" sizes="16x16" type="image/png">
 
     <!-- Google fonts-->
 
@@ -23,7 +23,7 @@
     <link href="css2?family=Open+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
 
     <!-- bootstrap icons -->
-    <link rel="stylesheet" href="npm/bootstrap-icons%401.5.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="{{ asset('npm/bootstrap-icons%401.5.0/font/bootstrap-icons.css') }}">
 
     <!-- style css for this template -->
     <link href="{{ asset('frontAssets/scss/style.css') }}" rel="stylesheet" id="style">
