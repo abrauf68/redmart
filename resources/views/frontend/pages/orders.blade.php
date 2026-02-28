@@ -196,7 +196,7 @@
                             "X-CSRF-TOKEN": csrfToken,
                             "Content-Type": "application/json"
                         },
-                        credentials: "same-origin"
+                        credentials: "same-origin",
                         body: JSON.stringify({}) // include if backend expects JSON
                     })
                     .then(res => res.json())
