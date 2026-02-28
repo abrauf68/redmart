@@ -11,7 +11,7 @@
                  </a>
              </li>
              <li class="nav-item">
-                 <a class="nav-link" href="">
+                 <a class="nav-link {{ request()->routeIs('frontend.recharge') ? 'active' : '' }}" href="{{ route('frontend.recharge') }}">
                      <span>
                          <i class="nav-icon bi bi-wallet2"></i>
                          <span class="nav-text">Recharge</span>
@@ -19,14 +19,14 @@
                  </a>
              </li>
              <li class="nav-item centerbutton">
-                 <a href="" class="nav-link" id="centermenubtn">
+                 <a href="{{ route('frontend.start') }}" class="nav-link" id="centermenubtn">
                      <span class="theme-linear-gradient">
                          <i class="bi bi-play-circle-fill size-22"></i>
                      </span>
                  </a>
              </li>
              <li class="nav-item">
-                 <a class="nav-link" href="">
+                 <a class="nav-link {{ request()->routeIs('frontend.orders') ? 'active' : '' }}" href="{{ route('frontend.orders') }}">
                      <span>
                          <i class="nav-icon bi bi-bag"></i>
                          <span class="nav-text">Orders</span>
@@ -34,7 +34,7 @@
                  </a>
              </li>
              <li class="nav-item">
-                 <a class="nav-link" href="">
+                 <a class="nav-link {{ request()->routeIs('frontend.wallet') ? 'active' : '' }}" href="{{ route('frontend.wallet') }}">
                      <span>
                          <i class="nav-icon bi bi-wallet2"></i>
                          <span class="nav-text">Wallet</span>

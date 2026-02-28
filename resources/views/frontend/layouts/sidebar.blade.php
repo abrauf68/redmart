@@ -14,7 +14,7 @@
                     </div>
                     <div class="col px-0 align-self-center">
                         <h5 class="mb-2">{{ auth()->user()->name }}</h5>
-                        <p class="text-muted size-12">{{ auth()->user()->username }}<br>{{ auth()->user()->phone }}</p>
+                        <p class="text-muted size-12">{{ auth()->user()->username }}<br>Credit Score: {{ auth()->user()->credit_score }}</p>
                     </div>
                 </div>
             </div>
@@ -32,7 +32,7 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="" tabindex="-1">
+                        <a class="nav-link {{ request()->routeIs('frontend.recharge') ? 'active' : '' }}" href="{{ route('frontend.recharge') }}" tabindex="-1">
                             <div class="avatar avatar-40 icon"><i class="bi bi-wallet2"></i></div>
                             <div class="col">Recharge</div>
                             <div class="arrow"><i class="bi bi-chevron-right"></i></div>
@@ -40,7 +40,7 @@
                     </li>
 
                     <li class="nav-item">
-                        <a class="nav-link" href="" tabindex="-1">
+                        <a class="nav-link {{ request()->routeIs('frontend.orders') ? 'active' : '' }}" href="{{ route('frontend.orders') }}" tabindex="-1">
                             <div class="avatar avatar-40 icon"><i class="bi bi-bag-check"></i></div>
                             <div class="col">Orders</div>
                             <div class="arrow"><i class="bi bi-chevron-right"></i></div>
@@ -48,7 +48,15 @@
                     </li>
 
                     <li class="nav-item">
-                        <a class="nav-link" href="" tabindex="-1">
+                        <a class="nav-link {{ request()->routeIs('frontend.products') ? 'active' : '' }}" href="{{ route('frontend.products') }}" tabindex="-1">
+                            <div class="avatar avatar-40 icon"><i class="bi bi-grid"></i></div>
+                            <div class="col">Products</div>
+                            <div class="arrow"><i class="bi bi-chevron-right"></i></div>
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link {{ request()->routeIs('frontend.profile') ? 'active' : '' }}" href="{{ route('frontend.profile') }}" tabindex="-1">
                             <div class="avatar avatar-40 icon"><i class="bi bi-person-circle"></i></div>
                             <div class="col">Profile</div>
                             <div class="arrow"><i class="bi bi-chevron-right"></i></div>
@@ -56,20 +64,20 @@
                     </li>
 
                     <li class="nav-item">
-                        <a class="nav-link" href="" tabindex="-1">
+                        <a class="nav-link {{ request()->routeIs('frontend.withdraw') ? 'active' : '' }}" href="{{ route('frontend.withdraw') }}" tabindex="-1">
                             <div class="avatar avatar-40 icon"><i class="bi bi-cash-coin"></i></div>
                             <div class="col">Withdraw</div>
                             <div class="arrow"><i class="bi bi-chevron-right"></i></div>
                         </a>
                     </li>
 
-                    <li class="nav-item">
-                        <a class="nav-link" href="" tabindex="-1">
+                    {{-- <li class="nav-item">
+                        <a class="nav-link" href="{{ route('frontend.recharge') }}" tabindex="-1">
                             <div class="avatar avatar-40 icon"><i class="bi bi-headset"></i></div>
                             <div class="col">Support</div>
                             <div class="arrow"><i class="bi bi-chevron-right"></i></div>
                         </a>
-                    </li>
+                    </li> --}}
                     <li class="nav-item">
                         <a class="nav-link" href="javscript:void();" tabindex="-1" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                             <div class="avatar avatar-40 icon"><i class="bi bi-box-arrow-right"></i></div>

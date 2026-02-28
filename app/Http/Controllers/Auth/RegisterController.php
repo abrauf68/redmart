@@ -6,6 +6,7 @@ use App\Helpers\Helper;
 use App\Http\Controllers\Controller;
 use App\Models\Profile;
 use App\Models\User;
+use App\Models\Wallet;
 use Illuminate\Auth\Notifications\VerifyEmail;
 use Illuminate\Http\Request;
 use Illuminate\Notifications\Messages\MailMessage;
@@ -96,6 +97,13 @@ class RegisterController extends Controller
             $profile->first_name = $request->name;
             $profile->save();
 
+            $wallet = new Wallet();
+            $wallet->user_id = $user->id;
+            $wallet->wallet_address = Helper::generateUniqueWalletAddress();
+            $wallet->balance = 0.00;
+            $wallet->status = 'active';
+            $wallet->save();
+
             // Attempt to authenticate
             Auth::attempt(['email' => $request->email, 'password' => $request->password]);
 
@@ -110,6 +118,8 @@ class RegisterController extends Controller
             // }
             // app('notificationService')->notifyUsers([$user], 'Welcome to ' . Helper::getCompanyName());
             // $user->sendEmailVerificationNotification();
+
+            app('notificationService')->notifyUsers([$user], 'Registered Successfully', 'Welcome to ' . Helper::getCompanyName());
 
             DB::commit();
 

@@ -4,7 +4,7 @@
 <link href="css2?family=Open+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
 
 <!-- bootstrap icons -->
-<link rel="stylesheet" href="npm/bootstrap-icons%401.5.0/font/bootstrap-icons.css">
+<link rel="stylesheet" href="{{ asset('npm/bootstrap-icons%401.5.0/font/bootstrap-icons.css') }}">
 
 <!-- nouislider CSS -->
 <link href="{{ asset('frontAssets/vendor/nouislider/nouislider.min.css') }}" rel="stylesheet">

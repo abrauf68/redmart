@@ -145,6 +145,25 @@ Route::middleware(['auth', 'verified'])->group(function () {
 Route::name('frontend.')->group(function () {
     Route::middleware(['auth', 'verified', 'check.activation'])->group(function () {
         Route::get('/', [FrontendHomeController::class, 'home'])->name('home');
+        Route::get('/recharge', [FrontendHomeController::class, 'recharge'])->name('recharge');
+        Route::get('/start', [FrontendHomeController::class, 'start'])->name('start');
+        Route::post('/grab-order', [FrontendHomeController::class, 'grabOrder'])->name('grab.order');
+        Route::get('/orders', [FrontendHomeController::class, 'orders'])->name('orders');
+        Route::post('/order/proceed/{order}', [FrontendHomeController::class, 'proceed'])->name('order.proceed');
+        Route::get('/wallet', [FrontendHomeController::class, 'wallet'])->name('wallet');
+        Route::get('/withdraw', [FrontendHomeController::class, 'withdraw'])->name('withdraw');
+        Route::post('/submit/withdraw', [FrontendHomeController::class, 'submitWithdraw'])->name('withdraw.submit');
+        Route::get('/profile', [FrontendHomeController::class, 'profile'])->name('profile');
+        Route::put('update/profile', [FrontendHomeController::class, 'updateProfile'])->name('profile.update');
+        Route::post('bank-details/update', [FrontendHomeController::class, 'updateBankDetails'])->name('bank-details.update');
+        Route::put('password/update', [FrontendHomeController::class, 'updatePassword'])->name('password.update');
+        Route::get('/products', [FrontendHomeController::class, 'products'])->name('products');
+        Route::get('/products/{sku}', [FrontendHomeController::class, 'productDetails'])->name('products.details');
+        Route::get('/notifications', [FrontendHomeController::class, 'notifications'])->name('notifications');
+        Route::post('/notifications/mark-all-read', [FrontendHomeController::class, 'markAllReadNoti'])->name('notifications.markAllRead');
+        Route::delete('/notifications/delete-all', [FrontendHomeController::class, 'deleteAllNoti'])->name('notifications.deleteAll');
+        Route::post('/notifications/{id}/mark-read', [FrontendHomeController::class, 'markReadNoti'])->name('notifications.markRead');
+        Route::delete('/notifications/{id}', [FrontendHomeController::class, 'deleteNoti'])->name('notifications.delete');
     });
 });
 
