@@ -154,7 +154,7 @@ class HomeController extends Controller
             Log::info('Proceed Order: ', [$order]);
             Log::info('User: ', [auth()->user()]);
 
-            if ($order->user_id !== auth()->user()->id) {
+            if ($order->user_id != auth()->user()->id) {
                 return response()->json(['status' => false, 'message' => 'Unauthorized user']);
             }
 
