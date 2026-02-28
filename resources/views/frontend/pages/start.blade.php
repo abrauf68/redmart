@@ -241,21 +241,20 @@
                 });
         });
         document.addEventListener('click', function(e) {
-
             if (e.target && e.target.id === 'modalProceedBtn') {
-
                 let orderId = e.target.dataset.id;
+                const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 
-                fetch(`/order/proceed/${orderId}`, {
+                fetch(`{{ route('frontend.order.proceed', '') }}/${orderId}`, {
                         method: "POST",
                         headers: {
-                            "X-CSRF-TOKEN": "{{ csrf_token() }}",
+                            "X-CSRF-TOKEN": csrfToken,
                             "Content-Type": "application/json"
-                        }
+                        },
+                        body: JSON.stringify({})
                     })
                     .then(res => res.json())
                     .then(data => {
-
                         if (data.status) {
                             // Close order modal
                             let orderModalEl = document.getElementById('orderModal');
@@ -268,35 +267,27 @@
                             );
                             successModal.show();
 
-                            // Auto reload after 2.5 sec
-                            setTimeout(() => {
-                                location.reload();
-                            }, 2500);
+                            setTimeout(() => location.reload(), 2500);
                         } else if (data.type === 'insufficient') {
-
-                            // 🔹 Close order modal first
                             let orderModalEl = document.getElementById('orderModal');
                             let orderModal = bootstrap.Modal.getInstance(orderModalEl);
-                            if (orderModal) {
-                                orderModal.hide();
-                            }
+                            if (orderModal) orderModal.hide();
 
-                            // 🔹 Small delay to avoid modal conflict
                             setTimeout(() => {
                                 let insufficientModal = new bootstrap.Modal(
                                     document.getElementById('insufficientModal')
                                 );
                                 insufficientModal.show();
                             }, 300);
-
                         } else {
                             alert("Something went wrong.");
                         }
-
+                    })
+                    .catch(err => {
+                        console.error(err);
+                        alert("Something went wrong.");
                     });
-
             }
-
         });
     </script>
 @endsection
