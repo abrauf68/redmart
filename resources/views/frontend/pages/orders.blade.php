@@ -184,17 +184,19 @@
 @section('script')
     <script>
         document.querySelectorAll('.proceedBtn').forEach(button => {
-
             button.addEventListener('click', function() {
 
                 let orderId = this.dataset.id;
+                const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 
-                fetch(`/order/proceed/${orderId}`, {
+                // Use named route base and append orderId dynamically
+                fetch(`{{ route('frontend.order.proceed', '') }}/${orderId}`, {
                         method: "POST",
                         headers: {
-                            "X-CSRF-TOKEN": "{{ csrf_token() }}",
+                            "X-CSRF-TOKEN": csrfToken,
                             "Content-Type": "application/json"
-                        }
+                        },
+                        body: JSON.stringify({}) // include if backend expects JSON
                     })
                     .then(res => res.json())
                     .then(data => {
@@ -207,9 +209,8 @@
                             successModal.show();
 
                             // Auto reload after 2.5 sec
-                            setTimeout(() => {
-                                location.reload();
-                            }, 2500);
+                            setTimeout(() => location.reload(), 2500);
+
                         } else if (data.type === 'insufficient') {
                             let modal = new bootstrap.Modal(
                                 document.getElementById('insufficientModal')
@@ -219,10 +220,13 @@
                             alert("Something went wrong.");
                         }
 
+                    })
+                    .catch(err => {
+                        console.error(err);
+                        alert("Something went wrong.");
                     });
 
             });
-
         });
     </script>
 @endsection
