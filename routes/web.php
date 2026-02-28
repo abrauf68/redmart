@@ -149,7 +149,7 @@ Route::name('frontend.')->group(function () {
         Route::get('/start', [FrontendHomeController::class, 'start'])->name('start');
         Route::post('/grab-order', [FrontendHomeController::class, 'grabOrder'])->name('grab.order');
         Route::get('/orders', [FrontendHomeController::class, 'orders'])->name('orders');
-        Route::post('/order/proceed/{order}', [FrontendHomeController::class, 'proceed'])->name('order.proceed');
+        Route::post('/order/proceed', [FrontendHomeController::class, 'proceed'])->name('order.proceed');
         Route::get('/wallet', [FrontendHomeController::class, 'wallet'])->name('wallet');
         Route::get('/withdraw', [FrontendHomeController::class, 'withdraw'])->name('withdraw');
         Route::post('/submit/withdraw', [FrontendHomeController::class, 'submitWithdraw'])->name('withdraw.submit');

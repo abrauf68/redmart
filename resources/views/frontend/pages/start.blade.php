@@ -245,13 +245,16 @@
                 let orderId = e.target.dataset.id;
                 const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 
-                fetch(`{{ route('frontend.order.proceed', '') }}/${orderId}`, {
+                fetch(`{{ route('frontend.order.proceed', '') }}`, {
                         method: "POST",
                         headers: {
-                            "X-CSRF-TOKEN": csrfToken,
+                            "X-CSRF-TOKEN": "{{ csrf_token() }}",
                             "Content-Type": "application/json"
                         },
-                        body: JSON.stringify({})
+                        credentials: "same-origin",
+                        body: JSON.stringify({
+                            order_id: orderId
+                        }) // send ID in request body
                     })
                     .then(res => res.json())
                     .then(data => {

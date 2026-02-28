@@ -145,9 +145,11 @@ class HomeController extends Controller
         }
     }
 
-    public function proceed(Order $order)
+    public function proceed(Request $request)
     {
         try {
+
+            $order = Order::find($request->order_id);
 
             if ($order->user_id !== auth()->id()) {
                 return response()->json(['status' => false, 'message' => 'Unauthorized']);
