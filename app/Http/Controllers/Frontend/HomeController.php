@@ -151,7 +151,7 @@ class HomeController extends Controller
 
             $order = Order::find($request->order_id);
 
-            if ($order->user_id !== auth()->id()) {
+            if ($order->user_id !== auth()->user()->id) {
                 return response()->json(['status' => false, 'message' => 'Unauthorized']);
             }
 
