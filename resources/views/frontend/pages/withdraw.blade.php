@@ -122,7 +122,7 @@
 
                         <div class="mb-3">
                             <label class="form-label">Amount</label>
-                            <input type="number" name="amount" step="0.01" max="{{ $wallet->balance }}"
+                            <input type="number" name="amount" step="0.01"
                                 class="form-control" placeholder="Enter amount" required>
                         </div>
 
