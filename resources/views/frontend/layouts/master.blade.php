@@ -11,6 +11,9 @@
         main {
             background: linear-gradient(180deg, #1F2E3A, #17232D);
         }
+        .loader-wrap {
+            background: linear-gradient(180deg, #1F2E3A, #17232D);
+        }
     </style>
 </head>
 

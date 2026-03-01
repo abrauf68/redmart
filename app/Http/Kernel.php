@@ -2,6 +2,7 @@
 
 namespace App\Http;
 
+use App\Http\Middleware\ApprovelCheck;
 use App\Http\Middleware\CheckAccountActivation;
 use App\Http\Middleware\LocaleMiddleware;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
@@ -68,6 +69,8 @@ class Kernel extends HttpKernel
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
         'check.activation' => CheckAccountActivation::class,
+        'check.approval' => ApprovelCheck::class,
         'locale' => LocaleMiddleware::class,
+        'not.user' => \App\Http\Middleware\CheckNotUserRole::class,
     ];
 }

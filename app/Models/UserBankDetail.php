@@ -18,5 +18,7 @@ class UserBankDetail extends Model
         'account_type',
         'ifsc_code',
         'branch',
+        'crypto_type',
+        'crypto_address',
     ];
 }

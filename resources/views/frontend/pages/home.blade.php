@@ -260,6 +260,47 @@
         </div>
     </div>
 
+    <!-- Wallet Stats -->
+    <div class="row mb-4">
+        <div class="col-12 px-3">
+            <div class="quick-actions p-3 rounded-20">
+                <div class="row text-center g-3">
+
+                    <div class="col-4">
+                        <div class="action-box">
+                            <i class="bi bi-wallet2"></i>
+                            <p class="mb-1">Wallet</p>
+                            <strong>
+                                {{ \App\Helpers\Helper::formatCurrency($totalBalance ?? 0) }}
+                            </strong>
+                        </div>
+                    </div>
+
+                    <div class="col-4">
+                        <div class="action-box">
+                            <i class="bi bi-graph-up"></i>
+                            <p class="mb-1">Earned</p>
+                            <strong>
+                                {{ \App\Helpers\Helper::formatCurrency($totalEarned ?? 0) }}
+                            </strong>
+                        </div>
+                    </div>
+
+                    <div class="col-4">
+                        <div class="action-box">
+                            <i class="bi bi-lock-fill"></i>
+                            <p class="mb-1">Freeze</p>
+                            <strong>
+                                {{ \App\Helpers\Helper::formatCurrency($totalFreeze ?? 0) }}
+                            </strong>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
     @if (isset($randomProducts) && count($randomProducts) > 0)
         <!--products -->
         <div class="row mb-3">

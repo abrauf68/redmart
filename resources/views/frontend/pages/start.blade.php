@@ -17,6 +17,18 @@
                 transform: rotate(360deg);
             }
         }
+
+        .star {
+            font-size: 26px;
+            cursor: pointer;
+            color: #555;
+            margin: 0 3px;
+            transition: 0.2s;
+        }
+
+        .star.active {
+            color: #ffc107;
+        }
     </style>
 @endsection
 
@@ -55,36 +67,45 @@
             <div class="row g-3 mb-4">
 
                 <div class="col-6">
-                    <div class="card border-0 rounded-20 p-3 text-center text-white" style="background:#101820;">
-                        <i class="bi bi-bag-fill mb-2" style="font-size:22px;color:#D8C79A;"></i>
-                        <h6 class="mb-0">{{ $totalOrders }}</h6>
-                        <small class="text-muted">Total Orders</small>
-                    </div>
+                    <a href="{{ route('frontend.orders') }}">
+                        <div class="card border-0 rounded-20 p-3 text-center text-white" style="background:#101820;">
+                            <i class="bi bi-bag-fill mb-2" style="font-size:22px;color:#D8C79A;"></i>
+                            <h6 class="mb-0">{{ $totalOrders }}</h6>
+                            <small class="text-muted">Total Orders</small>
+                        </div>
+                    </a>
                 </div>
 
                 <div class="col-6">
-                    <div class="card border-0 rounded-20 p-3 text-center text-white" style="background:#101820;">
-                        <i class="bi bi-hourglass-split mb-2" style="font-size:22px;color:#ffc107;"></i>
-                        <h6 class="mb-0">{{ $pendingOrders }}</h6>
-                        <small class="text-muted">Pending</small>
-                    </div>
+                    <a href="{{ route('frontend.orders') }}">
+                        <div class="card border-0 rounded-20 p-3 text-center text-white" style="background:#101820;">
+                            <i class="bi bi-hourglass-split mb-2" style="font-size:22px;color:#ffc107;"></i>
+                            <h6 class="mb-0">{{ $pendingOrders }}</h6>
+                            <small class="text-muted">Pending</small>
+                        </div>
+                    </a>
                 </div>
 
                 <div class="col-6">
-                    <div class="card border-0 rounded-20 p-3 text-center text-white" style="background:#101820;">
-                        <i class="bi bi-check-circle-fill mb-2" style="font-size:22px;color:#28a745;"></i>
-                        <h6 class="mb-0">{{ $completedOrders }}</h6>
-                        <small class="text-muted">Completed</small>
-                    </div>
+                    <a href="{{ route('frontend.orders') }}">
+                        <div class="card border-0 rounded-20 p-3 text-center text-white" style="background:#101820;">
+                            <i class="bi bi-check-circle-fill mb-2" style="font-size:22px;color:#28a745;"></i>
+                            <h6 class="mb-0">{{ $completedOrders }}</h6>
+                            <small class="text-muted">Completed</small>
+                        </div>
+                    </a>
                 </div>
 
                 <div class="col-6">
-                    <div class="card border-0 rounded-20 p-3 text-center text-white" style="background:#101820;">
-                        <i class="bi bi-cash-stack mb-2" style="font-size:22px;color:#D8C79A;"></i>
-                        <h6 class="mb-0">{{ \App\Helpers\Helper::formatCurrency($earnedCommission + $pendingCommission) }}
-                        </h6>
-                        <small class="text-muted">Total Commission</small>
-                    </div>
+                    <a href="{{ route('frontend.wallet') }}">
+                        <div class="card border-0 rounded-20 p-3 text-center text-white" style="background:#101820;">
+                            <i class="bi bi-cash-stack mb-2" style="font-size:22px;color:#D8C79A;"></i>
+                            <h6 class="mb-0">
+                                {{ \App\Helpers\Helper::formatCurrency($earnedCommission + $pendingCommission) }}
+                            </h6>
+                            <small class="text-muted">Total Commission</small>
+                        </div>
+                    </a>
                 </div>
 
             </div>
@@ -186,6 +207,59 @@
             </div>
         </div>
     </div>
+
+    <div class="modal fade" id="ratingModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content rounded-20 p-4" style="background:#1F2E3A;color:#fff;">
+
+                <div class="text-center mb-3">
+                    <img id="ratingProductImage" src=""
+                        style="width:90px;height:90px;object-fit:cover;border-radius:15px;">
+                    <h6 class="mt-2 mb-0" id="ratingProductName"></h6>
+                </div>
+
+                <input type="hidden" id="ratingOrderId">
+
+                <div class="mb-3 text-center">
+                    <label class="small d-block mb-2">Product Description</label>
+                    <div class="star-group" data-type="description_rating">
+                        <i class="bi bi-star-fill star" data-value="1"></i>
+                        <i class="bi bi-star-fill star" data-value="2"></i>
+                        <i class="bi bi-star-fill star" data-value="3"></i>
+                        <i class="bi bi-star-fill star" data-value="4"></i>
+                        <i class="bi bi-star-fill star" data-value="5"></i>
+                    </div>
+                </div>
+
+                <div class="mb-3 text-center">
+                    <label class="small d-block mb-2">Logistics Service</label>
+                    <div class="star-group" data-type="logistics_rating">
+                        <i class="bi bi-star-fill star" data-value="1"></i>
+                        <i class="bi bi-star-fill star" data-value="2"></i>
+                        <i class="bi bi-star-fill star" data-value="3"></i>
+                        <i class="bi bi-star-fill star" data-value="4"></i>
+                        <i class="bi bi-star-fill star" data-value="5"></i>
+                    </div>
+                </div>
+
+                <div class="mb-3 text-center">
+                    <label class="small d-block mb-2">Customer Service</label>
+                    <div class="star-group" data-type="service_rating">
+                        <i class="bi bi-star-fill star" data-value="1"></i>
+                        <i class="bi bi-star-fill star" data-value="2"></i>
+                        <i class="bi bi-star-fill star" data-value="3"></i>
+                        <i class="bi bi-star-fill star" data-value="4"></i>
+                        <i class="bi bi-star-fill star" data-value="5"></i>
+                    </div>
+                </div>
+
+                <button class="btn btn-success rounded-15 w-100 mt-2" id="submitOrderBtn">
+                    Submit Order
+                </button>
+
+            </div>
+        </div>
+    </div>
 @endsection
 
 @section('script')
@@ -240,57 +314,118 @@
                     }, 3000); // 3 sec delay
                 });
         });
+        let ratings = {
+            description_rating: 1,
+            logistics_rating: 1,
+            service_rating: 1
+        };
+
+        // When Proceed button clicked inside Order Modal
         document.addEventListener('click', function(e) {
+
             if (e.target && e.target.id === 'modalProceedBtn') {
+
                 let orderId = e.target.dataset.id;
-                const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 
-                fetch(`{{ route('frontend.order.proceed') }}`, {
-                        method: "POST",
-                        headers: {
-                            "X-CSRF-TOKEN": "{{ csrf_token() }}",
-                            "Content-Type": "application/json"
-                        },
-                        credentials: "same-origin",
-                        body: JSON.stringify({
-                            order_id: orderId
-                        }) // send ID in request body
-                    })
-                    .then(res => res.json())
-                    .then(data => {
-                        if (data.status) {
-                            // Close order modal
-                            let orderModalEl = document.getElementById('orderModal');
-                            let orderModal = bootstrap.Modal.getInstance(orderModalEl);
-                            if (orderModal) orderModal.hide();
+                // close order modal
+                let orderModalEl = document.getElementById('orderModal');
+                let orderModal = bootstrap.Modal.getInstance(orderModalEl);
+                if (orderModal) orderModal.hide();
 
-                            // Show success modal
-                            let successModal = new bootstrap.Modal(
-                                document.getElementById('successModal')
-                            );
-                            successModal.show();
+                // set rating modal data
+                document.getElementById('ratingOrderId').value = orderId;
+                document.getElementById('ratingProductImage').src =
+                    document.getElementById('modalProductImage').src;
+                document.getElementById('ratingProductName').innerText =
+                    document.getElementById('modalProduct').innerText;
 
-                            setTimeout(() => location.reload(), 2500);
-                        } else if (data.type === 'insufficient') {
-                            let orderModalEl = document.getElementById('orderModal');
-                            let orderModal = bootstrap.Modal.getInstance(orderModalEl);
-                            if (orderModal) orderModal.hide();
+                // reset stars to default 1
+                document.querySelectorAll('.star-group').forEach(group => {
+                    let type = group.dataset.type;
+                    ratings[type] = 1;
 
-                            setTimeout(() => {
-                                let insufficientModal = new bootstrap.Modal(
-                                    document.getElementById('insufficientModal')
-                                );
-                                insufficientModal.show();
-                            }, 300);
-                        } else {
-                            alert("Something went wrong.");
+                    group.querySelectorAll('.star').forEach(star => {
+                        star.classList.remove('active');
+                        if (star.dataset.value <= 1) {
+                            star.classList.add('active');
                         }
-                    })
-                    .catch(err => {
-                        console.error(err);
-                        alert("Something went wrong.");
                     });
+                });
+
+                new bootstrap.Modal(document.getElementById('ratingModal')).show();
             }
+        });
+
+
+        // Star click logic
+        document.querySelectorAll('.star-group').forEach(group => {
+            group.querySelectorAll('.star').forEach(star => {
+
+                star.addEventListener('click', function() {
+
+                    let value = this.dataset.value;
+                    let type = group.dataset.type;
+
+                    ratings[type] = value;
+
+                    group.querySelectorAll('.star').forEach(s => {
+                        s.classList.remove('active');
+                        if (s.dataset.value <= value) {
+                            s.classList.add('active');
+                        }
+                    });
+
+                });
+
+            });
+        });
+
+
+        // Submit order with ratings
+        document.getElementById('submitOrderBtn').addEventListener('click', function() {
+
+            let orderId = document.getElementById('ratingOrderId').value;
+
+            fetch(`{{ route('frontend.order.proceed') }}`, {
+                    method: "POST",
+                    headers: {
+                        "X-CSRF-TOKEN": "{{ csrf_token() }}",
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        order_id: orderId,
+                        description_rating: ratings.description_rating,
+                        logistics_rating: ratings.logistics_rating,
+                        service_rating: ratings.service_rating
+                    })
+                })
+                .then(res => res.json())
+                .then(data => {
+
+                    bootstrap.Modal.getInstance(
+                        document.getElementById('ratingModal')
+                    ).hide();
+
+                    if (data.status) {
+
+                        new bootstrap.Modal(
+                            document.getElementById('successModal')
+                        ).show();
+
+                        setTimeout(() => location.reload(), 2500);
+
+                    } else if (data.type === 'insufficient') {
+
+                        new bootstrap.Modal(
+                            document.getElementById('insufficientModal')
+                        ).show();
+
+                    } else {
+                        alert("Something went wrong.");
+                    }
+
+                })
+                .catch(() => alert("Something went wrong."));
         });
     </script>
 @endsection

@@ -105,6 +105,18 @@
                 <div class="withdraw-card mb-4">
                     <h5 class="mb-3">Request Withdraw</h5>
 
+                    <!-- CREDIT SCORE FLAG (Always Visible) -->
+                    <div class="mb-3 d-flex align-items-center p-2 rounded-15"
+                        style="background: #1F2E3A; border: 1px solid #D8C79A; color: #fff;">
+                        <span class="me-2" style="font-size: 14px; font-weight: bold;">Credit Score:</span>
+                        <span>{{ $user->credit_score }}</span>
+                        @if ($user->credit_score < 100)
+                            <span class="ms-2 small text-danger">Too low to withdraw</span>
+                        @else
+                            <span class="ms-2 small text-success">Good to withdraw</span>
+                        @endif
+                    </div>
+
                     <form action="{{ route('frontend.withdraw.submit') }}" method="POST">
                         @csrf
 

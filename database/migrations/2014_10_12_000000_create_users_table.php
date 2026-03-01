@@ -23,6 +23,7 @@ return new class extends Migration
             $table->string('password');
             $table->rememberToken();
             $table->enum('is_active', ['active', 'inactive'])->default('active');
+            $table->enum('is_approved', ['0', '1'])->default('0');
             $table->string('provider')->nullable();
             $table->string('provider_id')->nullable();
             $table->integer('credit_score')->default(100);

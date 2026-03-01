@@ -48,6 +48,18 @@
         .stat-card small {
             color: #cfcfcf;
         }
+
+        .star {
+            font-size: 26px;
+            cursor: pointer;
+            color: #555;
+            margin: 0 3px;
+            transition: 0.2s;
+        }
+
+        .star.active {
+            color: #ffc107;
+        }
     </style>
 @endsection
 
@@ -124,7 +136,8 @@
                                     <div class="ms-3 text-end">
                                         @if ($order->status == 'pending')
                                             <button class="btn btn-proceed rounded-15 px-3 proceedBtn"
-                                                data-id="{{ $order->id }}">
+                                                data-id="{{ $order->id }}" data-name="{{ $order->product->name }}"
+                                                data-image="{{ asset($order->product->main_image) }}">
                                                 Proceed
                                             </button>
                                         @else
@@ -179,57 +192,169 @@
             </div>
         </div>
     </div>
+
+    <div class="modal fade" id="ratingModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content rounded-20 p-4" style="background:#1F2E3A;color:#fff;">
+
+                <!-- Product Info -->
+                <div class="text-center mb-3">
+                    <img id="ratingProductImage" src=""
+                        style="width:90px;height:90px;object-fit:cover;border-radius:15px;">
+                    <h6 class="mt-2 mb-0" id="ratingProductName"></h6>
+                </div>
+
+                <input type="hidden" id="ratingOrderId">
+
+                <!-- Description Rating -->
+                <div class="mb-3 text-center">
+                    <label class="small d-block mb-2">Product Description</label>
+                    <div class="star-group" data-type="description_rating">
+                        <i class="bi bi-star-fill star" data-value="1"></i>
+                        <i class="bi bi-star-fill star" data-value="2"></i>
+                        <i class="bi bi-star-fill star" data-value="3"></i>
+                        <i class="bi bi-star-fill star" data-value="4"></i>
+                        <i class="bi bi-star-fill star" data-value="5"></i>
+                    </div>
+                </div>
+
+                <!-- Logistics Rating -->
+                <div class="mb-3 text-center">
+                    <label class="small d-block mb-2">Logistics Service</label>
+                    <div class="star-group" data-type="logistics_rating">
+                        <i class="bi bi-star-fill star" data-value="1"></i>
+                        <i class="bi bi-star-fill star" data-value="2"></i>
+                        <i class="bi bi-star-fill star" data-value="3"></i>
+                        <i class="bi bi-star-fill star" data-value="4"></i>
+                        <i class="bi bi-star-fill star" data-value="5"></i>
+                    </div>
+                </div>
+
+                <!-- Service Rating -->
+                <div class="mb-3 text-center">
+                    <label class="small d-block mb-2">Customer Service</label>
+                    <div class="star-group" data-type="service_rating">
+                        <i class="bi bi-star-fill star" data-value="1"></i>
+                        <i class="bi bi-star-fill star" data-value="2"></i>
+                        <i class="bi bi-star-fill star" data-value="3"></i>
+                        <i class="bi bi-star-fill star" data-value="4"></i>
+                        <i class="bi bi-star-fill star" data-value="5"></i>
+                    </div>
+                </div>
+
+                <button class="btn btn-proceed w-100 rounded-15 mt-2" id="submitOrderBtn">
+                    Submit Order
+                </button>
+
+            </div>
+        </div>
+    </div>
 @endsection
 
 @section('script')
     <script>
+        // Store ratings
+        let ratings = {
+            description_rating: 1,
+            logistics_rating: 1,
+            service_rating: 1
+        };
+
+        // Open Rating Modal
         document.querySelectorAll('.proceedBtn').forEach(button => {
             button.addEventListener('click', function() {
 
-                let orderId = this.dataset.id;
-                const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+                document.getElementById('ratingOrderId').value = this.dataset.id;
+                document.getElementById('ratingProductName').innerText = this.dataset.name;
+                document.getElementById('ratingProductImage').src = this.dataset.image;
 
-                // Use named route base and append orderId dynamically
-                fetch(`{{ route('frontend.order.proceed') }}`, {
-                        method: "POST",
-                        headers: {
-                            "X-CSRF-TOKEN": "{{ csrf_token() }}",
-                            "Content-Type": "application/json"
-                        },
-                        credentials: "same-origin",
-                        body: JSON.stringify({
-                            order_id: orderId
-                        }) // send ID in request body
-                    })
-                    .then(res => res.json())
-                    .then(data => {
+                // Reset default 3 stars
+                document.querySelectorAll('.star-group').forEach(group => {
+                    let type = group.dataset.type;
+                    ratings[type] = 1;
 
-                        if (data.status) {
-                            // Show success modal
-                            let successModal = new bootstrap.Modal(
-                                document.getElementById('successModal')
-                            );
-                            successModal.show();
-
-                            // Auto reload after 2.5 sec
-                            setTimeout(() => location.reload(), 2500);
-
-                        } else if (data.type === 'insufficient') {
-                            let modal = new bootstrap.Modal(
-                                document.getElementById('insufficientModal')
-                            );
-                            modal.show();
-                        } else {
-                            alert("Something went wrong.");
+                    group.querySelectorAll('.star').forEach(star => {
+                        star.classList.remove('active');
+                        if (star.dataset.value <= 1) {
+                            star.classList.add('active');
                         }
+                    });
+                });
 
-                    })
-                    .catch(err => {
-                        console.error(err);
-                        alert("Something went wrong.");
+                new bootstrap.Modal(document.getElementById('ratingModal')).show();
+            });
+        });
+
+
+        // Star Click Logic
+        document.querySelectorAll('.star-group').forEach(group => {
+            group.querySelectorAll('.star').forEach(star => {
+
+                star.addEventListener('click', function() {
+
+                    let value = this.dataset.value;
+                    let type = group.dataset.type;
+
+                    ratings[type] = value;
+
+                    group.querySelectorAll('.star').forEach(s => {
+                        s.classList.remove('active');
+                        if (s.dataset.value <= value) {
+                            s.classList.add('active');
+                        }
                     });
 
+                });
+
             });
+        });
+
+
+        // Submit Order
+        document.getElementById('submitOrderBtn').addEventListener('click', function() {
+
+            let orderId = document.getElementById('ratingOrderId').value;
+
+            fetch(`{{ route('frontend.order.proceed') }}`, {
+                    method: "POST",
+                    headers: {
+                        "X-CSRF-TOKEN": "{{ csrf_token() }}",
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        order_id: orderId,
+                        description_rating: ratings.description_rating,
+                        logistics_rating: ratings.logistics_rating,
+                        service_rating: ratings.service_rating
+                    })
+                })
+                .then(res => res.json())
+                .then(data => {
+
+                    bootstrap.Modal.getInstance(
+                        document.getElementById('ratingModal')
+                    ).hide();
+
+                    if (data.status) {
+
+                        new bootstrap.Modal(
+                            document.getElementById('successModal')
+                        ).show();
+
+                        setTimeout(() => location.reload(), 2500);
+
+                    } else if (data.type === 'insufficient') {
+
+                        new bootstrap.Modal(
+                            document.getElementById('insufficientModal')
+                        ).show();
+
+                    } else {
+                        alert("Something went wrong.");
+                    }
+
+                })
+                .catch(() => alert("Something went wrong."));
         });
     </script>
 @endsection

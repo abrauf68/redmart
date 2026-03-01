@@ -21,6 +21,9 @@ class Order extends Model
         'total',
         'commission',
         'notes',
+        'description_rating',
+        'logistics_rating',
+        'service_rating',
     ];
 
     public function product()

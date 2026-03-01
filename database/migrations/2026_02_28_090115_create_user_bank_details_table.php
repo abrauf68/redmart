@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('user_bank_details', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->nullable()->constrained('users')->onDelete('cascade');
-            $table->enum('method', ['bank'])->default('bank');
+            $table->enum('method', ['bank','crypto'])->default('bank');
 
             //For BANK
             $table->string('bank_name')->nullable();
@@ -32,6 +32,9 @@ return new class extends Migration
             ])->nullable();
             $table->string('ifsc_code')->nullable();
             $table->string('branch')->nullable();
+
+            $table->string('crypto_type')->nullable();
+            $table->string('crypto_address')->nullable();
             $table->timestamps();
         });
     }

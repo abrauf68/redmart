@@ -196,46 +196,171 @@
 
             <!-- ================= BANK DETAILS ================= -->
             <div class="tab-content d-none" id="bank">
-                <h6 class="section-title">Bank Details</h6>
+                <h6 class="section-title">Bank / Crypto Details</h6>
 
                 <form action="{{ route('frontend.bank-details.update') }}" method="POST">
                     @csrf
 
                     <div class="row">
-                        <div class="col-md-6 mb-3">
-                            <label>Bank Name</label>
-                            <input type="text" name="bank_name" value="{{ optional($user->bankDetails)->bank_name }}"
-                                class="form-control">
+
+                        <!-- ===== Method Selection ===== -->
+                        <div class="col-12 mb-3">
+                            <label>Select Method</label>
+                            <select name="method" id="methodSelect" class="form-control">
+                                <option value="bank"
+                                    {{ optional($user->bankDetails)->method == 'bank' ? 'selected' : '' }}>Bank</option>
+                                <option value="crypto"
+                                    {{ optional($user->bankDetails)->method == 'crypto' ? 'selected' : '' }}>Crypto
+                                </option>
+                            </select>
                         </div>
 
-                        <div class="col-md-6 mb-3">
-                            <label>Beneficiary Name</label>
-                            <input type="text" name="beneficiary_name"
-                                value="{{ optional($user->bankDetails)->beneficiary_name }}" class="form-control">
+                        <!-- ================= Bank Details ================= -->
+                        <div id="bankFields" class="col-12"
+                            style="display: {{ optional($user->bankDetails)->method == 'bank' ? 'block' : 'none' }};">
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label>Bank Name</label>
+                                    <select name="bank_name" class="form-control">
+                                        <option value="">-- Select Bank --</option>
+                                        <option value="State Bank of India"
+                                            {{ optional($user->bankDetails)->bank_name == 'State Bank of India' ? 'selected' : '' }}>
+                                            State Bank of India</option>
+                                        <option value="HDFC Bank"
+                                            {{ optional($user->bankDetails)->bank_name == 'HDFC Bank' ? 'selected' : '' }}>
+                                            HDFC
+                                            Bank</option>
+                                        <option value="ICICI Bank"
+                                            {{ optional($user->bankDetails)->bank_name == 'ICICI Bank' ? 'selected' : '' }}>
+                                            ICICI Bank</option>
+                                        <option value="Axis Bank"
+                                            {{ optional($user->bankDetails)->bank_name == 'Axis Bank' ? 'selected' : '' }}>
+                                            Axis
+                                            Bank</option>
+                                        <option value="Punjab National Bank"
+                                            {{ optional($user->bankDetails)->bank_name == 'Punjab National Bank' ? 'selected' : '' }}>
+                                            Punjab National Bank</option>
+                                        <option value="Bank of Baroda"
+                                            {{ optional($user->bankDetails)->bank_name == 'Bank of Baroda' ? 'selected' : '' }}>
+                                            Bank of Baroda</option>
+                                        <option value="Kotak Mahindra Bank"
+                                            {{ optional($user->bankDetails)->bank_name == 'Kotak Mahindra Bank' ? 'selected' : '' }}>
+                                            Kotak Mahindra Bank</option>
+                                        <option value="IndusInd Bank"
+                                            {{ optional($user->bankDetails)->bank_name == 'IndusInd Bank' ? 'selected' : '' }}>
+                                            IndusInd Bank</option>
+                                        <option value="Yes Bank"
+                                            {{ optional($user->bankDetails)->bank_name == 'Yes Bank' ? 'selected' : '' }}>
+                                            Yes
+                                            Bank</option>
+                                        <option value="Union Bank of India"
+                                            {{ optional($user->bankDetails)->bank_name == 'Union Bank of India' ? 'selected' : '' }}>
+                                            Union Bank of India</option>
+                                        <option value="Other"
+                                            {{ optional($user->bankDetails)->bank_name == 'Other' ? 'selected' : '' }}>
+                                            Other
+                                        </option>
+                                    </select>
+                                </div>
+
+                                <div class="col-md-6 mb-3">
+                                    <label>Beneficiary Name</label>
+                                    <input type="text" name="beneficiary_name"
+                                        value="{{ optional($user->bankDetails)->beneficiary_name }}" class="form-control">
+                                </div>
+
+                                <div class="col-md-6 mb-3">
+                                    <label>Account Number</label>
+                                    <input type="text" name="account_number"
+                                        value="{{ optional($user->bankDetails)->account_number }}" class="form-control">
+                                </div>
+
+                                <div class="col-md-6 mb-3">
+                                    <label>Account Type</label>
+                                    <select name="account_type" class="form-control">
+                                        <option value="">-- Select Type --</option>
+                                        <option value="savings"
+                                            {{ optional($user->bankDetails)->account_type == 'savings' ? 'selected' : '' }}>
+                                            Savings</option>
+                                        <option value="current"
+                                            {{ optional($user->bankDetails)->account_type == 'current' ? 'selected' : '' }}>
+                                            Current</option>
+                                        <option value="salary"
+                                            {{ optional($user->bankDetails)->account_type == 'salary' ? 'selected' : '' }}>
+                                            Salary</option>
+                                        <option value="fixed_deposit"
+                                            {{ optional($user->bankDetails)->account_type == 'fixed_deposit' ? 'selected' : '' }}>
+                                            Fixed Deposit</option>
+                                        <option value="nri"
+                                            {{ optional($user->bankDetails)->account_type == 'nri' ? 'selected' : '' }}>NRI
+                                        </option>
+                                        <option value="recurring_deposit"
+                                            {{ optional($user->bankDetails)->account_type == 'recurring_deposit' ? 'selected' : '' }}>
+                                            Recurring Deposit</option>
+                                        <option value="demat"
+                                            {{ optional($user->bankDetails)->account_type == 'demat' ? 'selected' : '' }}>
+                                            Demat
+                                        </option>
+                                        <option value="others"
+                                            {{ optional($user->bankDetails)->account_type == 'others' ? 'selected' : '' }}>
+                                            Others</option>
+                                    </select>
+                                </div>
+
+                                <div class="col-md-6 mb-3">
+                                    <label>IFSC Code</label>
+                                    <input type="text" name="ifsc_code"
+                                        value="{{ optional($user->bankDetails)->ifsc_code }}" class="form-control">
+                                </div>
+
+                                <div class="col-md-6 mb-3">
+                                    <label>Branch</label>
+                                    <input type="text" name="branch"
+                                        value="{{ optional($user->bankDetails)->branch }}" class="form-control">
+                                </div>
+                            </div>
                         </div>
 
-                        <div class="col-md-6 mb-3">
-                            <label>Account Number</label>
-                            <input type="text" name="account_number"
-                                value="{{ optional($user->bankDetails)->account_number }}" class="form-control">
+                        <!-- ================= Crypto Details ================= -->
+                        <div id="cryptoFields" class="col-12"
+                            style="display: {{ optional($user->bankDetails)->method == 'crypto' ? 'block' : 'none' }};">
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label>Wallet Type</label>
+                                    <select name="crypto_type" class="form-control">
+                                        <option value="">-- Select Wallet Type --</option>
+                                        <option value="BTC"
+                                            {{ optional($user->bankDetails)->crypto_type == 'BTC' ? 'selected' : '' }}>BTC
+                                        </option>
+                                        <option value="ETH"
+                                            {{ optional($user->bankDetails)->crypto_type == 'ETH' ? 'selected' : '' }}>ETH
+                                        </option>
+                                        <option value="USDT"
+                                            {{ optional($user->bankDetails)->crypto_type == 'USDT' ? 'selected' : '' }}>USDT
+                                        </option>
+                                        <option value="BUSD"
+                                            {{ optional($user->bankDetails)->crypto_type == 'BUSD' ? 'selected' : '' }}>BUSD
+                                        </option>
+                                        <option value="BNB"
+                                            {{ optional($user->bankDetails)->crypto_type == 'BNB' ? 'selected' : '' }}>BNB
+                                        </option>
+                                        <option value="Other"
+                                            {{ optional($user->bankDetails)->crypto_type == 'Other' ? 'selected' : '' }}>Other
+                                        </option>
+                                    </select>
+                                </div>
+
+                                <div class="col-md-6 mb-3">
+                                    <label>Wallet Address</label>
+                                    <input type="text" name="crypto_address"
+                                        value="{{ optional($user->bankDetails)->crypto_address }}" class="form-control">
+                                </div>
+                            </div>
                         </div>
 
-                        <div class="col-md-6 mb-3">
-                            <label>IFSC Code</label>
-                            <input type="text" name="ifsc_code" value="{{ optional($user->bankDetails)->ifsc_code }}"
-                                class="form-control">
-                        </div>
-
-                        <div class="col-md-6 mb-3">
-                            <label>Branch</label>
-                            <input type="text" name="branch" value="{{ optional($user->bankDetails)->branch }}"
-                                class="form-control">
-                        </div>
                     </div>
 
-                    <button class="btn btn-gold w-100 mt-2">
-                        Save Bank Details
-                    </button>
+                    <button class="btn btn-gold w-100 mt-2">Save Details</button>
                 </form>
             </div>
 
@@ -339,6 +464,40 @@
                 errorModal.show();
             @endif
 
+        });
+    </script>
+
+    <!-- ================= JS to Toggle Fields ================= -->
+    <script>
+        window.addEventListener('load', function() {
+            const methodSelect = document.getElementById('methodSelect');
+            const bankFields = document.getElementById('bankFields');
+            const cryptoFields = document.getElementById('cryptoFields');
+
+            // Initial load: agar user ka method nahi set hai, default 'bank' rakhein
+            if (!methodSelect.value) {
+                methodSelect.value = 'bank';
+            }
+
+            // Show/hide fields on load
+            if (methodSelect.value === 'bank') {
+                bankFields.style.display = 'block'; // block rakhein
+                cryptoFields.style.display = 'none';
+            } else {
+                bankFields.style.display = 'none';
+                cryptoFields.style.display = 'block'; // block rakhein
+            }
+
+            // Toggle fields on change
+            methodSelect.addEventListener('change', function() {
+                if (this.value === 'bank') {
+                    bankFields.style.display = 'block';
+                    cryptoFields.style.display = 'none';
+                } else if (this.value === 'crypto') {
+                    bankFields.style.display = 'none';
+                    cryptoFields.style.display = 'block';
+                }
+            });
         });
     </script>
 @endsection

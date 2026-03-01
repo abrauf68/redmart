@@ -27,6 +27,12 @@
 
     <!-- style css for this template -->
     <link href="{{ asset('frontAssets/scss/style.css') }}" rel="stylesheet" id="style">
+
+    <style>
+        main {
+            background: linear-gradient(180deg, #1F2E3A, #17232D);
+        }
+    </style>
 </head>
 
 <body class="body-scroll d-flex flex-column h-100 theme-pink" data-page="signin">

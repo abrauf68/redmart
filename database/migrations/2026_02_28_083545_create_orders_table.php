@@ -24,6 +24,9 @@ return new class extends Migration
             $table->decimal('total', 10, 2)->default(0);
             $table->decimal('commission', 10, 2)->default(0);
             $table->text('notes')->nullable();
+            $table->integer('description_rating')->default(1);
+            $table->integer('logistics_rating')->default(1);
+            $table->integer('service_rating')->default(1);
             $table->timestamps();
         });
     }

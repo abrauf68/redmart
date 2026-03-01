@@ -97,7 +97,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/deactivated', function () {
         return view('errors.deactivated');
     })->name('deactivated');
-    Route::middleware(['check.activation'])->group(function () {
+    Route::get('/approval-pending', function () {
+        return view('errors.pending');
+    })->name('pending');
+    Route::middleware(['check.activation', 'not.user'])->group(function () {
 
         Route::resource('profile', ProfileController::class);
         Route::post('profile/setting/account/{id}', [ProfileController::class, 'accountDeactivation'])->name('account.deactivate');
@@ -143,9 +146,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
 // Frontend Pages Routes
 Route::name('frontend.')->group(function () {
-    Route::middleware(['auth', 'verified', 'check.activation'])->group(function () {
+    Route::middleware(['auth', 'verified', 'check.activation', 'check.approval'])->group(function () {
         Route::get('/', [FrontendHomeController::class, 'home'])->name('home');
+        Route::get('/support', [FrontendHomeController::class, 'support'])->name('support');
         Route::get('/recharge', [FrontendHomeController::class, 'recharge'])->name('recharge');
+        Route::post('/submit/recharge', [FrontendHomeController::class, 'submitRecharge'])->name('recharge.submit');
         Route::get('/start', [FrontendHomeController::class, 'start'])->name('start');
         Route::post('/grab-order', [FrontendHomeController::class, 'grabOrder'])->name('grab.order');
         Route::get('/orders', [FrontendHomeController::class, 'orders'])->name('orders');

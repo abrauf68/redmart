@@ -27,12 +27,27 @@ class HomeController extends Controller
     public function home()
     {
         try {
+            $user = Auth::user();
             $randomProducts = Product::inRandomOrder()->take(6)->get();
             $popularProducts = Product::where('is_active', 'active')->where('is_popular', '1')->limit(5)->get();
 
-            return view('frontend.pages.home', compact('randomProducts', 'popularProducts'));
+            $totalBalance = $user->wallet->balance;
+            $totalEarned = Order::where('user_id', $user->id)->where('status', 'completed')->sum('commission');
+            $totalFreeze = Order::where('user_id', $user->id)->where('status', 'pending')->sum('commission');
+
+            return view('frontend.pages.home', compact('randomProducts', 'popularProducts', 'totalBalance', 'totalEarned', 'totalFreeze'));
         } catch (\Throwable $th) {
             Log::error('Error loading home page: ' . $th->getMessage());
+            return redirect()->back()->with('error', 'An error occurred while loading the home page.');
+        }
+    }
+
+    public function support()
+    {
+        try {
+            return view('frontend.pages.support');
+        } catch (\Throwable $th) {
+            Log::error('Error loading support page: ' . $th->getMessage());
             return redirect()->back()->with('error', 'An error occurred while loading the home page.');
         }
     }
@@ -44,6 +59,66 @@ class HomeController extends Controller
         } catch (\Throwable $th) {
             Log::error('Error loading recharge page: ' . $th->getMessage());
             return redirect()->back()->with('error', 'An error occurred while loading the home page.');
+        }
+    }
+
+    public function submitRecharge(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'amount' => 'required|numeric|min:0',
+        ]);
+
+        if ($validator->fails()) {
+            Log::error('Recharge Submit Failed Validation', ['errors' => $validator->errors()]);
+            return redirect()->back()->withErrors($validator)->withInput($request->all())->with('error', 'Validation Error!');
+        }
+
+        try {
+            DB::beginTransaction();
+            $user = User::where('id', auth()->user()->id)->first();
+            $transaction = Transaction::where('user_id', $user->id)->where('status', 'pending')->first();
+            if (!$transaction) {
+                $transaction = Transaction::create([
+                    'transaction_id' => Str::uuid(),
+                    'user_id' => $user->id,
+                    'money_flow' => 'in',
+                    'transaction_type' => 'recharge',
+                    'amount' => $request->amount,
+                    'description' => 'Wallet Recharge',
+                    'status' => 'pending',
+                ]);
+
+                app('notificationService')->notifyUsers(
+                    [$user],
+                    'Recharge Request',
+                    'You have requested for recharge of ' . Helper::formatCurrency($request->amount),
+                    'transactions',
+                    $transaction->id,
+                    'transactions'
+                );
+            } else {
+                $oldAmount = $transaction->amount;
+                $transaction->update([
+                    'amount' => $request->amount
+                ]);
+
+                app('notificationService')->notifyUsers(
+                    [$user],
+                    'Recharge Amount Updated',
+                    'You recharge amount updated from ' . Helper::formatCurrency($oldAmount) . ' to ' . Helper::formatCurrency($request->amount),
+                    'transactions',
+                    $transaction->id,
+                    'transactions'
+                );
+            }
+
+            DB::commit();
+            return redirect()->route('frontend.support')->with('success', 'Recharge Requested Successfully');
+        } catch (\Throwable $th) {
+            throw $th;
+            DB::rollBack();
+            Log::error('Recharge Request Failed', ['error' => $th->getMessage()]);
+            return redirect()->back()->with('error', "Something went wrong! Please try again later");
         }
     }
 
@@ -64,10 +139,185 @@ class HomeController extends Controller
         }
     }
 
+    // public function grabOrder(Request $request)
+    // {
+    //     $user = $request->user();
+    //     // Check for pending order
+    //     $pendingOrder = Order::where('user_id', $user->id)
+    //         ->where('status', 'pending')
+    //         ->first();
+
+    //     if ($pendingOrder) {
+    //         return response()->json([
+    //             'status' => false,
+    //             'message' => 'You have a pending order. Please proceed with it first.'
+    //         ]);
+    //     }
+    //     $product = Product::where('is_active', 'active')
+    //         ->inRandomOrder()
+    //         ->first();
+
+    //     if (!$product) {
+    //         return response()->json([
+    //             'status' => false,
+    //             'message' => 'No product available'
+    //         ]);
+    //     }
+
+    //     $commissionRate = 0.15;
+    //     $price = (float) $product->price;
+    //     $quantity = random_int(10, 30);
+
+    //     $subtotal = $price * $quantity;
+    //     $commission = $subtotal * $commissionRate;
+    //     $total = $subtotal;
+
+    //     $order = Order::create([
+    //         'user_id' => auth()->id(),
+    //         'product_id' => $product->id,
+    //         'order_no' => 'ORD-' . strtoupper(Str::random(6)),
+    //         'status' => 'pending',
+    //         'quantity' => $quantity,
+    //         'subtotal' => $subtotal,
+    //         'total' => $total,
+    //         'commission' => $commission,
+    //     ]);
+
+    //     // 🔔 Notification
+    //     app('notificationService')->notifyUsers(
+    //         [$user],
+    //         'Order Grabbed',
+    //         'Your order #' . $order->order_no . ' has been created successfully.',
+    //         'orders',
+    //         $order->id,
+    //         'orders'
+    //     );
+
+    //     return response()->json([
+    //         'status' => true,
+    //         'product_image' => $product->main_image,
+    //         'product_name' => $product->name,
+    //         'price' => Helper::formatCurrency($price),
+    //         'quantity' => $quantity,
+    //         'subtotal' => Helper::formatCurrency($subtotal),
+    //         'total' => Helper::formatCurrency($total),
+    //         'commission' => Helper::formatCurrency($commission),
+    //         'order_id' => $order->id
+    //     ]);
+    // }
+
+    // public function grabOrder(Request $request)
+    // {
+    //     $user = $request->user();
+
+    //     // 1️⃣ Check Pending Order
+    //     $pendingOrder = Order::where('user_id', $user->id)
+    //         ->where('status', 'pending')
+    //         ->first();
+
+    //     if ($pendingOrder) {
+    //         return response()->json([
+    //             'status' => false,
+    //             'message' => 'You have a pending order. Please complete it first.'
+    //         ]);
+    //     }
+
+    //     // 2️⃣ Get Active Product
+    //     $product = Product::where('is_active', 'active')
+    //         ->inRandomOrder()
+    //         ->first();
+
+    //     if (!$product) {
+    //         return response()->json([
+    //             'status' => false,
+    //             'message' => 'No product available'
+    //         ]);
+    //     }
+
+    //     $price = (float) $product->price;
+    //     $commissionRate = 0.02; // 2%
+
+    //     // 3️⃣ Count Completed Orders
+    //     $orderCount = Order::where('user_id', $user->id)
+    //         ->where('status', 'completed')
+    //         ->count();
+
+    //     // 4️⃣ Quantity Logic
+    //     if ($orderCount == 0) {
+
+    //         // ✅ First Order (allow even if balance = 0)
+    //         $quantity = rand(1, 5);
+    //     } elseif ($orderCount >= 1 && $orderCount < 4) {
+
+    //         if ($user->wallet->balance <= 0) {
+    //             return response()->json([
+    //                 'status' => false,
+    //                 'message' => 'Please recharge to continue grabbing orders.'
+    //             ]);
+    //         }
+
+    //         $maxQuantity = floor($user->wallet->balance / $price);
+
+    //         if ($maxQuantity < 1) {
+    //             return response()->json([
+    //                 'status' => false,
+    //                 'message' => 'Insufficient balance.'
+    //             ]);
+    //         }
+
+    //         $quantity = rand(1, $maxQuantity);
+    //     } else {
+
+    //         $minQuantity = ceil(($user->wallet->balance + 1) / $price);
+    //         $quantity = max(1, $minQuantity);
+    //     }
+
+    //     // 5️⃣ Calculate
+    //     $subtotal = $price * $quantity;
+    //     $commission = $subtotal * $commissionRate;
+
+    //     // if ($orderCount != 0 && $user->wallet->balance < $subtotal) {
+
+    //     //     $required = $subtotal - $user->wallet->balance;
+
+    //     //     return response()->json([
+    //     //         'status' => false,
+    //     //         'message' => 'Insufficient balance. Please recharge '
+    //     //             . Helper::formatCurrency($required)
+    //     //     ]);
+    //     // }
+
+    //     // 7️⃣ Create Order
+    //     $order = Order::create([
+    //         'user_id' => $user->id,
+    //         'product_id' => $product->id,
+    //         'order_no' => 'ORD-' . strtoupper(Str::random(6)),
+    //         'status' => 'pending',
+    //         'quantity' => $quantity,
+    //         'subtotal' => $subtotal,
+    //         'total' => $subtotal,
+    //         'commission' => $commission,
+    //     ]);
+
+    //     // 8️⃣ Response
+    //     return response()->json([
+    //         'status' => true,
+    //         'product_image' => $product->main_image,
+    //         'product_name' => $product->name,
+    //         'price' => Helper::formatCurrency($price),
+    //         'quantity' => $quantity,
+    //         'subtotal' => Helper::formatCurrency($subtotal),
+    //         'total' => Helper::formatCurrency($subtotal),
+    //         'commission' => Helper::formatCurrency($commission),
+    //         'order_id' => $order->id
+    //     ]);
+    // }
+
     public function grabOrder(Request $request)
     {
         $user = $request->user();
-        // Check for pending order
+
+        // 1️⃣ Check Pending Order
         $pendingOrder = Order::where('user_id', $user->id)
             ->where('status', 'pending')
             ->first();
@@ -75,9 +325,11 @@ class HomeController extends Controller
         if ($pendingOrder) {
             return response()->json([
                 'status' => false,
-                'message' => 'You have a pending order. Please proceed with it first.'
+                'message' => 'You have a pending order. Please complete it first.'
             ]);
         }
+
+        // 2️⃣ Get Active Product
         $product = Product::where('is_active', 'active')
             ->inRandomOrder()
             ->first();
@@ -89,34 +341,73 @@ class HomeController extends Controller
             ]);
         }
 
-        $commissionRate = 0.15;
         $price = (float) $product->price;
-        $quantity = random_int(10, 30);
 
+        // 3️⃣ Count Completed Orders
+        $orderCount = Order::where('user_id', $user->id)
+            ->where('status', 'completed')
+            ->count();
+
+        $balance = $user->wallet->balance;
+        $commissionRate = 0.02; // default 2%
+
+        // 4️⃣ Quantity Logic
+        if ($orderCount == 0) {
+
+            // ✅ First Order (balance zero allowed)
+            $quantity = rand(1, 5);
+        } elseif ($orderCount >= 1 && $orderCount < 4) {
+
+            if ($balance <= 0) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Please recharge to continue grabbing orders.'
+                ]);
+            }
+
+            $maxQuantity = floor($balance / $price);
+
+            if ($maxQuantity < 1) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Insufficient balance.'
+                ]);
+            }
+
+            $quantity = rand(1, $maxQuantity);
+        } else {
+
+            // 🔥 5th Order Special Combo
+            // Subtotal = balance + 60%
+
+            if ($balance <= 0) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Please recharge to continue.'
+                ]);
+            }
+
+            $targetSubtotal = $balance * 1.6; // 60% above balance
+            $quantity = ceil($targetSubtotal / $price);
+
+            $commissionRate = 0.10; // 🔥 10% commission
+        }
+
+        // 5️⃣ Calculate
         $subtotal = $price * $quantity;
         $commission = $subtotal * $commissionRate;
-        $total = $subtotal;
 
+        // 6️⃣ Create Order
         $order = Order::create([
-            'user_id' => auth()->id(),
+            'user_id' => $user->id,
             'product_id' => $product->id,
             'order_no' => 'ORD-' . strtoupper(Str::random(6)),
             'status' => 'pending',
             'quantity' => $quantity,
             'subtotal' => $subtotal,
-            'total' => $total,
+            'total' => $subtotal,
             'commission' => $commission,
         ]);
-
-        // 🔔 Notification
-        app('notificationService')->notifyUsers(
-            [$user],
-            'Order Grabbed',
-            'Your order #' . $order->order_no . ' has been created successfully.',
-            'orders',
-            $order->id,
-            'orders'
-        );
 
         return response()->json([
             'status' => true,
@@ -125,7 +416,7 @@ class HomeController extends Controller
             'price' => Helper::formatCurrency($price),
             'quantity' => $quantity,
             'subtotal' => Helper::formatCurrency($subtotal),
-            'total' => Helper::formatCurrency($total),
+            'total' => Helper::formatCurrency($subtotal),
             'commission' => Helper::formatCurrency($commission),
             'order_id' => $order->id
         ]);
@@ -148,7 +439,6 @@ class HomeController extends Controller
     public function proceed(Request $request)
     {
         try {
-
             $order = Order::find($request->order_id);
 
             if ($order->user_id != auth()->user()->id) {
@@ -168,7 +458,7 @@ class HomeController extends Controller
                 ]);
             }
 
-            DB::transaction(function () use ($order, $wallet) {
+            DB::transaction(function () use ($order, $wallet, $request) {
 
                 // 1️⃣ Deduct balance
                 // $wallet->balance -= $order->total;
@@ -186,7 +476,10 @@ class HomeController extends Controller
 
                 // 3️⃣ Update order status
                 $order->update([
-                    'status' => 'completed'
+                    'description_rating' => $request->description_rating,
+                    'logistics_rating' => $request->logistics_rating,
+                    'service_rating' => $request->service_rating,
+                    'status' => 'completed',
                 ]);
 
                 // 4️⃣ Add commission
@@ -235,7 +528,8 @@ class HomeController extends Controller
                 ]);
             }
             $withdraws = Withdraw::where('user_id', $user->id)->get();
-            return view('frontend.pages.wallet', compact('wallet', 'transactions'));
+            $totalFreeze = Order::where('user_id', $user->id)->where('status', 'pending')->sum('commission');
+            return view('frontend.pages.wallet', compact('wallet', 'transactions','totalFreeze'));
         } catch (\Throwable $th) {
             Log::error('Error loading wallet page: ' . $th->getMessage());
             return redirect()->back()->with('error', 'An error occurred while loading the wallet page.');
@@ -321,11 +615,15 @@ class HomeController extends Controller
     public function updateBankDetails(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'bank_name' => 'required|string|max:255',
-            'beneficiary_name' => 'required|string|max:255',
-            'account_number' => 'required|string|max:255',
-            'ifsc_code' => 'required|string|max:255',
-            'branch' => 'required|string|max:255',
+            'method' => 'required|in:bank,crypto',
+            'bank_name' => 'nullable|string|max:255',
+            'beneficiary_name' => 'nullable|string|max:255',
+            'account_number' => 'nullable|string|max:255',
+            'account_type' => 'nullable|string|max:255',
+            'ifsc_code' => 'nullable|string|max:255',
+            'branch' => 'nullable|string|max:255',
+            'crypto_type' => 'nullable|string|max:255',
+            'crypto_address' => 'nullable|string|max:255',
         ]);
 
         if ($validator->fails()) {
@@ -337,22 +635,30 @@ class HomeController extends Controller
             $user = User::where('id', auth()->user()->id)->first();
 
             $userBankDetails = UserBankDetail::where('user_id', auth()->user()->id)->first();
-            if(!$userBankDetails){
+            if (!$userBankDetails) {
                 UserBankDetail::create([
                     'user_id' => $user->id,
+                    'method' => $request->method,
                     'bank_name' => $request->bank_name,
                     'beneficiary_name' => $request->beneficiary_name,
                     'account_number' => $request->account_number,
+                    'account_type' => $request->account_type,
                     'ifsc_code' => $request->ifsc_code,
                     'branch' => $request->branch,
+                    'crypto_type' => $request->crypto_type,
+                    'crypto_address' => $request->crypto_address,
                 ]);
-            }else{
+            } else {
                 $userBankDetails->update([
+                    'method' => $request->method,
                     'bank_name' => $request->bank_name,
                     'beneficiary_name' => $request->beneficiary_name,
                     'account_number' => $request->account_number,
+                    'account_type' => $request->account_type,
                     'ifsc_code' => $request->ifsc_code,
                     'branch' => $request->branch,
+                    'crypto_type' => $request->crypto_type,
+                    'crypto_address' => $request->crypto_address,
                 ]);
             }
 
@@ -434,6 +740,9 @@ class HomeController extends Controller
 
             if (!$wallet || $wallet->balance < $request->amount) {
                 return redirect()->back()->with('error', 'Insufficient balance!');
+            }
+            if ($user->credit_score < 100) {
+                return redirect()->back()->with('error', 'Withdrawal not allowed. Your credit score is currently too low to process this request.');
             }
 
             $wallet->balance -= $request->amount;

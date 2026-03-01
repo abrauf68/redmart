@@ -31,6 +31,9 @@
                 @endif
 
             </a>
+            <a href="{{ route('frontend.support') }}" class="btn btn-light btn-44 btn-rounded ms-2">
+                <i class="bi bi-headset"></i>
+            </a>
             <a href="{{ route('frontend.profile') }}" target="_self" class="btn btn-light btn-44 btn-rounded ms-2">
                 <i class="bi bi-person-circle"></i>
             </a>
