@@ -16,6 +16,7 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->string('wallet_address')->unique();
             $table->decimal('balance', 15, 2)->default(0.00);
+            $table->decimal('freeze_balance', 15, 2)->default(0.00);
             $table->enum('status', ['active', 'inactive'])->default('active');
             $table->timestamps();
         });

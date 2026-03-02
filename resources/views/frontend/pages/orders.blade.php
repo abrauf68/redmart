@@ -101,7 +101,7 @@
                     </a>
                 </div>
             @else
-                <h5 class="mb-3">My Orders</h5>
+                <h5 class="mb-3" style="color: #fff;">My Orders</h5>
                 <div class="row g-3">
                     @foreach ($orders as $order)
                         <div class="col-12">

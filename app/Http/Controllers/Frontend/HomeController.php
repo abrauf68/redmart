@@ -32,8 +32,8 @@ class HomeController extends Controller
             $popularProducts = Product::where('is_active', 'active')->where('is_popular', '1')->limit(5)->get();
 
             $totalBalance = $user->wallet->balance;
+            $totalFreeze = $user->wallet->freeze_balance;
             $totalEarned = Order::where('user_id', $user->id)->where('status', 'completed')->sum('commission');
-            $totalFreeze = Order::where('user_id', $user->id)->where('status', 'pending')->sum('commission');
 
             return view('frontend.pages.home', compact('randomProducts', 'popularProducts', 'totalBalance', 'totalEarned', 'totalFreeze'));
         } catch (\Throwable $th) {
@@ -528,7 +528,7 @@ class HomeController extends Controller
                 ]);
             }
             $withdraws = Withdraw::where('user_id', $user->id)->get();
-            $totalFreeze = Order::where('user_id', $user->id)->where('status', 'pending')->sum('commission');
+            $totalFreeze = $user->wallet->freeze_balance;
             return view('frontend.pages.wallet', compact('wallet', 'transactions','totalFreeze'));
         } catch (\Throwable $th) {
             Log::error('Error loading wallet page: ' . $th->getMessage());
