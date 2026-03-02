@@ -34,25 +34,25 @@
                             {{ __('Company Setting') }}
                         </a>
                     </li>
-                    <li class="nav-item">
+                    {{-- <li class="nav-item">
                         <a class="nav-link profile-tab" href="#" data-target="#recaptcha-setting"
                             data-query="recaptcha">
                             <i class="ti-sm ti ti-shield me-1_5"></i>
                             {{ __('ReCaptcha Setting') }}
                         </a>
-                    </li>
+                    </li> --}}
                     <li class="nav-item">
                         <a class="nav-link profile-tab" href="#" data-target="#system-settings" data-query="system">
                             <i class="ti-sm ti ti-settings me-1_5"></i>
                             {{ __('System Settings') }}
                         </a>
                     </li>
-                    <li class="nav-item">
+                    {{-- <li class="nav-item">
                         <a class="nav-link profile-tab" href="#" data-target="#email-settings" data-query="email">
                             <i class="ti-sm ti ti-mail me-1_5"></i>
                             {{ __('Email Settings') }}
                         </a>
-                    </li>
+                    </li> --}}
                 </ul>
             </div>
         </div>
@@ -75,15 +75,15 @@
             <div id="company-setting" style="display: none;">
                 @include('dashboard.settings.sections.company-setting')
             </div>
-            <div id="recaptcha-setting" style="display: none;">
+            {{-- <div id="recaptcha-setting" style="display: none;">
                 @include('dashboard.settings.sections.recaptcha-setting')
-            </div>
+            </div> --}}
             <div id="system-settings" style="display: none;">
                 @include('dashboard.settings.sections.system-setting')
             </div>
-            <div id="email-settings" style="display: none;">
+            {{-- <div id="email-settings" style="display: none;">
                 @include('dashboard.settings.sections.email-setting')
-            </div>
+            </div> --}}
         </div>
     </div>
 @endsection

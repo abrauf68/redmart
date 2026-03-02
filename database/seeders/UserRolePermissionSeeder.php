@@ -63,7 +63,7 @@ class UserRolePermissionSeeder extends Seeder
 
         $superAdminRole->givePermissionTo($allPermissionNames);
 
-        $agentRole->givePermissionTo(['create user', 'view user', 'update user']);
+        $agentRole->givePermissionTo(['create customer', 'view customer', 'update customer']);
 
 
         // Create User and assign Role to it.

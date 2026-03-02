@@ -1,27 +1,122 @@
-@extends('layouts.errors.master')
+<!DOCTYPE html>
+<html lang="en">
 
-@section('title', 'Account Deactivated')
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Account Deactivated</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 
-@section('css')
-@endsection
+    <style>
+        body {
+            background: #101820;
+            color: #fff;
+            font-family: 'Segoe UI', sans-serif;
+        }
 
-@section('content')
-    <div class="misc-wrapper text-center">
-        <h1 class="mb-2 mx-2 text-danger" style="line-height: 6rem; font-size: 6rem">🚫</h1>
-        <h4 class="mb-2 mx-2">{{__('Your Account Has Been Deactivated')}}</h4>
-        <p class="mb-6 mx-2">{{__('It looks like your account is inactive. Please contact support if you believe this is a mistake.')}}</p>
-        <div class="d-flex">
-            <a href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();" class="btn btn-danger mb-10 mx-4">{{__('Logout')}}</a>
-            <a href="#" class="btn btn-primary mb-10">{{__('Contact Support')}}</a>
-        </div>
-        <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
-            @csrf
-        </form>
-        <div class="mt-4">
-            <img src="{{ asset('assets/img/illustrations/page-misc-error.png') }}" alt="Account Deactivated" width="225" class="img-fluid" />
+        .deactivated-wrapper {
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .deactivated-card {
+            background: linear-gradient(180deg, #1F2E3A, #17232D);
+            border-radius: 25px;
+            padding: 45px 35px;
+            margin: 0 20px;
+            text-align: center;
+            width: 100%;
+            max-width: 450px;
+            box-shadow: 0 0 25px rgba(220, 53, 69, 0.35);
+        }
+
+        .icon-box {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 20px;
+            border-radius: 50%;
+            background: rgba(220, 53, 69, 0.15);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 35px;
+            color: #dc3545;
+        }
+
+        .deactivated-card h2 {
+            color: #dc3545;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        .deactivated-card p {
+            color: #ccc;
+            margin-bottom: 30px;
+            font-size: 14px;
+        }
+
+        .btn-gold {
+            background: linear-gradient(180deg, #D8C79A, #B8A06F);
+            color: #17232D;
+            font-weight: bold;
+            border-radius: 15px;
+            padding: 10px 22px;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-outline-light-custom {
+            border: 1px solid #D8C79A;
+            color: #D8C79A;
+            border-radius: 15px;
+            padding: 10px 22px;
+            text-decoration: none;
+            margin-left: 10px;
+        }
+
+        .btn-outline-light-custom:hover {
+            background: #D8C79A;
+            color: #17232D;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="deactivated-wrapper">
+        <div class="deactivated-card">
+
+            <div class="icon-box">
+                ⚠
+            </div>
+
+            <h2>Your Account Has Been Deactivated</h2>
+
+            <p>
+                It appears that your account is currently inactive.
+                If you believe this action was taken in error,
+                please contact our support team for further assistance.
+            </p>
+
+            <div>
+                <a href="javascript:void();" class="btn-gold"
+                    onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                    Log Out
+                </a>
+                <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                    @csrf
+                </form>
+
+                <a href="#" class="btn-outline-light-custom">
+                    Contact Support
+                </a>
+            </div>
+
         </div>
     </div>
-@endsection
 
-@section('script')
-@endsection
+</body>
+
+</html>

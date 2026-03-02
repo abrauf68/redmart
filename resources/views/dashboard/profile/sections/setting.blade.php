@@ -1,7 +1,7 @@
 <div class="card mb-6">
     <!-- Account -->
     <div class="card-body pt-4">
-        <form id="formAccountSettings" method="POST" action="{{ route('profile.update', $profile->id) }}"
+        <form id="formAccountSettings" method="POST" action="{{ route('dashboard.profile.update', $profile->id) }}"
             enctype="multipart/form-data">
             @csrf
             @method('PUT')
@@ -245,7 +245,7 @@
     </div>
     <!-- /Account -->
 </div>
-<div class="card">
+{{-- <div class="card">
     <h5 class="card-header">{{ __('Deactivate Account') }}</h5>
     <div class="card-body">
         <div class="mb-6 col-12 mb-0">
@@ -255,7 +255,7 @@
             </div>
         </div>
         <form id="formAccountDeactivation" method="POST"
-            action="{{ route('account.deactivate', $profile->user->id) }}">
+            action="{{ route('dashboard.account.deactivate', $profile->user->id) }}">
             @csrf
             <div class="form-check my-8">
                 <input class="form-check-input" type="checkbox" name="accountActivation" id="accountActivation" />
@@ -266,4 +266,4 @@
             </button>
         </form>
     </div>
-</div>
+</div> --}}

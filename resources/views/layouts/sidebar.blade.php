@@ -1,10 +1,10 @@
 <aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme">
     <div class="app-brand demo">
         <a href="{{ route('dashboard') }}" class="app-brand-link">
-            <span class="app-brand-logo demo">
-                <img src="{{ asset(\App\Helpers\Helper::getLogoLight()) }}" alt="{{env('APP_NAME')}}">
+            <span class="app-brand-logo">
+                <img height="40px" src="{{ asset(\App\Helpers\Helper::getLogoLight()) }}" alt="{{env('APP_NAME')}}">
             </span>
-            <span class="app-brand-text demo menu-text fw-bold">{{\App\Helpers\Helper::getCompanyName()}}</span>
+            {{-- <span class="app-brand-text demo menu-text fw-bold">{{\App\Helpers\Helper::getCompanyName()}}</span> --}}
         </a>
 
         <a href="javascript:void(0);" class="layout-menu-toggle menu-link text-large ms-auto">
@@ -29,7 +29,7 @@
             <span class="menu-header-text">{{__('Apps & Pages')}}</span>
         </li>
         @canany(['view user', 'view archived user', 'view agent', 'view customer'])
-            <li class="menu-item {{ request()->routeIs('dashboard.user.*') || request()->routeIs('dashboard.agent.*') || request()->routeIs('dashboard.customer.*') || request()->routeIs('dashboard.archived-user.*') ? 'open' : '' }}">
+            <li class="menu-item {{ request()->routeIs('dashboard.user.*') || request()->routeIs('dashboard.agents.*') || request()->routeIs('dashboard.customers.*') || request()->routeIs('dashboard.archived-user.*') ? 'open' : '' }}">
                 <a href="javascript:void(0);" class="menu-link menu-toggle">
                     <i class="menu-icon tf-icons ti ti-users"></i>
                     <div>{{__('Users')}}</div>

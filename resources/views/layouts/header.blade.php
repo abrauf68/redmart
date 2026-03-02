@@ -8,15 +8,28 @@
 
     <div class="navbar-nav-right d-flex align-items-center" id="navbar-collapse">
         <!-- Search -->
-        <div class="navbar-nav align-items-center">
+        {{-- <div class="navbar-nav align-items-center">
             <div class="nav-item navbar-search-wrapper mb-0">
                 <a class="nav-item nav-link search-toggler d-flex align-items-center px-0" href="javascript:void(0);">
                     <i class="ti ti-search ti-md me-2 me-lg-4 ti-lg"></i>
                     <span class="d-none d-md-inline-block text-muted fw-normal">{{ __('Search (Ctrl+/)') }}</span>
                 </a>
             </div>
-        </div>
+        </div> --}}
         <!-- /Search -->
+
+        <div class="navbar-nav align-items-center">
+            <div class="nav-item navbar-search-wrapper mb-0">
+                <!-- Hide link on mobile -->
+                <a href="javascript:void();" class="d-none d-md-inline">
+                    {{ route('register') . '?inviter=' . Auth::user()->username }}
+                </a>
+
+                <!-- Always show copy icon -->
+                <i class="ti ti-copy ti-lg mx-2 copy-icon" style="cursor: pointer;" data-bs-toggle="tooltip"
+                    data-popup="tooltip-custom" data-bs-placement="top" title="{{ __('Copy Refferal Link') }}"></i>
+            </div>
+        </div>
 
         <ul class="navbar-nav flex-row align-items-center ms-auto">
             <!-- Time -->
@@ -84,7 +97,7 @@
             <!-- / Style Switcher-->
 
             <!-- Notification -->
-            <li class="nav-item dropdown-notifications navbar-dropdown dropdown me-3 me-xl-2">
+            {{-- <li class="nav-item dropdown-notifications navbar-dropdown dropdown me-3 me-xl-2">
                 <a class="nav-link btn btn-text-secondary btn-icon rounded-pill dropdown-toggle hide-arrow"
                     href="javascript:void(0);" data-bs-toggle="dropdown" data-bs-auto-close="outside"
                     aria-expanded="false">
@@ -119,7 +132,7 @@
                         </div>
                     </li>
                 </ul>
-            </li>
+            </li> --}}
             <!--/ Notification -->
 
             <!-- User -->
@@ -163,7 +176,7 @@
                                 class="align-middle">{{ __('Settings') }}</span>
                         </a>
                     </li>
-                    <li>
+                    {{-- <li>
                         <div class="dropdown-divider my-1 mx-n2"></div>
                     </li>
                     <li>
@@ -171,7 +184,7 @@
                             <i class="ti ti-question-mark me-3 ti-md"></i><span
                                 class="align-middle">{{ __('FAQ') }}</span>
                         </a>
-                    </li>
+                    </li> --}}
                     <li>
                         <div class="d-grid px-2 pt-2 pb-1">
                             <a class="btn btn-sm btn-danger d-flex" style="color: #fff ;"

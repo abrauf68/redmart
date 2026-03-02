@@ -8,13 +8,13 @@
 
             <div class="row p-5">
                 <h3>{{ __('Company Settings') }}</h3>
-                <div class="mb-4 col-md-4">
+                <div class="mb-4 col-md-6">
                     <div class="d-flex align-items-start align-items-sm-center gap-6 mb-5">
                         <img src="{{ asset($companySetting->light_logo ?? 'assets/img/default/img.png') }}"
                             alt="light-logo" class="d-block w-px-100 h-px-100 rounded" id="uploadedLightLogo" />
                         <div class="button-wrapper">
                             <label for="upload1" class="btn btn-primary me-3 mb-4 @error('light_logo') is-invalid @enderror">
-                                <span class="d-none d-sm-block">{{ __('Upload light logo') }}</span>
+                                <span class="d-none d-sm-block">{{ __('Upload Logo') }}</span>
                                 <i class="ti ti-upload d-block d-sm-none"></i>
                                 <input type="file" id="upload1" class="account-file-input" name="light_logo" hidden
                                     accept="image/png, image/jpeg" />
@@ -33,7 +33,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="mb-4 col-md-4">
+                {{-- <div class="mb-4 col-md-4">
                     <div class="d-flex align-items-start align-items-sm-center gap-6 mb-5">
                         <img src="{{ asset($companySetting->dark_logo ?? 'assets/img/default/img.png') }}"
                             alt="dark-logo" class="d-block w-px-100 h-px-100 rounded" id="uploadedDarkLogo" />
@@ -57,8 +57,8 @@
                             @enderror
                         </div>
                     </div>
-                </div>
-                <div class="mb-4 col-md-4">
+                </div> --}}
+                <div class="mb-4 col-md-6">
                     <div class="d-flex align-items-start align-items-sm-center gap-6 mb-5">
                         <img src="{{ asset($companySetting->favicon ?? 'assets/img/default/img.png') }}"
                             alt="favicon" class="d-block w-px-100 h-px-100 rounded" id="uploadedFavicon" />

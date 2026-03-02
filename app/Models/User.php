@@ -28,6 +28,7 @@ class User  extends Authenticatable implements MustVerifyEmail
         'password',
         'provider',
         'provider_id',
+        'inviter_id',
         'email_verified_at',
         'is_active',
         'is_approved',
@@ -74,5 +75,25 @@ class User  extends Authenticatable implements MustVerifyEmail
     public function bankDetails()
     {
         return $this->hasOne(UserBankDetail::class, 'user_id');
+    }
+
+    public function referrals()
+    {
+        return $this->hasMany(User::class, 'inviter_id');
+    }
+
+    public function inviter()
+    {
+        return $this->belongsTo(User::class, 'inviter_id');
+    }
+
+    public function transactions()
+    {
+        return $this->hasMany(Transaction::class, 'user_id');
+    }
+
+    public function withdraws()
+    {
+        return $this->hasMany(Withdraw::class, 'user_id');
     }
 }

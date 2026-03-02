@@ -118,11 +118,19 @@ Route::middleware(['auth', 'verified'])->group(function () {
             Route::get('/notifications/send-test-noti/{id}', [NotificationController::class, 'testNotification']);
 
             Route::resource('user', UserController::class);
+            Route::get('user/status/{id}', [UserController::class, 'updateStatus'])->name('user.status.update');
+
             Route::resource('agents', AgentController::class);
+            Route::get('agents/status/{id}', [UserController::class, 'updateStatus'])->name('agents.status.update');
+
             Route::resource('customers', CustomerController::class);
+            Route::get('customers/status/{id}', [CustomerController::class, 'updateStatus'])->name('customers.status.update');
+            Route::post('customers/wallet/update/{id}', [CustomerController::class, 'updateCustomerWallet'])->name('customers.wallet.update');
+            Route::post('customers/score/update/{id}', [CustomerController::class, 'updateCustomerScore'])->name('customers.score.update');
+            Route::post('approve/customers/{id}', [CustomerController::class, 'approveCustomer'])->name('customers.approve');
+
             Route::resource('archived-user', ArchivedUserController::class);
             Route::get('user/restore/{id}', [ArchivedUserController::class, 'restoreUser'])->name('archived-user.restore');
-            Route::get('user/status/{id}', [UserController::class, 'updateStatus'])->name('user.status.update');
 
             // Role & Permission Start
             Route::resource('permissions', PermissionController::class);

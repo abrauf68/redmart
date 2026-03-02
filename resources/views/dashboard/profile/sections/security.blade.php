@@ -2,7 +2,7 @@
 <div class="card mb-6">
     <h5 class="card-header">{{ __('Change Password') }}</h5>
     <div class="card-body pt-1">
-        <form id="formAccountSecurity" method="POST" action="{{route('update.password', $profile->user->id)}}">
+        <form id="formAccountSecurity" method="POST" action="{{route('dashboard.update.password', $profile->user->id)}}">
             @csrf
             <div class="row">
                 <div class="mb-6 col-md-6 form-password-toggle">
