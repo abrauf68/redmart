@@ -32,6 +32,16 @@ class UserRolePermissionSeeder extends Seeder
         Permission::create(['name' => 'update user']);
         Permission::create(['name' => 'delete user']);
 
+        Permission::create(['name' => 'view agent']);
+        Permission::create(['name' => 'create agent']);
+        Permission::create(['name' => 'update agent']);
+        Permission::create(['name' => 'delete agent']);
+
+        Permission::create(['name' => 'view customer']);
+        Permission::create(['name' => 'create customer']);
+        Permission::create(['name' => 'update customer']);
+        Permission::create(['name' => 'delete customer']);
+
         Permission::create(['name' => 'view archived user']);
         Permission::create(['name' => 'create archived user']);
         Permission::create(['name' => 'update archived user']);
@@ -62,8 +72,9 @@ class UserRolePermissionSeeder extends Seeder
                     'email' => 'admin@gmail.com',
                 ], [
                     'name' => 'Admin',
-                    'email' => 'admin@gmail.com',
                     'username' => 'admin',
+                    'email' => 'admin@gmail.com',
+                    'is_approved' => '1',
                     'password' => Hash::make ('admin123'),
                     'email_verified_at' => now(),
                 ]);
@@ -83,6 +94,7 @@ class UserRolePermissionSeeder extends Seeder
                             'name' => 'agent',
                             'username' => 'agent',
                             'email' => 'agent@gmail.com',
+                            'is_approved' => '1',
                             'password' => Hash::make ('12345678'),
                             'email_verified_at' => now(),
                         ]);

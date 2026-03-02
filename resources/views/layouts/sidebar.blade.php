@@ -28,17 +28,31 @@
         <li class="menu-header small">
             <span class="menu-header-text">{{__('Apps & Pages')}}</span>
         </li>
-        @canany(['view user', 'view archived user'])
-            <li class="menu-item {{ request()->routeIs('dashboard.user.*') || request()->routeIs('dashboard.archived-user.*') ? 'open' : '' }}">
+        @canany(['view user', 'view archived user', 'view agent', 'view customer'])
+            <li class="menu-item {{ request()->routeIs('dashboard.user.*') || request()->routeIs('dashboard.agent.*') || request()->routeIs('dashboard.customer.*') || request()->routeIs('dashboard.archived-user.*') ? 'open' : '' }}">
                 <a href="javascript:void(0);" class="menu-link menu-toggle">
                     <i class="menu-icon tf-icons ti ti-users"></i>
                     <div>{{__('Users')}}</div>
                 </a>
                 <ul class="menu-sub">
-                    @can(['view user'])
+                    {{-- @can(['view user'])
                         <li class="menu-item {{ request()->routeIs('dashboard.user.*') ? 'active' : '' }}">
                             <a href="{{route('dashboard.user.index')}}" class="menu-link">
                                 <div>{{__('All Users')}}</div>
+                            </a>
+                        </li>
+                    @endcan --}}
+                    @can(['view agent'])
+                        <li class="menu-item {{ request()->routeIs('dashboard.agents.*') ? 'active' : '' }}">
+                            <a href="{{route('dashboard.agents.index')}}" class="menu-link">
+                                <div>{{__('Agents')}}</div>
+                            </a>
+                        </li>
+                    @endcan
+                    @can(['view customer'])
+                        <li class="menu-item {{ request()->routeIs('dashboard.customers.*') ? 'active' : '' }}">
+                            <a href="{{route('dashboard.customers.index')}}" class="menu-link">
+                                <div>{{__('Customers')}}</div>
                             </a>
                         </li>
                     @endcan

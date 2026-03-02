@@ -80,23 +80,8 @@
         updateTime();
         setInterval(updateTime, 60000);
     </script>
-    {{-- <script src="https://cdn.jsdelivr.net/npm/pusher-js@7.0.3"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/laravel-echo/1.11.1/echo.iife.min.js"></script> --}}
     <script>
         $(document).ready(function() {
-            // window.Pusher = Pusher;
-            // window.Echo = new Echo({
-            //     broadcaster: 'pusher',
-            //     key: "{{ env('PUSHER_APP_KEY') }}",
-            //     cluster: "{{ env('PUSHER_APP_CLUSTER') }}",
-            //     forceTLS: true
-            // });
-
-            // window.Echo.private(`notifications.${@php echo auth()->user()->id;@endphp}`)
-            // .listen('NotificationEvent', (e) => {
-            //     console.log('New Notification:', e);
-            //     fetchNotifications(); // Refresh the notification list
-            // });
 
             const notificationDropdown = $('.dropdown-notifications-list ul');
             const markAllAsReadButton = $('.dropdown-notifications-all');
@@ -132,7 +117,7 @@
             // Fetch notifications
             function fetchNotifications() {
                 $.ajax({
-                    url: '/notifications',
+                    url: '/dashboard/notifications',
                     type: 'GET',
                     dataType: 'json',
                     success: function(response) {
@@ -193,7 +178,7 @@
             notificationDropdown.on('click', '.dropdown-notifications-read', function() {
                 const notificationId = $(this).data('id');
                 $.ajax({
-                    url: `/notifications/${notificationId}/mark-as-read`,
+                    url: `/dashboard/notifications/${notificationId}/mark-as-read`,
                     type: 'POST',
                     headers: {
                         'X-CSRF-TOKEN': csrfToken
@@ -210,7 +195,7 @@
             // Mark all notifications as read
             markAllAsReadButton.on('click', function() {
                 $.ajax({
-                    url: '/notifications/mark-all-as-read',
+                    url: '/dashboard/notifications/mark-all-as-read',
                     type: 'POST',
                     headers: {
                         'X-CSRF-TOKEN': csrfToken
@@ -228,7 +213,7 @@
             notificationDropdown.on('click', '.dropdown-notifications-archive', function() {
                 const notificationId = $(this).data('id');
                 $.ajax({
-                    url: `/notifications/${notificationId}/delete`, // Change the endpoint to your delete API
+                    url: `/dashboard/notifications/${notificationId}/delete`, // Change the endpoint to your delete API
                     type: 'POST',
                     headers: {
                         'X-CSRF-TOKEN': csrfToken

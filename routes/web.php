@@ -11,7 +11,9 @@ use App\Http\Controllers\Dashboard\ProfileController;
 use App\Http\Controllers\Dashboard\RolePermission\PermissionController;
 use App\Http\Controllers\Dashboard\RolePermission\RoleController;
 use App\Http\Controllers\Dashboard\SettingController;
+use App\Http\Controllers\Dashboard\User\AgentController;
 use App\Http\Controllers\Dashboard\User\ArchivedUserController;
+use App\Http\Controllers\Dashboard\User\CustomerController;
 use App\Http\Controllers\Dashboard\User\UserController;
 use App\Http\Controllers\Frontend\HomeController as FrontendHomeController;
 use App\Http\Middleware\CheckAccountActivation;
@@ -101,23 +103,23 @@ Route::middleware(['auth', 'verified'])->group(function () {
         return view('errors.pending');
     })->name('pending');
     Route::middleware(['check.activation', 'not.user'])->group(function () {
-
-        Route::resource('profile', ProfileController::class);
-        Route::post('profile/setting/account/{id}', [ProfileController::class, 'accountDeactivation'])->name('account.deactivate');
-        Route::post('profile/security/password/{id}', [ProfileController::class, 'passwordUpdate'])->name('update.password');
-
-        Route::get('/notifications', [NotificationController::class, 'index']);
-        Route::post('/notifications/{id}/mark-as-read', [NotificationController::class, 'markAsRead']);
-        Route::post('/notifications/mark-all-as-read', [NotificationController::class, 'markAllAsRead']);
-        Route::post('/notifications/{id}/delete', [NotificationController::class, 'deleteNotification']);
-        Route::get('/notifications/send-test-noti/{id}', [NotificationController::class, 'testNotification']);
-
         Route::get('dashboard', [HomeController::class, 'index'])->name('dashboard');
 
         // Admin Dashboard Authentication Routes
         Route::prefix('dashboard')->name('dashboard.')->group(function () {
+            Route::resource('profile', ProfileController::class);
+            Route::post('profile/setting/account/{id}', [ProfileController::class, 'accountDeactivation'])->name('account.deactivate');
+            Route::post('profile/security/password/{id}', [ProfileController::class, 'passwordUpdate'])->name('update.password');
+
+            Route::get('/notifications', [NotificationController::class, 'index']);
+            Route::post('/notifications/{id}/mark-as-read', [NotificationController::class, 'markAsRead']);
+            Route::post('/notifications/mark-all-as-read', [NotificationController::class, 'markAllAsRead']);
+            Route::post('/notifications/{id}/delete', [NotificationController::class, 'deleteNotification']);
+            Route::get('/notifications/send-test-noti/{id}', [NotificationController::class, 'testNotification']);
 
             Route::resource('user', UserController::class);
+            Route::resource('agents', AgentController::class);
+            Route::resource('customers', CustomerController::class);
             Route::resource('archived-user', ArchivedUserController::class);
             Route::get('user/restore/{id}', [ArchivedUserController::class, 'restoreUser'])->name('archived-user.restore');
             Route::get('user/status/{id}', [UserController::class, 'updateStatus'])->name('user.status.update');
@@ -137,8 +139,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
             Route::post('send-mail/setting', [SettingController::class, 'sendTestMail'])->name('setting.send_test_mail');
 
             // User Dashboard Authentication Routes
-
-
 
         });
     });

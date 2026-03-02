@@ -132,7 +132,7 @@
                 </a>
                 <ul class="dropdown-menu dropdown-menu-end">
                     <li>
-                        <a class="dropdown-item mt-0" href="{{ route('profile.index') }}">
+                        <a class="dropdown-item mt-0" href="{{ route('dashboard.profile.index') }}">
                             <div class="d-flex align-items-center">
                                 <div class="flex-shrink-0 me-2">
                                     <div class="avatar avatar-online">
@@ -152,13 +152,13 @@
                         <div class="dropdown-divider my-1 mx-n2"></div>
                     </li>
                     <li>
-                        <a class="dropdown-item" href="{{ route('profile.index') }}">
+                        <a class="dropdown-item" href="{{ route('dashboard.profile.index') }}">
                             <i class="ti ti-user me-3 ti-md"></i><span
                                 class="align-middle">{{ __('My Profile') }}</span>
                         </a>
                     </li>
                     <li>
-                        <a class="dropdown-item" href="{{ route('profile.index', ['tab' => 'account']) }}">
+                        <a class="dropdown-item" href="{{ route('dashboard.profile.index', ['tab' => 'account']) }}">
                             <i class="ti ti-settings me-3 ti-md"></i><span
                                 class="align-middle">{{ __('Settings') }}</span>
                         </a>
