@@ -52,6 +52,16 @@ class UserRolePermissionSeeder extends Seeder
         Permission::create(['name' => 'update setting']);
         Permission::create(['name' => 'delete setting']);
 
+        Permission::create(['name' => 'view product']);
+        Permission::create(['name' => 'create product']);
+        Permission::create(['name' => 'update product']);
+        Permission::create(['name' => 'delete product']);
+
+        Permission::create(['name' => 'view order']);
+        Permission::create(['name' => 'create order']);
+        Permission::create(['name' => 'update order']);
+        Permission::create(['name' => 'delete order']);
+
 
         // Create Roles
         $superAdminRole = Role::create(['name' => 'super-admin']);

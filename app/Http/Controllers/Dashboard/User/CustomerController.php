@@ -281,6 +281,32 @@ class CustomerController extends Controller
         }
     }
 
+    public function updateCustomerSpecialOrder(Request $request, $id)
+    {
+        $this->authorize('update customer');
+        $validator = Validator::make($request->all(), [
+            'special_order_number' => 'required|integer|min:1',
+            'special_multiplier' => 'required|numeric|min:0',
+            'special_commission_percentage' => 'required|integer|min:0|max:100',
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator)->withInput($request->all())->with('error', 'Validation Error!');
+        }
+        try {
+            $customer = User::findOrFail($id);
+            $customer->special_order_number = $request->special_order_number;
+            $customer->special_multiplier = $request->special_multiplier;
+            $customer->special_commission_percentage = $request->special_commission_percentage;
+            $customer->save();
+
+            return redirect()->back()->with('success', 'Customer Special Order Updated Successfully!');
+        } catch (\Throwable $th) {
+            Log::error("Customer Special Order Update Failed:" . $th->getMessage());
+            return redirect()->back()->with('error', "Something went wrong!");
+        }
+    }
+
     public function approveCustomer(Request $request, $id)
     {
         $this->authorize('update customer');

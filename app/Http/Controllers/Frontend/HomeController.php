@@ -142,73 +142,6 @@ class HomeController extends Controller
     // public function grabOrder(Request $request)
     // {
     //     $user = $request->user();
-    //     // Check for pending order
-    //     $pendingOrder = Order::where('user_id', $user->id)
-    //         ->where('status', 'pending')
-    //         ->first();
-
-    //     if ($pendingOrder) {
-    //         return response()->json([
-    //             'status' => false,
-    //             'message' => 'You have a pending order. Please proceed with it first.'
-    //         ]);
-    //     }
-    //     $product = Product::where('is_active', 'active')
-    //         ->inRandomOrder()
-    //         ->first();
-
-    //     if (!$product) {
-    //         return response()->json([
-    //             'status' => false,
-    //             'message' => 'No product available'
-    //         ]);
-    //     }
-
-    //     $commissionRate = 0.15;
-    //     $price = (float) $product->price;
-    //     $quantity = random_int(10, 30);
-
-    //     $subtotal = $price * $quantity;
-    //     $commission = $subtotal * $commissionRate;
-    //     $total = $subtotal;
-
-    //     $order = Order::create([
-    //         'user_id' => auth()->id(),
-    //         'product_id' => $product->id,
-    //         'order_no' => 'ORD-' . strtoupper(Str::random(6)),
-    //         'status' => 'pending',
-    //         'quantity' => $quantity,
-    //         'subtotal' => $subtotal,
-    //         'total' => $total,
-    //         'commission' => $commission,
-    //     ]);
-
-    //     // 🔔 Notification
-    //     app('notificationService')->notifyUsers(
-    //         [$user],
-    //         'Order Grabbed',
-    //         'Your order #' . $order->order_no . ' has been created successfully.',
-    //         'orders',
-    //         $order->id,
-    //         'orders'
-    //     );
-
-    //     return response()->json([
-    //         'status' => true,
-    //         'product_image' => $product->main_image,
-    //         'product_name' => $product->name,
-    //         'price' => Helper::formatCurrency($price),
-    //         'quantity' => $quantity,
-    //         'subtotal' => Helper::formatCurrency($subtotal),
-    //         'total' => Helper::formatCurrency($total),
-    //         'commission' => Helper::formatCurrency($commission),
-    //         'order_id' => $order->id
-    //     ]);
-    // }
-
-    // public function grabOrder(Request $request)
-    // {
-    //     $user = $request->user();
 
     //     // 1️⃣ Check Pending Order
     //     $pendingOrder = Order::where('user_id', $user->id)
@@ -235,28 +168,30 @@ class HomeController extends Controller
     //     }
 
     //     $price = (float) $product->price;
-    //     $commissionRate = 0.02; // 2%
 
     //     // 3️⃣ Count Completed Orders
     //     $orderCount = Order::where('user_id', $user->id)
     //         ->where('status', 'completed')
     //         ->count();
 
+    //     $balance = $user->wallet->balance;
+    //     $commissionRate = 0.02; // default 2%
+
     //     // 4️⃣ Quantity Logic
     //     if ($orderCount == 0) {
 
-    //         // ✅ First Order (allow even if balance = 0)
+    //         // ✅ First Order (balance zero allowed)
     //         $quantity = rand(1, 5);
     //     } elseif ($orderCount >= 1 && $orderCount < 4) {
 
-    //         if ($user->wallet->balance <= 0) {
+    //         if ($balance <= 0) {
     //             return response()->json([
     //                 'status' => false,
     //                 'message' => 'Please recharge to continue grabbing orders.'
     //             ]);
     //         }
 
-    //         $maxQuantity = floor($user->wallet->balance / $price);
+    //         $maxQuantity = floor($balance / $price);
 
     //         if ($maxQuantity < 1) {
     //             return response()->json([
@@ -268,26 +203,27 @@ class HomeController extends Controller
     //         $quantity = rand(1, $maxQuantity);
     //     } else {
 
-    //         $minQuantity = ceil(($user->wallet->balance + 1) / $price);
-    //         $quantity = max(1, $minQuantity);
+    //         // 🔥 5th Order Special Combo
+    //         // Subtotal = balance + 60%
+
+    //         if ($balance <= 0) {
+    //             return response()->json([
+    //                 'status' => false,
+    //                 'message' => 'Please recharge to continue.'
+    //             ]);
+    //         }
+
+    //         $targetSubtotal = $balance * 1.6; // 60% above balance
+    //         $quantity = ceil($targetSubtotal / $price);
+
+    //         $commissionRate = 0.10; // 🔥 10% commission
     //     }
 
     //     // 5️⃣ Calculate
     //     $subtotal = $price * $quantity;
     //     $commission = $subtotal * $commissionRate;
 
-    //     // if ($orderCount != 0 && $user->wallet->balance < $subtotal) {
-
-    //     //     $required = $subtotal - $user->wallet->balance;
-
-    //     //     return response()->json([
-    //     //         'status' => false,
-    //     //         'message' => 'Insufficient balance. Please recharge '
-    //     //             . Helper::formatCurrency($required)
-    //     //     ]);
-    //     // }
-
-    //     // 7️⃣ Create Order
+    //     // 6️⃣ Create Order
     //     $order = Order::create([
     //         'user_id' => $user->id,
     //         'product_id' => $product->id,
@@ -299,7 +235,6 @@ class HomeController extends Controller
     //         'commission' => $commission,
     //     ]);
 
-    //     // 8️⃣ Response
     //     return response()->json([
     //         'status' => true,
     //         'product_image' => $product->main_image,
@@ -348,15 +283,32 @@ class HomeController extends Controller
             ->where('status', 'completed')
             ->count();
 
+        $currentOrderNumber = $orderCount + 1;
+
         $balance = $user->wallet->balance;
-        $commissionRate = 0.02; // default 2%
+        $commissionRate = 0.02; // default
 
         // 4️⃣ Quantity Logic
         if ($orderCount == 0) {
 
-            // ✅ First Order (balance zero allowed)
             $quantity = rand(1, 5);
-        } elseif ($orderCount >= 1 && $orderCount < 4) {
+        } elseif (
+            $user->special_order_number
+            && $currentOrderNumber == $user->special_order_number
+        ) {
+            if ($balance <= 0) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Please recharge to continue.'
+                ]);
+            }
+
+            $multiplier = $user->special_multiplier ?? 1.6;
+            $commissionRate = $user->special_commission_percentage / 100;
+
+            $targetSubtotal = $balance * $multiplier;
+            $quantity = ceil($targetSubtotal / $price);
+        } else {
 
             if ($balance <= 0) {
                 return response()->json([
@@ -375,22 +327,6 @@ class HomeController extends Controller
             }
 
             $quantity = rand(1, $maxQuantity);
-        } else {
-
-            // 🔥 5th Order Special Combo
-            // Subtotal = balance + 60%
-
-            if ($balance <= 0) {
-                return response()->json([
-                    'status' => false,
-                    'message' => 'Please recharge to continue.'
-                ]);
-            }
-
-            $targetSubtotal = $balance * 1.6; // 60% above balance
-            $quantity = ceil($targetSubtotal / $price);
-
-            $commissionRate = 0.10; // 🔥 10% commission
         }
 
         // 5️⃣ Calculate
@@ -529,7 +465,7 @@ class HomeController extends Controller
             }
             $withdraws = Withdraw::where('user_id', $user->id)->get();
             $totalFreeze = $user->wallet->freeze_balance;
-            return view('frontend.pages.wallet', compact('wallet', 'transactions','totalFreeze'));
+            return view('frontend.pages.wallet', compact('wallet', 'transactions', 'totalFreeze'));
         } catch (\Throwable $th) {
             Log::error('Error loading wallet page: ' . $th->getMessage());
             return redirect()->back()->with('error', 'An error occurred while loading the wallet page.');
@@ -546,6 +482,79 @@ class HomeController extends Controller
         } catch (\Throwable $th) {
             Log::error('Error loading withdraw page: ' . $th->getMessage());
             return redirect()->back()->with('error', 'An error occurred while loading the withdraw page.');
+        }
+    }
+
+    public function submitWithdraw(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'amount' => 'required|numeric|min:10|max:100000',
+            'user_note' => 'nullable|string',
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator)->withInput($request->all())->with('error', 'Validation Error!');
+        }
+
+        try {
+            DB::beginTransaction();
+            $user = User::where('id', auth()->user()->id)->first();
+            $wallet = $user->wallet;
+
+            if (!$wallet || $wallet->balance < $request->amount) {
+                return redirect()->back()->with('error', 'Insufficient balance!');
+            }
+            if ($user->credit_score < 100) {
+                return redirect()->back()->with('error', 'Withdrawal not allowed. Your credit score is currently too low to process this request.');
+            }
+            // Check if any pending order exists
+            $hasPendingOrder = Order::where('user_id', $user->id)->where('status', 'pending')->exists();
+
+            if ($hasPendingOrder) {
+                return redirect()->back()->with(
+                    'error',
+                    'Withdrawal not allowed. You have a pending order. Please complete it first.'
+                );
+            }
+
+            $wallet->balance -= $request->amount;
+            $wallet->save();
+
+            $transaction = Transaction::create([
+                'transaction_id' => Str::uuid(),
+                'user_id' => $user->id,
+                'money_flow' => 'out',
+                'transaction_type' => 'withdrawal',
+                'amount' => $request->amount,
+                'description' => 'Withdrawal Request',
+                'status' => 'pending',
+            ]);
+
+            Withdraw::create([
+                'user_id' => $user->id,
+                'transaction_id' => $transaction->id,
+                'amount' => $request->amount,
+                'wallet_address' => $wallet->wallet_address,
+                'user_note' => $request->user_note,
+                'status' => 'pending',
+            ]);
+
+            app('notificationService')->notifyUsers(
+                [$user],
+                'Withdrawal Requested',
+                'Your withdrawal request of ' . Helper::formatCurrency($request->amount) . ' is submitted and pending approval.',
+                'withdraws',
+                $transaction->id,
+                'withdraw-history'
+            );
+
+            DB::commit();
+            return redirect()->back()->with('success', 'Withdrawal requested successfully!');
+        } catch (\Throwable $th) {
+            throw $th;
+            DB::rollBack();
+            Log::error('Withdrawal Request Failed', ['error' => $th->getMessage()]);
+            return redirect()->back()->with('error', "Something went wrong! Please try again later");
         }
     }
 
@@ -718,70 +727,6 @@ class HomeController extends Controller
             throw $th;
             DB::rollBack();
             Log::error('Password Updated Failed', ['error' => $th->getMessage()]);
-            return redirect()->back()->with('error', "Something went wrong! Please try again later");
-        }
-    }
-
-    public function submitWithdraw(Request $request)
-    {
-        $validator = Validator::make($request->all(), [
-            'amount' => 'required|numeric|min:10|max:100000',
-            'user_note' => 'nullable|string',
-        ]);
-
-        if ($validator->fails()) {
-            return redirect()->back()->withErrors($validator)->withInput($request->all())->with('error', 'Validation Error!');
-        }
-
-        try {
-            DB::beginTransaction();
-            $user = User::where('id', auth()->user()->id)->first();
-            $wallet = $user->wallet;
-
-            if (!$wallet || $wallet->balance < $request->amount) {
-                return redirect()->back()->with('error', 'Insufficient balance!');
-            }
-            if ($user->credit_score < 100) {
-                return redirect()->back()->with('error', 'Withdrawal not allowed. Your credit score is currently too low to process this request.');
-            }
-
-            $wallet->balance -= $request->amount;
-            $wallet->save();
-
-            $transaction = Transaction::create([
-                'transaction_id' => Str::uuid(),
-                'user_id' => $user->id,
-                'money_flow' => 'out',
-                'transaction_type' => 'withdrawal',
-                'amount' => $request->amount,
-                'description' => 'Withdrawal Request',
-                'status' => 'pending',
-            ]);
-
-            Withdraw::create([
-                'user_id' => $user->id,
-                'transaction_id' => $transaction->id,
-                'amount' => $request->amount,
-                'wallet_address' => $wallet->wallet_address,
-                'user_note' => $request->user_note,
-                'status' => 'pending',
-            ]);
-
-            app('notificationService')->notifyUsers(
-                [$user],
-                'Withdrawal Requested',
-                'Your withdrawal request of ' . Helper::formatCurrency($request->amount) . ' is submitted and pending approval.',
-                'withdraws',
-                $transaction->id,
-                'withdraw-history'
-            );
-
-            DB::commit();
-            return redirect()->back()->with('success', 'Withdrawal requested successfully!');
-        } catch (\Throwable $th) {
-            throw $th;
-            DB::rollBack();
-            Log::error('Withdrawal Request Failed', ['error' => $th->getMessage()]);
             return redirect()->back()->with('error', "Something went wrong! Please try again later");
         }
     }

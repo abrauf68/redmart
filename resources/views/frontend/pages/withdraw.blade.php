@@ -89,7 +89,36 @@
 
 
             {{-- CHECK BANK DETAILS --}}
-            @if (!$user->bankDetails)
+            @php
+                $bankDetails = $user->bankDetails ?? null;
+
+                $isIncomplete = false;
+
+                if (!$bankDetails) {
+                    $isIncomplete = true;
+                } else {
+                    if ($bankDetails->method === 'crypto') {
+                        // Crypto fields check
+                        if (empty($bankDetails->crypto_type) || empty($bankDetails->crypto_address)) {
+                            $isIncomplete = true;
+                        }
+                    } else {
+                        // Bank fields check
+                        if (
+                            empty($bankDetails->bank_name) ||
+                            empty($bankDetails->beneficiary_name) ||
+                            empty($bankDetails->account_number) ||
+                            empty($bankDetails->account_type) ||
+                            empty($bankDetails->ifsc_code) ||
+                            empty($bankDetails->branch)
+                        ) {
+                            $isIncomplete = true;
+                        }
+                    }
+                }
+            @endphp
+
+            @if ($isIncomplete)
                 <!-- BANK DETAILS NOT FILLED -->
                 <div class="bank-warning mb-4">
                     <h5 class="text-danger mb-3">Receiving Bank Information Incomplete</h5>
@@ -122,8 +151,8 @@
 
                         <div class="mb-3">
                             <label class="form-label">Amount</label>
-                            <input type="number" name="amount" step="0.01"
-                                class="form-control" placeholder="Enter amount" required>
+                            <input type="number" name="amount" step="0.01" class="form-control"
+                                placeholder="Enter amount" required>
                         </div>
 
                         <div class="mb-3">

@@ -95,7 +95,7 @@
                                         No Inviter
                                     @endif
                                 </td>
-                                <td>{{ $customer->wallet->balance }}</td>
+                                <td>{{ \App\Helpers\Helper::formatCurrency($customer->wallet->balance) }}</td>
                                 <td>
                                     <span
                                         class="badge me-4 bg-label-{{ $customer->is_active == 'active' ? 'success' : 'danger' }}">{{ ucfirst($customer->is_active) }}</span>

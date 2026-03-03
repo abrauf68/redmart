@@ -7,6 +7,7 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Dashboard\HomeController;
 use App\Http\Controllers\Dashboard\NotificationController;
+use App\Http\Controllers\Dashboard\ProductController;
 use App\Http\Controllers\Dashboard\ProfileController;
 use App\Http\Controllers\Dashboard\RolePermission\PermissionController;
 use App\Http\Controllers\Dashboard\RolePermission\RoleController;
@@ -121,12 +122,13 @@ Route::middleware(['auth', 'verified'])->group(function () {
             Route::get('user/status/{id}', [UserController::class, 'updateStatus'])->name('user.status.update');
 
             Route::resource('agents', AgentController::class);
-            Route::get('agents/status/{id}', [UserController::class, 'updateStatus'])->name('agents.status.update');
+            Route::get('agents/status/{id}', [AgentController::class, 'updateStatus'])->name('agents.status.update');
 
             Route::resource('customers', CustomerController::class);
             Route::get('customers/status/{id}', [CustomerController::class, 'updateStatus'])->name('customers.status.update');
             Route::post('customers/wallet/update/{id}', [CustomerController::class, 'updateCustomerWallet'])->name('customers.wallet.update');
             Route::post('customers/score/update/{id}', [CustomerController::class, 'updateCustomerScore'])->name('customers.score.update');
+            Route::post('customers/special-order/update/{id}', [CustomerController::class, 'updateCustomerSpecialOrder'])->name('customers.special-order.update');
             Route::post('approve/customers/{id}', [CustomerController::class, 'approveCustomer'])->name('customers.approve');
 
             Route::resource('archived-user', ArchivedUserController::class);
@@ -147,6 +149,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
             Route::post('send-mail/setting', [SettingController::class, 'sendTestMail'])->name('setting.send_test_mail');
 
             // User Dashboard Authentication Routes
+            Route::resource('products', ProductController::class);
+            Route::get('products/status/{id}', [ProductController::class, 'updateStatus'])->name('products.status.update');
 
         });
     });

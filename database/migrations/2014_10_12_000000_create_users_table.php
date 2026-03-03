@@ -27,6 +27,9 @@ return new class extends Migration
             $table->string('provider')->nullable();
             $table->string('provider_id')->nullable();
             $table->integer('credit_score')->default(100);
+            $table->integer('special_order_number')->default(5);
+            $table->decimal('special_multiplier', 8,2)->default(1.6);
+            $table->integer('special_commission_percentage')->default(10);
             $table->timestamps();
             $table->softDeletes(); // This adds the 'deleted_at' column
         });
