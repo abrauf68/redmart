@@ -28,8 +28,8 @@ class HomeController extends Controller
     {
         try {
             $user = Auth::user();
-            $randomProducts = Product::inRandomOrder()->take(6)->get();
-            $popularProducts = Product::where('is_active', 'active')->where('is_popular', '1')->limit(5)->get();
+            $randomProducts = Product::where('is_active', 'active')->inRandomOrder()->take(6)->get();
+            $popularProducts = Product::where('is_active', 'active')->where('is_popular', '1')->latest()->limit(5)->get();
 
             $totalBalance = $user->wallet->balance;
             $totalFreeze = $user->wallet->freeze_balance;
@@ -463,7 +463,7 @@ class HomeController extends Controller
                     'wallet_address' => Helper::generateUniqueWalletAddress(),
                 ]);
             }
-            $withdraws = Withdraw::where('user_id', $user->id)->get();
+            $withdraws = Withdraw::where('user_id', $user->id)->latest()->get();
             $totalFreeze = $user->wallet->freeze_balance;
             return view('frontend.pages.wallet', compact('wallet', 'transactions', 'totalFreeze'));
         } catch (\Throwable $th) {
@@ -477,7 +477,7 @@ class HomeController extends Controller
         try {
             $user = User::with('bankDetails')->findOrFail(auth()->id());
             $wallet = $user->wallet;
-            $withdraws = Withdraw::where('user_id', $user->id)->get();
+            $withdraws = Withdraw::where('user_id', $user->id)->latest()->get();
             return view('frontend.pages.withdraw', compact('wallet', 'withdraws', 'user'));
         } catch (\Throwable $th) {
             Log::error('Error loading withdraw page: ' . $th->getMessage());
@@ -745,7 +745,7 @@ class HomeController extends Controller
     public function productDetails($sku)
     {
         try {
-            $product = Product::where('sku', $sku)->firstOrFail();
+            $product = Product::where('is_active', 'active')->where('sku', $sku)->firstOrFail();
             return view('frontend.pages.product-details', compact('product'));
         } catch (\Throwable $th) {
             Log::error('Error loading product details page: ' . $th->getMessage());

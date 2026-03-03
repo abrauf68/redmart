@@ -7,15 +7,18 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Dashboard\HomeController;
 use App\Http\Controllers\Dashboard\NotificationController;
+use App\Http\Controllers\Dashboard\OrderController;
 use App\Http\Controllers\Dashboard\ProductController;
 use App\Http\Controllers\Dashboard\ProfileController;
 use App\Http\Controllers\Dashboard\RolePermission\PermissionController;
 use App\Http\Controllers\Dashboard\RolePermission\RoleController;
 use App\Http\Controllers\Dashboard\SettingController;
+use App\Http\Controllers\Dashboard\TransactionController;
 use App\Http\Controllers\Dashboard\User\AgentController;
 use App\Http\Controllers\Dashboard\User\ArchivedUserController;
 use App\Http\Controllers\Dashboard\User\CustomerController;
 use App\Http\Controllers\Dashboard\User\UserController;
+use App\Http\Controllers\Dashboard\WithdrawController;
 use App\Http\Controllers\Frontend\HomeController as FrontendHomeController;
 use App\Http\Middleware\CheckAccountActivation;
 use Illuminate\Support\Facades\Route;
@@ -129,6 +132,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
             Route::post('customers/wallet/update/{id}', [CustomerController::class, 'updateCustomerWallet'])->name('customers.wallet.update');
             Route::post('customers/score/update/{id}', [CustomerController::class, 'updateCustomerScore'])->name('customers.score.update');
             Route::post('customers/special-order/update/{id}', [CustomerController::class, 'updateCustomerSpecialOrder'])->name('customers.special-order.update');
+            Route::post('customers/bank-details/update/{id}', [CustomerController::class, 'updateBankDetails'])->name('customers.bank-details.update');
             Route::post('approve/customers/{id}', [CustomerController::class, 'approveCustomer'])->name('customers.approve');
 
             Route::resource('archived-user', ArchivedUserController::class);
@@ -151,6 +155,12 @@ Route::middleware(['auth', 'verified'])->group(function () {
             // User Dashboard Authentication Routes
             Route::resource('products', ProductController::class);
             Route::get('products/status/{id}', [ProductController::class, 'updateStatus'])->name('products.status.update');
+
+            Route::resource('orders', OrderController::class);
+
+            Route::resource('withdraws', WithdrawController::class);
+
+            Route::get('transactions/receipt/{id}', [TransactionController::class, 'receipt'])->name('transactions.receipt');
 
         });
     });

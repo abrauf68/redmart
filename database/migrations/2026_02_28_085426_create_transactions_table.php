@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('transaction_id')->unique();
             $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
             $table->enum('money_flow', ['in', 'out'])->default('in');
-            $table->enum('transaction_type', ['deposit', 'withdrawal', 'transfer', 'referral_bonus', 'reward', 'recharge', 'purchase'])->default('deposit');
+            $table->enum('transaction_type', ['deposit', 'withdrawal', 'transfer', 'referral_bonus', 'reward', 'recharge', 'purchase','refund'])->default('deposit');
             $table->decimal('amount', 15, 2);
             $table->text('description')->nullable();
             $table->enum('status', ['pending', 'completed', 'failed', 'cancelled'])->default('pending');

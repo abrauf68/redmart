@@ -41,7 +41,7 @@
                                     <div class="d-flex align-items-center">
 
                                         <!-- User Image -->
-                                        <div class="avatar avatar-md me-3">
+                                        <div class="avatar avatar-sm me-3">
                                             @if ($agent->image)
                                                 <img src="{{ asset($agent->image) }}" alt="Avatar"
                                                     class="rounded-circle">
@@ -59,9 +59,6 @@
                                             </span>
                                             <small class="text-muted">
                                                 {{ $agent->email }}
-                                            </small>
-                                            <small class="text-muted">
-                                                {{ '@'.$agent->username }}
                                             </small>
                                         </div>
 

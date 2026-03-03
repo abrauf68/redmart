@@ -41,7 +41,7 @@
                                     <div class="d-flex align-items-center">
 
                                         <!-- User Image -->
-                                        <div class="avatar avatar-md me-3">
+                                        <div class="avatar avatar-sm me-3">
                                             @if ($customer->image)
                                                 <img src="{{ asset($customer->image) }}" alt="Avatar"
                                                     class="rounded-circle">
@@ -69,7 +69,7 @@
                                         <div class="d-flex align-items-center">
 
                                             <!-- User Image -->
-                                            <div class="avatar avatar-md me-3">
+                                            <div class="avatar avatar-sm me-3">
                                                 @if ($customer->inviter->image)
                                                     <img src="{{ asset($customer->inviter->image) }}" alt="Avatar"
                                                         class="rounded-circle">

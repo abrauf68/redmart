@@ -61,6 +61,7 @@ class ProductController extends Controller
         ]);
 
         if ($validator->fails()) {
+            Log::error('Product Store Validation Failed', ['errors' => $validator->errors()]);
             return redirect()->back()->withErrors($validator)->withInput($request->all())->with('error', 'Validation Error!');
         }
 

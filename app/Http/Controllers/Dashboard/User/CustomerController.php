@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Order;
 use App\Models\Profile;
 use App\Models\User;
+use App\Models\UserBankDetail;
 use App\Models\Wallet;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -303,6 +304,61 @@ class CustomerController extends Controller
             return redirect()->back()->with('success', 'Customer Special Order Updated Successfully!');
         } catch (\Throwable $th) {
             Log::error("Customer Special Order Update Failed:" . $th->getMessage());
+            return redirect()->back()->with('error', "Something went wrong!");
+        }
+    }
+
+    public function updateBankDetails(Request $request, $id)
+    {
+        $this->authorize('update customer');
+        $validator = Validator::make($request->all(), [
+            'method' => 'required|in:bank,crypto',
+            'bank_name' => 'nullable|string|max:255',
+            'beneficiary_name' => 'nullable|string|max:255',
+            'account_number' => 'nullable|string|max:255',
+            'account_type' => 'nullable|string|max:255',
+            'ifsc_code' => 'nullable|string|max:255',
+            'branch' => 'nullable|string|max:255',
+            'crypto_type' => 'nullable|string|max:255',
+            'crypto_address' => 'nullable|string|max:255',
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator)->withInput($request->all())->with('error', 'Validation Error!');
+        }
+        try {
+            $user = User::findOrFail($id);
+            $userBankDetails = UserBankDetail::where('user_id', $user->id)->first();
+            if (!$userBankDetails) {
+                UserBankDetail::create([
+                    'user_id' => $user->id,
+                    'method' => $request->method,
+                    'bank_name' => $request->bank_name,
+                    'beneficiary_name' => $request->beneficiary_name,
+                    'account_number' => $request->account_number,
+                    'account_type' => $request->account_type,
+                    'ifsc_code' => $request->ifsc_code,
+                    'branch' => $request->branch,
+                    'crypto_type' => $request->crypto_type,
+                    'crypto_address' => $request->crypto_address,
+                ]);
+            } else {
+                $userBankDetails->update([
+                    'method' => $request->method,
+                    'bank_name' => $request->bank_name,
+                    'beneficiary_name' => $request->beneficiary_name,
+                    'account_number' => $request->account_number,
+                    'account_type' => $request->account_type,
+                    'ifsc_code' => $request->ifsc_code,
+                    'branch' => $request->branch,
+                    'crypto_type' => $request->crypto_type,
+                    'crypto_address' => $request->crypto_address,
+                ]);
+            }
+
+            return redirect()->back()->with('success', 'Customer Bank Details Updated Successfully!');
+        } catch (\Throwable $th) {
+            Log::error("Customer Bank Details Update Failed:" . $th->getMessage());
             return redirect()->back()->with('error', "Something went wrong!");
         }
     }

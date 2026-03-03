@@ -28,6 +28,30 @@
         <li class="menu-header small">
             <span class="menu-header-text">{{__('Apps & Pages')}}</span>
         </li>
+        @can(['view order'])
+            <li class="menu-item {{ request()->routeIs('dashboard.orders.*') ? 'active' : '' }}">
+                <a href="{{ route('dashboard.orders.index') }}" class="menu-link">
+                    <i class="menu-icon tf-icons ti ti-shopping-cart"></i>
+                    <div>{{__('Orders')}}</div>
+                </a>
+            </li>
+        @endcan
+        @can(['view withdraw'])
+            <li class="menu-item {{ request()->routeIs('dashboard.withdraws.*') ? 'active' : '' }}">
+                <a href="{{ route('dashboard.withdraws.index') }}" class="menu-link">
+                    <i class="menu-icon tf-icons ti ti-receipt-2"></i>
+                    <div>{{__('Withdraw Requests')}}</div>
+                </a>
+            </li>
+        @endcan
+        @can(['view product'])
+            <li class="menu-item {{ request()->routeIs('dashboard.products.*') ? 'active' : '' }}">
+                <a href="{{ route('dashboard.products.index') }}" class="menu-link">
+                    <i class="menu-icon tf-icons ti ti-shopping-bag"></i>
+                    <div>{{__('Products')}}</div>
+                </a>
+            </li>
+        @endcan
         @canany(['view user', 'view archived user', 'view agent', 'view customer'])
             <li class="menu-item {{ request()->routeIs('dashboard.user.*') || request()->routeIs('dashboard.agents.*') || request()->routeIs('dashboard.customers.*') || request()->routeIs('dashboard.archived-user.*') ? 'open' : '' }}">
                 <a href="javascript:void(0);" class="menu-link menu-toggle">
