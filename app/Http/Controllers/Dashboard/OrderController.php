@@ -18,14 +18,29 @@ class OrderController extends Controller
     /**
      * Display a listing of the resource.
      */
+
     public function index()
     {
         $this->authorize('view order');
+
         try {
-            $orders = Order::latest()->get();
+            $authUser = User::where('id', auth()->id())->first();
+
+            $orders = Order::with('user');
+
+            // Agar login user Agent hai
+            if ($authUser->hasRole('agent')) {
+
+                $orders->whereHas('user', function ($query) use ($authUser) {
+                    $query->where('inviter_id', $authUser->id);
+                });
+            }
+
+            $orders = $orders->latest()->get();
+
             return view('dashboard.orders.index', compact('orders'));
         } catch (\Throwable $th) {
-            Log::error("Order Index Failed:" . $th->getMessage());
+            Log::error("Order Index Failed: " . $th->getMessage());
             return redirect()->back()->with('error', "Something went wrong! Please try again later");
         }
     }
@@ -111,8 +126,7 @@ class OrderController extends Controller
             $order->status = $request->status;
             $order->save();
 
-            if($request->status == 'completed')
-            {
+            if ($request->status == 'completed') {
                 $wallet->balance += $order->commission;
                 $wallet->save();
 
@@ -163,4 +177,3 @@ class OrderController extends Controller
         }
     }
 }
-

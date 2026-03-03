@@ -22,11 +22,23 @@ class WithdrawController extends Controller
     public function index()
     {
         $this->authorize('view withdraw');
+
         try {
-            $withdraws = Withdraw::with('user')->latest()->get();
+
+            $authUser = User::where('id', auth()->id())->first();
+
+            $withdraws = Withdraw::with('user')
+                ->when($authUser->hasRole('agent'), function ($query) use ($authUser) {
+                    $query->whereHas('user', function ($q) use ($authUser) {
+                        $q->where('inviter_id', $authUser->id);
+                    });
+                })
+                ->latest()
+                ->get();
+
             return view('dashboard.withdraws.index', compact('withdraws'));
         } catch (\Throwable $th) {
-            Log::error("Withdraw Index Failed:" . $th->getMessage());
+            Log::error("Withdraw Index Failed: " . $th->getMessage());
             return redirect()->back()->with('error', "Something went wrong! Please try again later");
         }
     }
