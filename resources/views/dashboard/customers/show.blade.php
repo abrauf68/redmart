@@ -153,18 +153,18 @@
                     </div>
                     <div class="card-body">
 
-                        @if ($customer->bankDetails)
+                        @if (optional($customer->bankDetails))
                             <div class="row">
                                 <div class="col-md-6">
-                                    <p><strong>Method:</strong> {{ ucfirst($customer->bankDetails->method) }}</p>
-                                    <p><strong>Bank:</strong> {{ $customer->bankDetails->bank_name ?? '-' }}</p>
-                                    <p><strong>Account #:</strong> {{ $customer->bankDetails->account_number ?? '-' }}</p>
-                                    <p><strong>IFSC:</strong> {{ $customer->bankDetails->ifsc_code ?? '-' }}</p>
+                                    <p><strong>Method:</strong> {{ ucfirst(optional($customer->bankDetails)->method) }}</p>
+                                    <p><strong>Bank:</strong> {{ optional($customer->bankDetails)->bank_name ?? '-' }}</p>
+                                    <p><strong>Account #:</strong> {{ optional($customer->bankDetails)->account_number ?? '-' }}</p>
+                                    <p><strong>IFSC:</strong> {{ optional($customer->bankDetails)->ifsc_code ?? '-' }}</p>
                                 </div>
 
                                 <div class="col-md-6">
-                                    <p><strong>Crypto:</strong> {{ $customer->bankDetails->crypto_type ?? '-' }}</p>
-                                    <p><strong>Crypto Address:</strong> {{ $customer->bankDetails->crypto_address ?? '-' }}
+                                    <p><strong>Crypto:</strong> {{ optional($customer->bankDetails)->crypto_type ?? '-' }}</p>
+                                    <p><strong>Crypto Address:</strong> {{ optional($customer->bankDetails)->crypto_address ?? '-' }}
                                     </p>
                                 </div>
                             </div>
@@ -318,9 +318,9 @@
                         <div class="mb-3">
                             <label for="method" class="form-label">{{ __('Method') }}</label>
                             <select name="method" id="method" class="form-select select2" required>
-                                <option value="bank" {{ $customer->bankDetails->method == 'bank' ? 'selected' : '' }}>
+                                <option value="bank" {{ optional($customer->bankDetails)->method == 'bank' ? 'selected' : '' }}>
                                     {{ __('Bank') }}</option>
-                                <option value="crypto" {{ $customer->bankDetails->method == 'crypto' ? 'selected' : '' }}>
+                                <option value="crypto" {{ optional($customer->bankDetails)->method == 'crypto' ? 'selected' : '' }}>
                                     {{ __('Crypto') }}</option>
                             </select>
                         </div>
@@ -332,7 +332,7 @@
                             <label for="bank_name">Bank Name</label>
                             <select name="bank_name" class="form-select select2">
                                 <option value="">Select Bank</option>
-                                @php $bank = optional($customer->bankDetails)->bank_name; @endphp
+                                @php $bank = optional(optional($customer->bankDetails))->bank_name; @endphp
 
                                 @foreach (['State Bank of India', 'HDFC Bank', 'ICICI Bank', 'Axis Bank', 'Punjab National Bank', 'Bank of Baroda', 'Kotak Mahindra Bank', 'IndusInd Bank', 'Yes Bank', 'Union Bank of India', 'Other'] as $b)
                                     <option value="{{ $b }}" {{ $bank == $b ? 'selected' : '' }}>
@@ -344,16 +344,16 @@
                         <div class="mb-3">
                             <label for="beneficiary_name">Beneficiary Name</label>
                             <input type="text" name="beneficiary_name"
-                                value="{{ $customer->bankDetails->beneficiary_name }}" class="form-control">
+                                value="{{ optional($customer->bankDetails)->beneficiary_name }}" class="form-control">
                         </div>
                         <div class="mb-3">
                             <label for="account_number">Account Number</label>
                             <input type="text" name="account_number"
-                                value="{{ $customer->bankDetails->account_number }}" class="form-control">
+                                value="{{ optional($customer->bankDetails)->account_number }}" class="form-control">
                         </div>
                         <div class="mb-3">
                             <label for="account_type">Account Type</label>
-                            @php $accountType = optional($customer->bankDetails)->account_type; @endphp
+                            @php $accountType = optional(optional($customer->bankDetails))->account_type; @endphp
                             <select name="account_type" class="form-select select2">
                                 <option value="">Select Account Type</option>
                                 @foreach ([
@@ -374,12 +374,12 @@
                         </div>
                         <div class="mb-3">
                             <label for="ifsc_code">IFSC Code</label>
-                            <input type="text" name="ifsc_code" value="{{ $customer->bankDetails->ifsc_code }}"
+                            <input type="text" name="ifsc_code" value="{{ optional($customer->bankDetails)->ifsc_code }}"
                                 class="form-control">
                         </div>
                         <div class="mb-3">
                             <label for="branch">Branch</label>
-                            <input type="text" name="branch" value="{{ $customer->bankDetails->branch }}"
+                            <input type="text" name="branch" value="{{ optional($customer->bankDetails)->branch }}"
                                 class="form-control">
                         </div>
 
@@ -388,7 +388,7 @@
 
                         <div class="mb-3">
                             <label for="crypto_type">Crypto Type</label>
-                            @php $crypto = optional($customer->bankDetails)->crypto_type; @endphp
+                            @php $crypto = optional(optional($customer->bankDetails))->crypto_type; @endphp
                             <select name="crypto_type" class="form-select select2">
                                 <option value="">Select Crypto Type</option>
                                 @foreach (['BTC', 'ETH', 'USDT', 'BUSD', 'BNB', 'Other'] as $c)
@@ -401,7 +401,7 @@
                         <div class="mb-3">
                             <label for="crypto_address">Crypto Address</label>
                             <input type="text" name="crypto_address"
-                                value="{{ $customer->bankDetails->crypto_address }}" class="form-control">
+                                value="{{ optional($customer->bankDetails)->crypto_address }}" class="form-control">
                         </div>
 
                     </div>
