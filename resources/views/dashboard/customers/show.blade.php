@@ -103,6 +103,10 @@
                             <span>Commission Percentage:</span>
                             <strong>{{ $customer->special_commission_percentage }}</strong>
                         </div>
+                        <div class="d-flex justify-content-between mt-2">
+                            <span>Orders Limit:</span>
+                            <strong>{{ $customer->order_limit }}</strong>
+                        </div>
 
                     </div>
                 </div>
