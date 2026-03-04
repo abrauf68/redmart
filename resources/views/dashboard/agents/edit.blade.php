@@ -33,6 +33,18 @@
                             @enderror
                         </div>
                         <div class="mb-4 col-md-6">
+                            <label for="username" class="form-label">{{ __('Invite Code') }}</label><span
+                                class="text-danger">*</span>
+                            <input class="form-control @error('username') is-invalid @enderror" type="text"
+                                id="username" name="username" placeholder="{{ __('Enter username') }}"
+                                value="{{ old('username', $agent->username) }}" required/>
+                            @error('username')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                            @enderror
+                        </div>
+                        <div class="mb-4 col-md-6">
                             <label for="phone" class="form-label">{{ __('Phone') }}</label>
                             <input class="form-control @error('phone') is-invalid @enderror" type="text" id="phone"
                                 name="phone" placeholder="{{ __('Enter phone') }}"
@@ -44,9 +56,10 @@
                             @enderror
                         </div>
                         <div class="mb-4 col-md-6">
-                            <label for="password" class="form-label">{{ __('Password') }}</label><small>(Leave blank if you don't want to change it)</small>
-                            <input class="form-control @error('password') is-invalid @enderror" type="text" id="password"
-                                name="password" placeholder="{{ __('Enter password') }}"
+                            <label for="password" class="form-label">{{ __('Password') }}</label><small>(Leave blank if you
+                                don't want to change it)</small>
+                            <input class="form-control @error('password') is-invalid @enderror" type="text"
+                                id="password" name="password" placeholder="{{ __('Enter password') }}"
                                 value="{{ old('password') }}" />
                             @error('password')
                                 <span class="invalid-feedback" role="alert">
@@ -66,4 +79,20 @@
 @endsection
 
 @section('script')
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+
+            const usernameInput = document.getElementById('username');
+
+            usernameInput.addEventListener('input', function() {
+
+                // Remove everything except letters and numbers
+                this.value = this.value
+                    .replace(/\s+/g, '') // remove spaces
+                    .replace(/[^a-zA-Z0-9]/g, '') // remove special chars
+                    .toLowerCase(); // optional: force lowercase
+            });
+
+        });
+    </script>
 @endsection

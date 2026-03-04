@@ -4,9 +4,12 @@ namespace App\Helpers;
 
 use App\Models\BusinessSetting;
 use App\Models\CompanySetting;
+use App\Models\Order;
 use App\Models\SystemSetting;
+use App\Models\Transaction;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
+use App\Models\Withdraw;
 use Carbon\Carbon;
 
 class Helper
@@ -130,5 +133,48 @@ class Helper
         } while (\App\Models\Wallet::where('wallet_address', $address)->exists());
 
         return $address;
+    }
+
+    public static function pendingCount($type)
+    {
+        $user = User::find(auth()->user()->id);
+
+        if (!$user) return 0;
+
+        // ADMIN
+        if ($user->hasRole('admin') || $user->hasRole('super-admin')) {
+
+            return match ($type) {
+                'orders' => Order::where('status', 'pending')->count(),
+                'withdraws' => Withdraw::where('status', 'pending')->count(),
+                'recharges' => Transaction::where('transaction_type', 'recharge')
+                                ->where('status', 'pending')
+                                ->count(),
+                'customers' => User::role('user')->where('is_approved', '0')->count(),
+                default => 0
+            };
+        }
+
+        // AGENT
+        $customerIds = User::where('inviter_id', $user->id)->pluck('id');
+
+        return match ($type) {
+            'orders' => Order::whereIn('user_id', $customerIds)
+                            ->where('status', 'pending')
+                            ->count(),
+
+            'withdraws' => Withdraw::whereIn('user_id', $customerIds)
+                            ->where('status', 'pending')
+                            ->count(),
+
+            'recharges' => Transaction::whereIn('user_id', $customerIds)
+                            ->where('transaction_type', 'recharge')
+                            ->where('status', 'pending')
+                            ->count(),
+
+            'customers' => User::role('user')->whereIn('id', $customerIds)->where('is_approved', '0')->count(),
+
+            default => 0
+        };
     }
 }

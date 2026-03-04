@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Dashboard;
 
 use App\Http\Controllers\Controller;
 use App\Models\Order;
+use App\Models\Transaction;
 use App\Models\User;
 use App\Models\Withdraw;
 use Illuminate\Http\Request;
@@ -26,9 +27,11 @@ class HomeController extends Controller
                 'pendingCustomers' => User::role('user')->where('is_approved', '0')->count(),
                 'totalOrders' => Order::count(),
                 'completedOrders' => Order::where('status', 'completed')->count(),
+                'pendingOrders' => Order::where('status', 'pending')->count(),
                 'totalRevenue' => Order::where('status', 'completed')->sum('total'),
                 'totalWithdraws' => Withdraw::count(),
                 'pendingWithdraws' => Withdraw::where('status', 'pending')->count(),
+                'pendingRecharge' => Transaction::where('transaction_type', 'recharge')->where('status', 'pending')->count(),
             ];
 
             // Monthly Orders for Admin (all orders)
@@ -42,8 +45,11 @@ class HomeController extends Controller
                 'pendingCustomers' => User::whereIn('id', $customerIds)->where('is_approved', '0')->count(),
                 'totalOrders' => Order::whereIn('user_id', $customerIds)->count(),
                 'completedOrders' => Order::whereIn('user_id', $customerIds)->where('status', 'completed')->count(),
+                'pendingOrders' => Order::whereIn('user_id', $customerIds)->where('status', 'pending')->count(),
                 'totalCommission' => Order::whereIn('user_id', $customerIds)->where('status', 'completed')->sum('commission'),
-                'totalWithdraws' => Withdraw::where('user_id', $user->id)->count(),
+                'totalWithdraws' => Withdraw::whereIn('user_id', $customerIds)->count(),
+                'pendingWithdraws' => Withdraw::whereIn('user_id', $customerIds)->where('status', 'pending')->count(),
+                'pendingRecharge' => Transaction::whereIn('user_id', $customerIds)->where('transaction_type', 'recharge')->where('status', 'pending')->count(),
             ];
 
             // Monthly Orders only for agent's customers

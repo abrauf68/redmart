@@ -10,6 +10,7 @@ use App\Http\Controllers\Dashboard\NotificationController;
 use App\Http\Controllers\Dashboard\OrderController;
 use App\Http\Controllers\Dashboard\ProductController;
 use App\Http\Controllers\Dashboard\ProfileController;
+use App\Http\Controllers\Dashboard\RechargeController;
 use App\Http\Controllers\Dashboard\RolePermission\PermissionController;
 use App\Http\Controllers\Dashboard\RolePermission\RoleController;
 use App\Http\Controllers\Dashboard\SettingController;
@@ -160,6 +161,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
             Route::resource('withdraws', WithdrawController::class);
 
+            Route::resource('recharges', RechargeController::class);
+            
             Route::get('transactions/receipt/{id}', [TransactionController::class, 'receipt'])->name('transactions.receipt');
 
         });

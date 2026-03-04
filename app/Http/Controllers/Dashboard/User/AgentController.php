@@ -149,6 +149,7 @@ class AgentController extends Controller
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255',
             'phone' => 'nullable|string|max:255',
+            'username' => 'required|string|unique:users,username,' . $id,
             'password' => 'nullable|string|min:6'
         ]);
 
@@ -161,6 +162,7 @@ class AgentController extends Controller
             $user = User::findOrFail($id);
             $user->name = $request->name;
             $user->phone = $request->phone;
+            $user->username = $request->username;
             if($request->password){
                 $user->password = Hash::make($request->password);
             }

@@ -3,6 +3,77 @@
 @section('title', 'Dashboard')
 
 @section('content')
+    @if (
+        $data['pendingCustomers'] > 0 ||
+            $data['pendingOrders']  > 0 ||
+            $data['pendingWithdraws'] > 0 ||
+            $data['pendingRecharge'] > 0)
+        <div class="row mb-4">
+
+            @if ($data['pendingCustomers'] > 0)
+                <div class="col-12">
+                    <a href="{{ route('dashboard.customers.index') }}" class="text-decoration-none">
+                        <div class="alert alert-warning d-flex justify-content-between align-items-center shadow-sm">
+                            <div>
+                                <i class="ti ti-user-exclamation me-2 fs-4"></i>
+                                <strong>{{ $data['pendingCustomers'] }}</strong>
+                                customer(s) pending approval.
+                            </div>
+                            <span class="fw-bold">View →</span>
+                        </div>
+                    </a>
+                </div>
+            @endif
+
+            @if ($data['pendingOrders'] > 0)
+                <div class="col-12">
+                    <a href="{{ route('dashboard.orders.index') }}" class="text-decoration-none">
+                        <div class="alert alert-info d-flex justify-content-between align-items-center shadow-sm">
+                            <div>
+                                <i class="ti ti-shopping-cart-pause me-2 fs-4"></i>
+                                <strong>{{ $data['pendingOrders'] }}</strong>
+                                order(s) pending.
+                            </div>
+                            <span class="fw-bold">View →</span>
+                        </div>
+                    </a>
+                </div>
+            @endif
+
+            @if ($data['pendingWithdraws'] > 0)
+                <div class="col-12">
+                    <a href="{{ route('dashboard.withdraws.index') }}"
+                        class="text-decoration-none">
+                        <div class="alert alert-danger d-flex justify-content-between align-items-center shadow-sm">
+                            <div>
+                                <i class="ti ti-cash-banknote me-2 fs-4"></i>
+                                <strong>{{ $data['pendingWithdraws'] }}</strong>
+                                withdrawal request(s) pending.
+                            </div>
+                            <span class="fw-bold">View →</span>
+                        </div>
+                    </a>
+                </div>
+            @endif
+
+            @if ($data['pendingRecharge'] > 0)
+                <div class="col-12">
+                    <a href="{{ route('dashboard.recharges.index') }}"
+                        class="text-decoration-none">
+                        <div class="alert alert-primary d-flex justify-content-between align-items-center shadow-sm">
+                            <div>
+                                <i class="ti ti-wallet me-2 fs-4"></i>
+                                <strong>{{ $data['pendingRecharge'] }}</strong>
+                                recharge request(s) pending.
+                            </div>
+                            <span class="fw-bold">View →</span>
+                        </div>
+                    </a>
+                </div>
+            @endif
+
+        </div>
+    @endif
     <div class="row">
 
         {{-- Role-based Stats --}}

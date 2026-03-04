@@ -158,13 +158,16 @@
                                 <div class="col-md-6">
                                     <p><strong>Method:</strong> {{ ucfirst(optional($customer->bankDetails)->method) }}</p>
                                     <p><strong>Bank:</strong> {{ optional($customer->bankDetails)->bank_name ?? '-' }}</p>
-                                    <p><strong>Account #:</strong> {{ optional($customer->bankDetails)->account_number ?? '-' }}</p>
+                                    <p><strong>Account #:</strong>
+                                        {{ optional($customer->bankDetails)->account_number ?? '-' }}</p>
                                     <p><strong>IFSC:</strong> {{ optional($customer->bankDetails)->ifsc_code ?? '-' }}</p>
                                 </div>
 
                                 <div class="col-md-6">
-                                    <p><strong>Crypto:</strong> {{ optional($customer->bankDetails)->crypto_type ?? '-' }}</p>
-                                    <p><strong>Crypto Address:</strong> {{ optional($customer->bankDetails)->crypto_address ?? '-' }}
+                                    <p><strong>Crypto:</strong> {{ optional($customer->bankDetails)->crypto_type ?? '-' }}
+                                    </p>
+                                    <p><strong>Crypto Address:</strong>
+                                        {{ optional($customer->bankDetails)->crypto_address ?? '-' }}
                                     </p>
                                 </div>
                             </div>
@@ -318,9 +321,11 @@
                         <div class="mb-3">
                             <label for="method" class="form-label">{{ __('Method') }}</label>
                             <select name="method" id="method" class="form-select select2" required>
-                                <option value="bank" {{ optional($customer->bankDetails)->method == 'bank' ? 'selected' : '' }}>
+                                <option value="bank"
+                                    {{ optional($customer->bankDetails)->method == 'bank' ? 'selected' : '' }}>
                                     {{ __('Bank') }}</option>
-                                <option value="crypto" {{ optional($customer->bankDetails)->method == 'crypto' ? 'selected' : '' }}>
+                                <option value="crypto"
+                                    {{ optional($customer->bankDetails)->method == 'crypto' ? 'selected' : '' }}>
                                     {{ __('Crypto') }}</option>
                             </select>
                         </div>
@@ -374,8 +379,8 @@
                         </div>
                         <div class="mb-3">
                             <label for="ifsc_code">IFSC Code</label>
-                            <input type="text" name="ifsc_code" value="{{ optional($customer->bankDetails)->ifsc_code }}"
-                                class="form-control">
+                            <input type="text" name="ifsc_code"
+                                value="{{ optional($customer->bankDetails)->ifsc_code }}" class="form-control">
                         </div>
                         <div class="mb-3">
                             <label for="branch">Branch</label>
@@ -492,14 +497,32 @@
                         </div>
 
                         <div class="mb-3">
-                            <label>Multiplier</label>
-                            <input type="number" min="0" step="0.01" name="special_multiplier"
-                                value="{{ $customer->special_multiplier }}" class="form-control" required>
+                            <label>
+                                Multiplier
+                                <small id="multiplierPreview">
+                                    ~
+                                    {{ \App\Helpers\Helper::formatCurrency($customer->special_multiplier * $customer->wallet->balance) }}
+                                </small>
+                            </label>
+
+                            <input type="number" min="0" step="0.01" id="special_multiplier"
+                                name="special_multiplier" value="{{ $customer->special_multiplier }}"
+                                class="form-control" required>
                         </div>
 
                         <div class="mb-3">
-                            <label>Commission Rate (%)</label>
-                            <input type="number" max="100" min="0" name="special_commission_percentage"
+                            <label>
+                                Commission Rate (%)
+                                <small id="commissionPreview">
+                                    ~
+                                    {{ \App\Helpers\Helper::formatCurrency(
+                                        ($customer->special_commission_percentage / 100) * ($customer->special_multiplier * $customer->wallet->balance),
+                                    ) }}
+                                </small>
+                            </label>
+
+                            <input type="number" max="100" min="0" id="special_commission_percentage"
+                                name="special_commission_percentage"
                                 value="{{ $customer->special_commission_percentage }}" class="form-control" required>
                         </div>
 
@@ -512,4 +535,40 @@
         </div>
     </div>
 
+@endsection
+
+@section('script')
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+
+            let balance = {{ $customer->wallet->balance }};
+            let multiplierInput = document.getElementById('special_multiplier');
+            let commissionInput = document.getElementById('special_commission_percentage');
+
+            let multiplierPreview = document.getElementById('multiplierPreview');
+            let commissionPreview = document.getElementById('commissionPreview');
+
+            function formatCurrency(amount) {
+                return new Intl.NumberFormat('en-US', {
+                    style: 'currency',
+                    currency: 'USD' // change if needed
+                }).format(amount);
+            }
+
+            function updatePreview() {
+                let multiplier = parseFloat(multiplierInput.value) || 0;
+                let commissionPercent = parseFloat(commissionInput.value) || 0;
+
+                let subtotal = multiplier * balance;
+                let commission = (commissionPercent / 100) * subtotal;
+
+                multiplierPreview.innerText = "~ " + formatCurrency(subtotal);
+                commissionPreview.innerText = "~ " + formatCurrency(commission);
+            }
+
+            multiplierInput.addEventListener('input', updatePreview);
+            commissionInput.addEventListener('input', updatePreview);
+
+        });
+    </script>
 @endsection

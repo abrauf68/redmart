@@ -76,7 +76,7 @@ class HomeController extends Controller
         try {
             DB::beginTransaction();
             $user = User::where('id', auth()->user()->id)->first();
-            $transaction = Transaction::where('user_id', $user->id)->where('status', 'pending')->first();
+            $transaction = Transaction::where('user_id', $user->id)->where('transaction_type', 'recharge')->where('status', 'pending')->first();
             if (!$transaction) {
                 $transaction = Transaction::create([
                     'transaction_id' => Str::uuid(),
@@ -264,10 +264,34 @@ class HomeController extends Controller
             ]);
         }
 
-        // 2️⃣ Get Active Product
-        $product = Product::where('is_active', 'active')
-            ->inRandomOrder()
-            ->first();
+        // 2️⃣ Get Used Product IDs (Completed Orders Only)
+        $usedProductIds = Order::where('user_id', $user->id)
+            ->where('status', 'completed')
+            ->pluck('product_id')
+            ->toArray();
+
+        // 3️⃣ Get Active Products excluding used ones
+        $productQuery = Product::where('is_active', 'active');
+
+        if (!empty($usedProductIds)) {
+            $productQuery->whereNotIn('id', $usedProductIds);
+        }
+
+        $product = $productQuery->inRandomOrder()->first();
+
+        // 4️⃣ If all products already used → reset rotation
+        if (!$product) {
+            $product = Product::where('is_active', 'active')
+                ->inRandomOrder()
+                ->first();
+        }
+
+        if (!$product) {
+            return response()->json([
+                'status' => false,
+                'message' => 'No product available'
+            ]);
+        }
 
         if (!$product) {
             return response()->json([
@@ -286,7 +310,7 @@ class HomeController extends Controller
         $currentOrderNumber = $orderCount + 1;
 
         $balance = $user->wallet->balance;
-        $commissionRate = 0.02; // default
+        $commissionRate = 0.015; // default
 
         // 4️⃣ Quantity Logic
         if ($orderCount == 0) {

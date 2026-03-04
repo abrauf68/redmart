@@ -2,7 +2,7 @@
     <div class="app-brand demo">
         <a href="{{ route('dashboard') }}" class="app-brand-link">
             <span class="app-brand-logo">
-                <img height="40px" src="{{ asset(\App\Helpers\Helper::getLogoLight()) }}" alt="{{env('APP_NAME')}}">
+                <img height="40px" src="{{ asset(\App\Helpers\Helper::getLogoLight()) }}" alt="{{ env('APP_NAME') }}">
             </span>
             {{-- <span class="app-brand-text demo menu-text fw-bold">{{\App\Helpers\Helper::getCompanyName()}}</span> --}}
         </a>
@@ -20,27 +20,59 @@
         <li class="menu-item {{ request()->routeIs('dashboard') ? 'active' : '' }}">
             <a href="{{ route('dashboard') }}" class="menu-link">
                 <i class="menu-icon tf-icons ti ti-smart-home"></i>
-                <div>{{__('Dashboard')}}</div>
+                <div>{{ __('Dashboard') }}</div>
             </a>
         </li>
 
         <!-- Apps & Pages -->
         <li class="menu-header small">
-            <span class="menu-header-text">{{__('Apps & Pages')}}</span>
+            <span class="menu-header-text">{{ __('Apps & Pages') }}</span>
         </li>
+        @php $pendingOrders = \App\Helpers\Helper::pendingCount('orders'); @endphp
+
         @can(['view order'])
             <li class="menu-item {{ request()->routeIs('dashboard.orders.*') ? 'active' : '' }}">
                 <a href="{{ route('dashboard.orders.index') }}" class="menu-link">
                     <i class="menu-icon tf-icons ti ti-shopping-cart"></i>
-                    <div>{{__('Orders')}}</div>
+                    <div>{{ __('Orders') }}</div>
+
+                    @if ($pendingOrders > 0)
+                        <div class="badge text-bg-danger rounded-pill ms-auto">
+                            {{ $pendingOrders }}
+                        </div>
+                    @endif
                 </a>
             </li>
         @endcan
+        @php $pendingWithdraws = \App\Helpers\Helper::pendingCount('withdraws'); @endphp
+
         @can(['view withdraw'])
             <li class="menu-item {{ request()->routeIs('dashboard.withdraws.*') ? 'active' : '' }}">
                 <a href="{{ route('dashboard.withdraws.index') }}" class="menu-link">
                     <i class="menu-icon tf-icons ti ti-receipt-2"></i>
-                    <div>{{__('Withdraw Requests')}}</div>
+                    <div>{{ __('Withdraw Requests') }}</div>
+
+                    @if ($pendingWithdraws > 0)
+                        <div class="badge text-bg-danger rounded-pill ms-auto">
+                            {{ $pendingWithdraws }}
+                        </div>
+                    @endif
+                </a>
+            </li>
+        @endcan
+        @php $pendingRecharges = \App\Helpers\Helper::pendingCount('recharges'); @endphp
+
+        @can(['view recharge'])
+            <li class="menu-item {{ request()->routeIs('dashboard.recharges.*') ? 'active' : '' }}">
+                <a href="{{ route('dashboard.recharges.index') }}" class="menu-link">
+                    <i class="menu-icon tf-icons ti ti-cash"></i>
+                    <div>{{ __('Recharge Requests') }}</div>
+
+                    @if ($pendingRecharges > 0)
+                        <div class="badge text-bg-danger rounded-pill ms-auto">
+                            {{ $pendingRecharges }}
+                        </div>
+                    @endif
                 </a>
             </li>
         @endcan
@@ -48,15 +80,22 @@
             <li class="menu-item {{ request()->routeIs('dashboard.products.*') ? 'active' : '' }}">
                 <a href="{{ route('dashboard.products.index') }}" class="menu-link">
                     <i class="menu-icon tf-icons ti ti-shopping-bag"></i>
-                    <div>{{__('Products')}}</div>
+                    <div>{{ __('Products') }}</div>
                 </a>
             </li>
         @endcan
+        @php $pendingCustomers = \App\Helpers\Helper::pendingCount('customers'); @endphp
         @canany(['view user', 'view archived user', 'view agent', 'view customer'])
-            <li class="menu-item {{ request()->routeIs('dashboard.user.*') || request()->routeIs('dashboard.agents.*') || request()->routeIs('dashboard.customers.*') || request()->routeIs('dashboard.archived-user.*') ? 'open' : '' }}">
+            <li
+                class="menu-item {{ request()->routeIs('dashboard.user.*') || request()->routeIs('dashboard.agents.*') || request()->routeIs('dashboard.customers.*') || request()->routeIs('dashboard.archived-user.*') ? 'open' : '' }}">
                 <a href="javascript:void(0);" class="menu-link menu-toggle">
                     <i class="menu-icon tf-icons ti ti-users"></i>
-                    <div>{{__('Users')}}</div>
+                    <div>{{ __('Users') }}</div>
+                    @if ($pendingCustomers > 0)
+                        <div class="badge text-bg-danger rounded-pill ms-auto">
+                            {{ $pendingCustomers }}
+                        </div>
+                    @endif
                 </a>
                 <ul class="menu-sub">
                     {{-- @can(['view user'])
@@ -68,22 +107,27 @@
                     @endcan --}}
                     @can(['view agent'])
                         <li class="menu-item {{ request()->routeIs('dashboard.agents.*') ? 'active' : '' }}">
-                            <a href="{{route('dashboard.agents.index')}}" class="menu-link">
-                                <div>{{__('Agents')}}</div>
+                            <a href="{{ route('dashboard.agents.index') }}" class="menu-link">
+                                <div>{{ __('Agents') }}</div>
                             </a>
                         </li>
                     @endcan
                     @can(['view customer'])
                         <li class="menu-item {{ request()->routeIs('dashboard.customers.*') ? 'active' : '' }}">
-                            <a href="{{route('dashboard.customers.index')}}" class="menu-link">
-                                <div>{{__('Customers')}}</div>
+                            <a href="{{ route('dashboard.customers.index') }}" class="menu-link">
+                                <div>{{ __('Customers') }}</div>
+                                @if ($pendingCustomers > 0)
+                                    <div class="badge text-bg-danger rounded-pill ms-auto">
+                                        {{ $pendingCustomers }}
+                                    </div>
+                                @endif
                             </a>
                         </li>
                     @endcan
                     @can(['view archived user'])
                         <li class="menu-item {{ request()->routeIs('dashboard.archived-user.*') ? 'active' : '' }}">
-                            <a href="{{route('dashboard.archived-user.index')}}" class="menu-link">
-                                <div>{{__('Archived Users')}}</div>
+                            <a href="{{ route('dashboard.archived-user.index') }}" class="menu-link">
+                                <div>{{ __('Archived Users') }}</div>
                             </a>
                         </li>
                     @endcan
@@ -91,24 +135,25 @@
             </li>
         @endcan
         @canany(['view role', 'view permission'])
-            <li class="menu-item {{ request()->routeIs('dashboard.roles.*') || request()->routeIs('dashboard.permissions.*') ? 'open' : '' }}">
+            <li
+                class="menu-item {{ request()->routeIs('dashboard.roles.*') || request()->routeIs('dashboard.permissions.*') ? 'open' : '' }}">
                 <a href="javascript:void(0);" class="menu-link menu-toggle">
                     {{-- <i class="menu-icon tf-icons ti ti-settings"></i> --}}
                     <i class="menu-icon tf-icons ti ti-shield-lock"></i>
-                    <div>{{__('Roles & Permissions')}}</div>
+                    <div>{{ __('Roles & Permissions') }}</div>
                 </a>
                 <ul class="menu-sub">
                     @can(['view role'])
                         <li class="menu-item {{ request()->routeIs('dashboard.roles.*') ? 'active' : '' }}">
-                            <a href="{{route('dashboard.roles.index')}}" class="menu-link">
-                                <div>{{__('Roles')}}</div>
+                            <a href="{{ route('dashboard.roles.index') }}" class="menu-link">
+                                <div>{{ __('Roles') }}</div>
                             </a>
                         </li>
                     @endcan
                     @can(['view permission'])
                         <li class="menu-item {{ request()->routeIs('dashboard.permissions.*') ? 'active' : '' }}">
-                            <a href="{{route('dashboard.permissions.index')}}" class="menu-link">
-                                <div>{{__('Permissions')}}</div>
+                            <a href="{{ route('dashboard.permissions.index') }}" class="menu-link">
+                                <div>{{ __('Permissions') }}</div>
                             </a>
                         </li>
                     @endcan
@@ -119,7 +164,7 @@
             <li class="menu-item {{ request()->routeIs('dashboard.setting.*') ? 'active' : '' }}">
                 <a href="{{ route('dashboard.setting.index') }}" class="menu-link">
                     <i class="menu-icon tf-icons ti ti-settings"></i>
-                    <div>{{__('Settings')}}</div>
+                    <div>{{ __('Settings') }}</div>
                 </a>
             </li>
         @endcan
