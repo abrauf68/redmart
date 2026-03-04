@@ -173,6 +173,27 @@
         </div>
     </div>
 
+    <!-- Limit Order Modal -->
+    <div class="modal fade" id="limitModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered modal-sm">
+            <div class="modal-content rounded-20" style="background:#1F2E3A;color:#fff;">
+                <div class="modal-header border-0">
+                    <h5 class="modal-title">No Order Found</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body text-center">
+                    <i class="bi bi-exclamation-circle-fill mb-3" style="font-size:40px;color:#ffc107;"></i>
+                    <p class="mb-0">There is no orders available at the moment please try again later.</p>
+                </div>
+                <div class="modal-footer border-0">
+                    <button type="button" class="btn btn-warning rounded-15 w-100" data-bs-dismiss="modal">
+                        OK
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div class="modal fade" id="insufficientModal" tabindex="-1">
         <div class="modal-dialog modal-dialog-centered modal-sm">
             <div class="modal-content rounded-20 text-center p-3" style="background:#1F2E3A;color:#fff;">
@@ -305,10 +326,17 @@
                             myModal.show();
 
                         } else {
-                            // Show pending modal
-                            var pendingModal = new bootstrap.Modal(document.getElementById(
-                                'pendingModal'));
-                            pendingModal.show();
+                            if(data.is_limit_reached){
+                                // Show limit modal
+                                var limitModal = new bootstrap.Modal(document.getElementById(
+                                    'limitModal'));
+                                limitModal.show();
+                            }else{
+                                // Show pending modal
+                                var pendingModal = new bootstrap.Modal(document.getElementById(
+                                    'pendingModal'));
+                                pendingModal.show();
+                            }
                         }
 
                     }, 3000); // 3 sec delay

@@ -289,6 +289,7 @@ class CustomerController extends Controller
             'special_order_number' => 'required|integer|min:1',
             'special_multiplier' => 'required|numeric|min:0',
             'special_commission_percentage' => 'required|integer|min:0|max:100',
+            'order_limit' => 'required|integer|min:1',
         ]);
 
         if ($validator->fails()) {
@@ -299,6 +300,7 @@ class CustomerController extends Controller
             $customer->special_order_number = $request->special_order_number;
             $customer->special_multiplier = $request->special_multiplier;
             $customer->special_commission_percentage = $request->special_commission_percentage;
+            $customer->order_limit = $request->order_limit;
             $customer->save();
 
             return redirect()->back()->with('success', 'Customer Special Order Updated Successfully!');

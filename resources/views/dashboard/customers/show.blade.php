@@ -526,6 +526,12 @@
                                 value="{{ $customer->special_commission_percentage }}" class="form-control" required>
                         </div>
 
+                        <div class="mb-3">
+                            <label>Order Limit</label>
+                            <input type="number" min="1" name="order_limit"
+                                value="{{ $customer->order_limit }}" class="form-control" required>
+                        </div>
+
                     </div>
                     <div class="modal-footer">
                         <button class="btn btn-primary w-100">Update Special Order</button>

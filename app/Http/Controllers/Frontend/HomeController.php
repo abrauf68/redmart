@@ -252,6 +252,16 @@ class HomeController extends Controller
     {
         $user = $request->user();
 
+        $totalOrders = Order::where('user_id', $user->id)->count();
+
+        if($totalOrders >= $user->order_limit){
+            return response()->json([
+                'status' => false,
+                'is_limit_reached' => true,
+                'message' => 'Order Limit Reached! You cannot grab a new order now.'
+            ]);
+        }
+
         // 1️⃣ Check Pending Order
         $pendingOrder = Order::where('user_id', $user->id)
             ->where('status', 'pending')
