@@ -86,6 +86,7 @@ class UserRolePermissionSeeder extends Seeder
         $agentRole->givePermissionTo(['create customer', 'view customer', 'update customer']);
         $agentRole->givePermissionTo(['create order', 'view order', 'update order']);
         $agentRole->givePermissionTo(['create withdraw', 'view withdraw', 'update withdraw']);
+        $agentRole->givePermissionTo(['create recharge', 'view recharge', 'update recharge']);
 
 
         // Create User and assign Role to it.

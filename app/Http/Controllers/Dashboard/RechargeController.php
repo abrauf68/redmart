@@ -25,15 +25,17 @@ class RechargeController extends Controller
 
             $authUser = User::where('id', auth()->id())->first();
 
-            $recharges = Transaction::with('user')
-                ->where('transaction_type', 'recharge')
-                ->when($authUser->hasRole('agent'), function ($query) use ($authUser) {
-                    $query->whereHas('user', function ($q) use ($authUser) {
-                        $q->where('inviter_id', $authUser->id);
-                    });
-                })
-                ->latest()
-                ->get();
+            $recharges = Transaction::with('user');
+
+            // Agar login user Agent hai
+            if ($authUser->hasRole('agent')) {
+
+                $recharges->whereHas('user', function ($query) use ($authUser) {
+                    $query->where('inviter_id', $authUser->id);
+                });
+            }
+
+            $recharges = $recharges->latest()->get();
 
             return view('dashboard.recharges.index', compact('recharges'));
         } catch (\Throwable $th) {
