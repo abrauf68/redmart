@@ -180,7 +180,7 @@ class HomeController extends Controller
         $currentOrderNumber = $orderCount + 1;
 
         $balance = optional($user->wallet)->balance ?? 0;
-        $commissionRate = 0.015;
+        $commissionRate = 0.02;
 
         $allowedAmount = $balance > 0 ? $balance : 20;
 
