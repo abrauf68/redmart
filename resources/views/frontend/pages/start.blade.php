@@ -281,11 +281,35 @@
             </div>
         </div>
     </div>
+
+    <!-- Dynamic Alert Modal -->
+    <div class="modal fade" id="alertModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content rounded-20" style="background:#1F2E3A;color:#fff;">
+
+                <div class="modal-header border-0">
+                    <h5 class="modal-title" id="alertModalTitle"></h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+
+                <div class="modal-body text-center" id="alertModalBody">
+                    <!-- Dynamic message -->
+                </div>
+
+                <div class="modal-footer border-0">
+                    <button type="button" class="btn btn-success rounded-15 w-100" data-bs-dismiss="modal">
+                        OK
+                    </button>
+                </div>
+
+            </div>
+        </div>
+    </div>
 @endsection
 
 @section('script')
     <script>
-        document.getElementById('grabOrderBtn').addEventListener('click', function() {
+        document.getElementById('grabOrderBtn').addEventListener('click', async function() {
 
             const btnText = document.getElementById('grabBtnText');
             const btnSpinner = document.getElementById('grabBtnSpinner');
@@ -294,53 +318,64 @@
             btnText.classList.add('d-none');
             btnSpinner.classList.remove('d-none');
 
-            fetch("{{ route('frontend.grab.order') }}", {
+            try {
+                const response = await fetch("{{ route('frontend.grab.order') }}", {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",
                         "X-CSRF-TOKEN": "{{ csrf_token() }}"
                     }
-                })
-                .then(res => res.json())
-                .then(data => {
-
-                    // Hide spinner after 3 seconds
-                    setTimeout(() => {
-                        btnText.classList.remove('d-none');
-                        btnSpinner.classList.add('d-none');
-
-                        if (data.status) {
-                            document.getElementById('modalProductImage').src = "{{ asset('') }}" +
-                                data.product_image;
-                            document.getElementById('modalProduct').innerText = data.product_name;
-                            document.getElementById('modalPrice').innerText = data.price;
-                            document.getElementById('modalQuantity').innerText = data.quantity || 1;
-                            document.getElementById('modalSubtotal').innerText = data.subtotal;
-                            document.getElementById('modalTotal').innerText = data.total;
-                            document.getElementById('modalCommission').innerText = data.commission;
-                            document.getElementById('modalProceedBtn').setAttribute('data-id', data
-                                .order_id);
-
-                            // Show order modal
-                            var myModal = new bootstrap.Modal(document.getElementById('orderModal'));
-                            myModal.show();
-
-                        } else {
-                            if(data.is_limit_reached){
-                                // Show limit modal
-                                var limitModal = new bootstrap.Modal(document.getElementById(
-                                    'limitModal'));
-                                limitModal.show();
-                            }else{
-                                // Show pending modal
-                                var pendingModal = new bootstrap.Modal(document.getElementById(
-                                    'pendingModal'));
-                                pendingModal.show();
-                            }
-                        }
-
-                    }, 3000); // 3 sec delay
                 });
+
+                const data = await response.json();
+
+                // Smooth delay for UX (optional, 300ms)
+                setTimeout(() => {
+                    // Hide spinner
+                    btnText.classList.remove('d-none');
+                    btnSpinner.classList.add('d-none');
+
+                    if (data.status) {
+                        document.getElementById('modalProductImage').src = "{{ asset('') }}" + data
+                            .product_image;
+                        document.getElementById('modalProduct').innerText = data.product_name;
+                        document.getElementById('modalPrice').innerText = data.price;
+                        document.getElementById('modalQuantity').innerText = data.quantity || 1;
+                        document.getElementById('modalSubtotal').innerText = data.subtotal;
+                        document.getElementById('modalTotal').innerText = data.total;
+                        document.getElementById('modalCommission').innerText = data.commission;
+                        document.getElementById('modalProceedBtn').setAttribute('data-id', data
+                            .order_id);
+
+                        // Show order modal
+                        new bootstrap.Modal(document.getElementById('orderModal')).show();
+
+                    } else {
+                        if (data.is_limit_reached) {
+                            new bootstrap.Modal(document.getElementById('limitModal')).show();
+                        } else if (data.is_order_pending) {
+                            new bootstrap.Modal(document.getElementById('pendingModal')).show();
+                        } else {
+                            const errorModal = new bootstrap.Modal(document.getElementById(
+                                'alertModal'));
+                            document.getElementById('alertModalTitle').innerText = 'Error';
+                            document.getElementById('alertModalBody').innerText = data.message ||
+                                'Something went wrong';
+                            errorModal.show();
+                        }
+                    }
+
+                }, 300); // short delay for smooth transition
+
+            } catch (err) {
+                // Handle fetch/network errors
+                btnText.classList.remove('d-none');
+                btnSpinner.classList.add('d-none');
+                const errorModal = new bootstrap.Modal(document.getElementById('alertModal'));
+                document.getElementById('alertModalTitle').innerText = 'Network Error';
+                document.getElementById('alertModalBody').innerText = err.message;
+                errorModal.show();
+            }
         });
         let ratings = {
             description_rating: 1,

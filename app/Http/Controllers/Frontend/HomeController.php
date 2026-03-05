@@ -270,6 +270,7 @@ class HomeController extends Controller
         if ($pendingOrder) {
             return response()->json([
                 'status' => false,
+                'is_order_pending' => true,
                 'message' => 'You have a pending order. Please complete it first.'
             ]);
         }
@@ -303,13 +304,6 @@ class HomeController extends Controller
             ]);
         }
 
-        if (!$product) {
-            return response()->json([
-                'status' => false,
-                'message' => 'No product available'
-            ]);
-        }
-
         $price = (float) $product->price;
 
         // 3️⃣ Count Completed Orders
@@ -325,7 +319,27 @@ class HomeController extends Controller
         // 4️⃣ Quantity Logic
         if ($orderCount == 0) {
 
-            $quantity = rand(1, 5);
+            do {
+                $productQuery = Product::where('is_active', 'active');
+                if (!empty($usedProductIds)) {
+                    $productQuery->whereNotIn('id', $usedProductIds);
+                }
+                $product = $productQuery->inRandomOrder()->first();
+
+                if (!$product) {
+                    $product = Product::where('is_active', 'active')
+                        ->inRandomOrder()
+                        ->first();
+                }
+
+                $price = (float) $product->price;
+
+                $allowedAmount = $balance > 0 ? $balance : 20;
+                $maxQuantity = floor($allowedAmount / $price);
+
+            } while ($maxQuantity < 1);
+
+            $quantity = rand(1, $maxQuantity);
         } elseif (
             $user->special_order_number
             && $currentOrderNumber == $user->special_order_number
@@ -333,7 +347,7 @@ class HomeController extends Controller
             if ($balance <= 0) {
                 return response()->json([
                     'status' => false,
-                    'message' => 'Please recharge to continue.'
+                    'message' => 'Please recharge to continue grabbing orders.'
                 ]);
             }
 
@@ -351,14 +365,25 @@ class HomeController extends Controller
                 ]);
             }
 
-            $maxQuantity = floor($balance / $price);
+            do {
+                $productQuery = Product::where('is_active', 'active');
+                if (!empty($usedProductIds)) {
+                    $productQuery->whereNotIn('id', $usedProductIds);
+                }
+                $product = $productQuery->inRandomOrder()->first();
 
-            if ($maxQuantity < 1) {
-                return response()->json([
-                    'status' => false,
-                    'message' => 'Insufficient balance.'
-                ]);
-            }
+                if (!$product) {
+                    $product = Product::where('is_active', 'active')
+                        ->inRandomOrder()
+                        ->first();
+                }
+
+                $price = (float) $product->price;
+
+                $allowedAmount = $balance > 0 ? $balance : 50;
+                $maxQuantity = floor($allowedAmount / $price);
+
+            } while ($maxQuantity < 1);
 
             $quantity = rand(1, $maxQuantity);
         }
