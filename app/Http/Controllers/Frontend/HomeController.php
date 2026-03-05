@@ -139,122 +139,13 @@ class HomeController extends Controller
         }
     }
 
-    // public function grabOrder(Request $request)
-    // {
-    //     $user = $request->user();
-
-    //     // 1️⃣ Check Pending Order
-    //     $pendingOrder = Order::where('user_id', $user->id)
-    //         ->where('status', 'pending')
-    //         ->first();
-
-    //     if ($pendingOrder) {
-    //         return response()->json([
-    //             'status' => false,
-    //             'message' => 'You have a pending order. Please complete it first.'
-    //         ]);
-    //     }
-
-    //     // 2️⃣ Get Active Product
-    //     $product = Product::where('is_active', 'active')
-    //         ->inRandomOrder()
-    //         ->first();
-
-    //     if (!$product) {
-    //         return response()->json([
-    //             'status' => false,
-    //             'message' => 'No product available'
-    //         ]);
-    //     }
-
-    //     $price = (float) $product->price;
-
-    //     // 3️⃣ Count Completed Orders
-    //     $orderCount = Order::where('user_id', $user->id)
-    //         ->where('status', 'completed')
-    //         ->count();
-
-    //     $balance = $user->wallet->balance;
-    //     $commissionRate = 0.02; // default 2%
-
-    //     // 4️⃣ Quantity Logic
-    //     if ($orderCount == 0) {
-
-    //         // ✅ First Order (balance zero allowed)
-    //         $quantity = rand(1, 5);
-    //     } elseif ($orderCount >= 1 && $orderCount < 4) {
-
-    //         if ($balance <= 0) {
-    //             return response()->json([
-    //                 'status' => false,
-    //                 'message' => 'Please recharge to continue grabbing orders.'
-    //             ]);
-    //         }
-
-    //         $maxQuantity = floor($balance / $price);
-
-    //         if ($maxQuantity < 1) {
-    //             return response()->json([
-    //                 'status' => false,
-    //                 'message' => 'Insufficient balance.'
-    //             ]);
-    //         }
-
-    //         $quantity = rand(1, $maxQuantity);
-    //     } else {
-
-    //         // 🔥 5th Order Special Combo
-    //         // Subtotal = balance + 60%
-
-    //         if ($balance <= 0) {
-    //             return response()->json([
-    //                 'status' => false,
-    //                 'message' => 'Please recharge to continue.'
-    //             ]);
-    //         }
-
-    //         $targetSubtotal = $balance * 1.6; // 60% above balance
-    //         $quantity = ceil($targetSubtotal / $price);
-
-    //         $commissionRate = 0.10; // 🔥 10% commission
-    //     }
-
-    //     // 5️⃣ Calculate
-    //     $subtotal = $price * $quantity;
-    //     $commission = $subtotal * $commissionRate;
-
-    //     // 6️⃣ Create Order
-    //     $order = Order::create([
-    //         'user_id' => $user->id,
-    //         'product_id' => $product->id,
-    //         'order_no' => 'ORD-' . strtoupper(Str::random(6)),
-    //         'status' => 'pending',
-    //         'quantity' => $quantity,
-    //         'subtotal' => $subtotal,
-    //         'total' => $subtotal,
-    //         'commission' => $commission,
-    //     ]);
-
-    //     return response()->json([
-    //         'status' => true,
-    //         'product_image' => $product->main_image,
-    //         'product_name' => $product->name,
-    //         'price' => Helper::formatCurrency($price),
-    //         'quantity' => $quantity,
-    //         'subtotal' => Helper::formatCurrency($subtotal),
-    //         'total' => Helper::formatCurrency($subtotal),
-    //         'commission' => Helper::formatCurrency($commission),
-    //         'order_id' => $order->id
-    //     ]);
-    // }
-
     public function grabOrder(Request $request)
     {
         $user = $request->user();
 
         $totalOrders = Order::where('user_id', $user->id)->count();
 
-        if($totalOrders >= $user->order_limit){
+        if ($totalOrders >= $user->order_limit) {
             return response()->json([
                 'status' => false,
                 'is_limit_reached' => true,
@@ -262,10 +153,10 @@ class HomeController extends Controller
             ]);
         }
 
-        // 1️⃣ Check Pending Order
+        // Check pending order
         $pendingOrder = Order::where('user_id', $user->id)
             ->where('status', 'pending')
-            ->first();
+            ->exists();
 
         if ($pendingOrder) {
             return response()->json([
@@ -275,75 +166,78 @@ class HomeController extends Controller
             ]);
         }
 
-        // 2️⃣ Get Used Product IDs (Completed Orders Only)
+        // Used product ids
         $usedProductIds = Order::where('user_id', $user->id)
             ->where('status', 'completed')
             ->pluck('product_id')
             ->toArray();
 
-        // 3️⃣ Get Active Products excluding used ones
-        $productQuery = Product::where('is_active', 'active');
-
-        if (!empty($usedProductIds)) {
-            $productQuery->whereNotIn('id', $usedProductIds);
-        }
-
-        $product = $productQuery->inRandomOrder()->first();
-
-        // 4️⃣ If all products already used → reset rotation
-        if (!$product) {
-            $product = Product::where('is_active', 'active')
-                ->inRandomOrder()
-                ->first();
-        }
-
-        if (!$product) {
-            return response()->json([
-                'status' => false,
-                'message' => 'No product available'
-            ]);
-        }
-
-        $price = (float) $product->price;
-
-        // 3️⃣ Count Completed Orders
+        // Completed orders
         $orderCount = Order::where('user_id', $user->id)
             ->where('status', 'completed')
             ->count();
 
         $currentOrderNumber = $orderCount + 1;
 
-        $balance = $user->wallet->balance;
-        $commissionRate = 0.015; // default
+        $balance = optional($user->wallet)->balance ?? 0;
+        $commissionRate = 0.015;
 
-        // 4️⃣ Quantity Logic
-        if ($orderCount == 0) {
+        $allowedAmount = $balance > 0 ? $balance : 20;
 
-            do {
-                $productQuery = Product::where('is_active', 'active');
-                if (!empty($usedProductIds)) {
-                    $productQuery->whereNotIn('id', $usedProductIds);
+        $product = null;
+        $price = 0;
+        $maxQuantity = 0;
+
+        // 1️⃣ Try unused products first
+        $products = Product::where('is_active', 'active')
+            ->whereNotIn('id', $usedProductIds)
+            ->get()
+            ->shuffle();
+
+        foreach ($products as $p) {
+
+            $maxQuantity = floor($allowedAmount / $p->price);
+
+            if ($maxQuantity >= 1) {
+                $product = $p;
+                $price = $p->price;
+                break;
+            }
+        }
+
+        // 2️⃣ If not found → check used products
+        if (!$product) {
+
+            $products = Product::where('is_active', 'active')
+                ->get()
+                ->shuffle();
+
+            foreach ($products as $p) {
+
+                $maxQuantity = floor($allowedAmount / $p->price);
+
+                if ($maxQuantity >= 1) {
+                    $product = $p;
+                    $price = $p->price;
+                    break;
                 }
-                $product = $productQuery->inRandomOrder()->first();
+            }
+        }
 
-                if (!$product) {
-                    $product = Product::where('is_active', 'active')
-                        ->inRandomOrder()
-                        ->first();
-                }
+        // 3️⃣ If still no product
+        if (!$product) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Balance too low for available products.'
+            ]);
+        }
 
-                $price = (float) $product->price;
-
-                $allowedAmount = $balance > 0 ? $balance : 20;
-                $maxQuantity = floor($allowedAmount / $price);
-
-            } while ($maxQuantity < 1);
-
-            $quantity = rand(1, $maxQuantity);
-        } elseif (
-            $user->special_order_number
-            && $currentOrderNumber == $user->special_order_number
+        // Quantity Logic
+        if (
+            $user->special_order_number &&
+            $currentOrderNumber == $user->special_order_number
         ) {
+
             if ($balance <= 0) {
                 return response()->json([
                     'status' => false,
@@ -365,34 +259,14 @@ class HomeController extends Controller
                 ]);
             }
 
-            do {
-                $productQuery = Product::where('is_active', 'active');
-                if (!empty($usedProductIds)) {
-                    $productQuery->whereNotIn('id', $usedProductIds);
-                }
-                $product = $productQuery->inRandomOrder()->first();
-
-                if (!$product) {
-                    $product = Product::where('is_active', 'active')
-                        ->inRandomOrder()
-                        ->first();
-                }
-
-                $price = (float) $product->price;
-
-                $allowedAmount = $balance > 0 ? $balance : 50;
-                $maxQuantity = floor($allowedAmount / $price);
-
-            } while ($maxQuantity < 1);
-
             $quantity = rand(1, $maxQuantity);
         }
 
-        // 5️⃣ Calculate
+        // Calculations
         $subtotal = $price * $quantity;
         $commission = $subtotal * $commissionRate;
 
-        // 6️⃣ Create Order
+        // Create Order
         $order = Order::create([
             'user_id' => $user->id,
             'product_id' => $product->id,
