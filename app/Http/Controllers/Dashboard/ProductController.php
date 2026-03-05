@@ -57,7 +57,7 @@ class ProductController extends Controller
             'price' => 'required|string|max:255',
             'reviews_count' => 'required|integer|min:0',
             'rating' => 'required|numeric|min:1|max:5',
-            'is_popular' => 'required|in:on',
+            'is_popular' => 'nullable|in:on',
         ]);
 
         if ($validator->fails()) {
@@ -145,7 +145,7 @@ class ProductController extends Controller
             'price' => 'required|string|max:255',
             'reviews_count' => 'required|integer|min:0',
             'rating' => 'required|numeric|min:1|max:5',
-            'is_popular' => 'required|in:on',
+            'is_popular' => 'nullable|in:on',
         ]);
 
         if ($validator->fails()) {
