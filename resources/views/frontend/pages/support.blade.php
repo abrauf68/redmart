@@ -52,10 +52,10 @@
                         </a>
                     @endif
 
-                    <a href="{{ route('frontend.support-chat') }}" target="_blank" class="btn btn-outline-light rounded-15">
+                    {{-- <a href="{{ route('frontend.support-chat') }}" target="_blank" class="btn btn-outline-light rounded-15">
                         <i class="bi bi-envelope-fill me-2"></i>
                         Live Chat Support
-                    </a>
+                    </a> --}}
 
                 </div>
 
