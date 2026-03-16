@@ -162,7 +162,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
             Route::resource('withdraws', WithdrawController::class);
 
             Route::resource('recharges', RechargeController::class);
-            
+
             Route::get('transactions/receipt/{id}', [TransactionController::class, 'receipt'])->name('transactions.receipt');
 
         });
@@ -174,6 +174,9 @@ Route::name('frontend.')->group(function () {
     Route::middleware(['auth', 'verified', 'check.activation', 'check.approval'])->group(function () {
         Route::get('/', [FrontendHomeController::class, 'home'])->name('home');
         Route::get('/support', [FrontendHomeController::class, 'support'])->name('support');
+        Route::get('/support-chat', function() {
+            return view('frontend.pages.support-chat');
+        })->name('support-chat');
         Route::get('/recharge', [FrontendHomeController::class, 'recharge'])->name('recharge');
         Route::post('/submit/recharge', [FrontendHomeController::class, 'submitRecharge'])->name('recharge.submit');
         Route::get('/start', [FrontendHomeController::class, 'start'])->name('start');
