@@ -91,40 +91,40 @@
 @section('script')
     <script src="{{ asset('assets/js/custom-js/settings.js') }}"></script>
     <script>
-        $(document).ready(function() {
-            let countryData = {
-                @foreach ($countries as $country)
-                    "{{ $country->id }}": {
-                        code: "{{ $country->code }}",
-                        phone_code: "{{ $country->phone_code }}",
-                        phone_limit: {{ $country->phone_number_limit }}
-                    },
-                @endforeach
-            };
+        // $(document).ready(function() {
+        //     let countryData = {
+        //         @foreach ($countries as $country)
+        //             "{{ $country->id }}": {
+        //                 code: "{{ $country->code }}",
+        //                 phone_code: "{{ $country->phone_code }}",
+        //                 phone_limit: {{ $country->phone_number_limit }}
+        //             },
+        //         @endforeach
+        //     };
 
-            function updatePhoneCode(countryId) {
-                if (countryId in countryData) {
-                    let countryCode = countryData[countryId].code;
-                    let phoneCode = countryData[countryId].phone_code;
-                    let phoneLimit = countryData[countryId].phone_limit;
+        //     function updatePhoneCode(countryId) {
+        //         if (countryId in countryData) {
+        //             let countryCode = countryData[countryId].code;
+        //             let phoneCode = countryData[countryId].phone_code;
+        //             let phoneLimit = countryData[countryId].phone_limit;
 
-                    $('.input-group-text').text(countryCode + " (" + phoneCode + ")"); // Update phone prefix
-                    $('#phone_number').attr('maxlength', phoneLimit); // Set max length
-                }
-            }
+        //             $('.input-group-text').text(countryCode + " (" + phoneCode + ")"); // Update phone prefix
+        //             $('#phone_number').attr('maxlength', phoneLimit); // Set max length
+        //         }
+        //     }
 
-            // On page load, set phone code based on saved country
-            let savedCountryId = "{{ $companySetting->country_id }}";
-            if (savedCountryId) {
-                updatePhoneCode(savedCountryId);
-            }
+        //     // On page load, set phone code based on saved country
+        //     let savedCountryId = "{{ $companySetting->country_id }}";
+        //     if (savedCountryId) {
+        //         updatePhoneCode(savedCountryId);
+        //     }
 
-            // When country is changed
-            $('#country').change(function() {
-                let selectedCountryId = $(this).val();
-                updatePhoneCode(selectedCountryId);
-                $('#phone_number').val(''); // Clear phone input on change
-            });
-        });
+        //     // When country is changed
+        //     $('#country').change(function() {
+        //         let selectedCountryId = $(this).val();
+        //         updatePhoneCode(selectedCountryId);
+        //         $('#phone_number').val(''); // Clear phone input on change
+        //     });
+        // });
     </script>
 @endsection

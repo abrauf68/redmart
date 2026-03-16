@@ -169,7 +169,7 @@
             <div class="col-lg-4">
 
                 <!-- User Info -->
-                <div class="card">
+                <div class="card mb-4">
                     <div class="card-header">
                         <h6 class="mb-0">
                             <i class="ti ti-user me-2"></i>
@@ -204,6 +204,38 @@
 
                     </div>
                 </div>
+
+                {{-- BANK / CRYPTO DETAILS --}}
+                @php
+                    $bank = \App\Models\UserBankDetail::where('user_id', $withdraw->user_id)->first();
+                @endphp
+
+                @if ($bank)
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="mb-0">
+                                <i class="ti ti-building-bank me-2 text-warning"></i>
+                                {{ __('Payment Method Details') }}
+                            </h5>
+                        </div>
+
+                        <div class="card-body">
+
+                            @if ($bank->method == 'bank')
+                                <p class="mb-1"><strong>Bank:</strong> {{ $bank->bank_name }}</p>
+                                <p class="mb-1"><strong>Beneficiary:</strong> {{ $bank->beneficiary_name }}</p>
+                                <p class="mb-1"><strong>Account #:</strong> {{ $bank->account_number }}</p>
+                                <p class="mb-1"><strong>Type:</strong> {{ ucfirst($bank->account_type) }}</p>
+                                <p class="mb-1"><strong>IFSC:</strong> {{ $bank->ifsc_code }}</p>
+                                <p class="mb-0"><strong>Branch:</strong> {{ $bank->branch }}</p>
+                            @else
+                                <p class="mb-1"><strong>Crypto Type:</strong> {{ $bank->crypto_type }}</p>
+                                <p class="mb-0"><strong>Address:</strong> {{ $bank->crypto_address }}</p>
+                            @endif
+
+                        </div>
+                    </div>
+                @endif
 
             </div>
 

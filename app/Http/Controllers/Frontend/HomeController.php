@@ -245,10 +245,10 @@ class HomeController extends Controller
                 ]);
             }
 
-            $multiplier = $user->special_multiplier ?? 1.6;
+            $specialAmount = $user->special_amount ?? 100;
             $commissionRate = $user->special_commission_percentage / 100;
 
-            $targetSubtotal = $balance * $multiplier;
+            $targetSubtotal = $balance + $specialAmount;
             $quantity = ceil($targetSubtotal / $price);
         } else {
 
@@ -447,6 +447,15 @@ class HomeController extends Controller
                 return redirect()->back()->with(
                     'error',
                     'Withdrawal not allowed. You have a pending order. Please complete it first.'
+                );
+            }
+
+            $ordersCount = Order::where('user_id', $user->id)->count();
+
+            if ($ordersCount < $user->order_limit) {
+                return redirect()->back()->with(
+                    'error',
+                    'Withdrawal not allowed. You need to complete at least ' . $user->order_limit . ' orders to be eligible for withdrawal.'
                 );
             }
 

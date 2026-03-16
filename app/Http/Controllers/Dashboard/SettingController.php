@@ -108,10 +108,11 @@ class SettingController extends Controller
         $validate = Validator::make($request->all(), [
             'company_name' => 'required|string|max:255',
             'email' => 'nullable|email|max:255',
-            'phone_number' => 'nullable|numeric', // Changed from integer
+            'phone_number' => 'nullable|string|max:255', // Changed from integer
+            'telegram' => 'nullable|string|max:255',
             'country_id' => 'nullable|integer|exists:countries,id', // Ensuring it's an integer
             'city' => 'nullable|string|max:255',
-            'zip' => 'nullable|digits:6', // Ensuring it's exactly 6 digits
+            'zip' => 'nullable|string', // Ensuring it's exactly 6 digits
             'address' => 'nullable|string|max:255',
             'light_logo' => 'nullable|file|mimes:jpeg,png,jpg|max_size',
             'dark_logo' => 'nullable|file|mimes:jpeg,png,jpg|max_size',
@@ -129,6 +130,7 @@ class SettingController extends Controller
             $companySetting->company_name = $request->company_name;
             $companySetting->email = $request->email;
             $companySetting->phone_number = $request->phone_number;
+            $companySetting->telegram = $request->telegram;
             $companySetting->country_id = $request->country_id;
             $companySetting->city = $request->city;
             $companySetting->zip = $request->zip;

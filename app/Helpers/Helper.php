@@ -36,6 +36,18 @@ class Helper
     {
         return CompanySetting::first()->company_name ?? env('APP_NAME');
     }
+    public static function getCompanyPhone()
+    {
+        return CompanySetting::first()->phone_number ?? null;
+    }
+    public static function getCompanyEmail()
+    {
+        return CompanySetting::first()->email ?? null;
+    }
+    public static function getCompanyTelegram()
+    {
+        return CompanySetting::first()->telegram ?? null;
+    }
     public static function getTimezone()
     {
         $systemSetting = SystemSetting::with('timezone')->first();

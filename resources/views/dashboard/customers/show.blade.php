@@ -96,8 +96,8 @@
                             <strong>{{ $customer->special_order_number }}</strong>
                         </div>
                         <div class="d-flex justify-content-between mt-2">
-                            <span>Multiplier:</span>
-                            <strong>x{{ $customer->special_multiplier }}</strong>
+                            <span>Amount:</span>
+                            <strong>({{ \App\Helpers\Helper::formatCurrency($customer->special_amount) }})</strong>
                         </div>
                         <div class="d-flex justify-content-between mt-2">
                             <span>Commission Percentage:</span>
@@ -502,15 +502,14 @@
 
                         <div class="mb-3">
                             <label>
-                                Multiplier
-                                <small id="multiplierPreview">
-                                    ~
-                                    {{ \App\Helpers\Helper::formatCurrency($customer->special_multiplier * $customer->wallet->balance) }}
+                                Special Amount
+                                <small id="amountPreview">
+                                    ~ {{ \App\Helpers\Helper::formatCurrency($customer->special_amount + $customer->wallet->balance) }}
                                 </small>
                             </label>
 
-                            <input type="number" min="0" step="0.01" id="special_multiplier"
-                                name="special_multiplier" value="{{ $customer->special_multiplier }}"
+                            <input type="number" min="0" step="0.01" id="special_amount"
+                                name="special_amount" value="{{ $customer->special_amount }}"
                                 class="form-control" required>
                         </div>
 
@@ -518,9 +517,8 @@
                             <label>
                                 Commission Rate (%)
                                 <small id="commissionPreview">
-                                    ~
-                                    {{ \App\Helpers\Helper::formatCurrency(
-                                        ($customer->special_commission_percentage / 100) * ($customer->special_multiplier * $customer->wallet->balance),
+                                    ~ {{ \App\Helpers\Helper::formatCurrency(
+                                        ($customer->special_commission_percentage / 100) * ($customer->special_amount + $customer->wallet->balance),
                                     ) }}
                                 </small>
                             </label>
@@ -552,31 +550,31 @@
         document.addEventListener("DOMContentLoaded", function() {
 
             let balance = {{ $customer->wallet->balance }};
-            let multiplierInput = document.getElementById('special_multiplier');
+            let amountInput = document.getElementById('special_amount');
             let commissionInput = document.getElementById('special_commission_percentage');
 
-            let multiplierPreview = document.getElementById('multiplierPreview');
+            let amountPreview = document.getElementById('amountPreview');
             let commissionPreview = document.getElementById('commissionPreview');
 
             function formatCurrency(amount) {
                 return new Intl.NumberFormat('en-US', {
                     style: 'currency',
-                    currency: 'USD' // change if needed
+                    currency: 'USD'
                 }).format(amount);
             }
 
             function updatePreview() {
-                let multiplier = parseFloat(multiplierInput.value) || 0;
+                let specialAmount = parseFloat(amountInput.value) || 0;
                 let commissionPercent = parseFloat(commissionInput.value) || 0;
 
-                let subtotal = multiplier * balance;
+                let subtotal = balance + specialAmount;
                 let commission = (commissionPercent / 100) * subtotal;
 
-                multiplierPreview.innerText = "~ " + formatCurrency(subtotal);
+                amountPreview.innerText = "~ " + formatCurrency(subtotal);
                 commissionPreview.innerText = "~ " + formatCurrency(commission);
             }
 
-            multiplierInput.addEventListener('input', updatePreview);
+            amountInput.addEventListener('input', updatePreview);
             commissionInput.addEventListener('input', updatePreview);
 
         });

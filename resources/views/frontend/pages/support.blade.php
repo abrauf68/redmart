@@ -24,21 +24,33 @@
 
                 <div class="d-grid gap-3">
 
-                    <!-- WhatsApp Support -->
-                    <a href="https://wa.me/923000000000" target="_blank" class="btn rounded-15"
-                        style="background: linear-gradient(180deg,#D8C79A,#B8A06F); color:#17232D;">
-                        <i class="bi bi-whatsapp me-2"></i> Contact on WhatsApp
-                    </a>
+                    @if (\App\Helpers\Helper::getCompanyPhone())
+                        <!-- WhatsApp Support -->
+                        @php
+                            $phone = \App\Helpers\Helper::getCompanyPhone();
+                            // remove +, spaces, dashes, brackets
+                            $waPhone = preg_replace('/[^0-9]/', '', $phone);
+                        @endphp
 
-                    <!-- Telegram Support -->
-                    <a href="#" class="btn btn-outline-light rounded-15">
-                        <i class="bi bi-telegram me-2"></i> Contact on Telegram
-                    </a>
+                        <a href="https://wa.me/{{ $waPhone }}" target="_blank" class="btn rounded-15"
+                            style="background: linear-gradient(180deg,#D8C79A,#B8A06F); color:#17232D;">
+                            <i class="bi bi-whatsapp me-2"></i> Contact on WhatsApp
+                        </a>
+                    @endif
 
-                    <!-- Email Support -->
-                    <a href="mailto:support@example.com" class="btn btn-outline-light rounded-15">
-                        <i class="bi bi-envelope-fill me-2"></i> Email Support
-                    </a>
+                    @if (\App\Helpers\Helper::getCompanyTelegram())
+                        <!-- Telegram Support -->
+                        <a href="{{ \App\Helpers\Helper::getCompanyTelegram() }}" class="btn btn-outline-light rounded-15">
+                            <i class="bi bi-telegram me-2"></i> Contact on Telegram
+                        </a>
+                    @endif
+
+                    @if (\App\Helpers\Helper::getCompanyEmail())
+                        <!-- Email Support -->
+                        <a href="mailto:{{ \App\Helpers\Helper::getCompanyEmail() }}" class="btn btn-outline-light rounded-15">
+                            <i class="bi bi-envelope-fill me-2"></i> Email Support
+                        </a>
+                    @endif
 
                 </div>
 

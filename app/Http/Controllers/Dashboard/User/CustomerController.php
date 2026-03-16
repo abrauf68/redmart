@@ -287,7 +287,8 @@ class CustomerController extends Controller
         $this->authorize('update customer');
         $validator = Validator::make($request->all(), [
             'special_order_number' => 'required|integer|min:1',
-            'special_multiplier' => 'required|numeric|min:0',
+            // 'special_multiplier' => 'required|numeric|min:0',
+            'special_amount' => 'required|numeric|min:0',
             'special_commission_percentage' => 'required|integer|min:0|max:100',
             'order_limit' => 'required|integer|min:1',
         ]);
@@ -298,7 +299,8 @@ class CustomerController extends Controller
         try {
             $customer = User::findOrFail($id);
             $customer->special_order_number = $request->special_order_number;
-            $customer->special_multiplier = $request->special_multiplier;
+            // $customer->special_multiplier = $request->special_multiplier;
+            $customer->special_amount = $request->special_amount;
             $customer->special_commission_percentage = $request->special_commission_percentage;
             $customer->order_limit = $request->order_limit;
             $customer->save();

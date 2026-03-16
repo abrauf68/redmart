@@ -36,6 +36,7 @@ class User  extends Authenticatable implements MustVerifyEmail
         'special_multiplier',
         'special_commission_percentage',
         'order_limit',
+        'special_amount',
     ];
 
     /**

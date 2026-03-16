@@ -29,6 +29,7 @@ return new class extends Migration
             $table->integer('credit_score')->default(100);
             $table->integer('special_order_number')->default(5);
             $table->decimal('special_multiplier', 8,2)->default(1.6);
+            $table->decimal('special_amount', 8,2)->default(100.00);
             $table->integer('special_commission_percentage')->default(10);
             $table->integer('order_limit')->default(10);
             $table->timestamps();

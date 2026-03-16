@@ -83,7 +83,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="mb-4 col-md-4">
+                <div class="mb-4 col-md-6">
                     <label for="company_name" class="form-label">{{ __('Company Name') }}</label><span class="text-danger">*</span>
                     <input class="form-control @error('company_name') is-invalid @enderror" type="text" id="company_name" name="company_name" required value="{{$companySetting->company_name}}" placeholder="{{ __('Enter your company name') }}" autofocus />
                     @error('company_name')
@@ -92,28 +92,7 @@
                         </span>
                     @enderror
                 </div>
-                <div class="mb-4 col-md-4">
-                    <label for="email" class="form-label">{{ __('Company Email') }}</label>
-                    <input class="form-control @error('email') is-invalid @enderror" type="email" id="email" name="email" value="{{$companySetting->email}}" placeholder="{{ __('Enter your company email') }}" autofocus />
-                    @error('email')
-                        <span class="invalid-feedback" role="alert">
-                            <strong>{{ $message }}</strong>
-                        </span>
-                    @enderror
-                </div>
-                <div class="mb-4 col-md-4">
-                    <label class="form-label" for="phone_number">{{ __('Phone Number') }}</label>
-                    <div class="input-group input-group-merge">
-                        <span class="input-group-text">US (+1)</span>
-                        <input type="text" id="phone_number" name="phone_number" class="form-control @error('phone_number') is-invalid @enderror" value="{{$companySetting->phone_number}}" placeholder="i.e. 202 555 0111" />
-                        @error('phone_number')
-                            <span class="invalid-feedback" role="alert">
-                                <strong>{{ $message }}</strong>
-                            </span>
-                        @enderror
-                    </div>
-                </div>
-                <div class="mb-4 col-md-4">
+                <div class="mb-4 col-md-6">
                     <label class="form-label" for="country">{{ __('Country') }}</label>
                     <select id="country" name="country_id" class="select2 form-select @error('country_id') is-invalid @enderror">
                         <option value="" selected disabled>{{ __('Select Country') }}</option>
@@ -129,7 +108,7 @@
                         </span>
                     @enderror
                 </div>
-                <div class="mb-4 col-md-4">
+                <div class="mb-4 col-md-6">
                     <label for="city" class="form-label">{{ __('City') }}</label>
                     <input class="form-control @error('city') is-invalid @enderror" type="text" id="city" name="city" value="{{$companySetting->city}}" placeholder="i.e. California" />
                     @error('city')
@@ -138,7 +117,7 @@
                         </span>
                     @enderror
                 </div>
-                <div class="mb-4 col-md-4">
+                <div class="mb-4 col-md-6">
                     <label for="zip" class="form-label">{{ __('Zip Code') }}</label>
                     <input type="text" class="form-control @error('zip') is-invalid @enderror" id="zip" name="zip" value="{{$companySetting->zip}}" placeholder="i.e. 231465" maxlength="6" />
                     @error('zip')
@@ -151,6 +130,38 @@
                     <label for="address" class="form-label">{{ __('Address') }}</label>
                     <input type="text" class="form-control @error('address') is-invalid @enderror" id="address" name="address" value="{{$companySetting->address}}" placeholder="{{ __('i.e. Beacon Main St. #55') }}" />
                     @error('address')
+                        <span class="invalid-feedback" role="alert">
+                            <strong>{{ $message }}</strong>
+                        </span>
+                    @enderror
+                </div>
+
+                <h5>Support Setup</h5>
+
+                <div class="mb-4 col-md-12">
+                    <label for="email" class="form-label">{{ __('Email') }}</label>
+                    <input class="form-control @error('email') is-invalid @enderror" type="email" id="email" name="email" value="{{$companySetting->email}}" placeholder="{{ __('Enter your email') }}" />
+                    @error('email')
+                        <span class="invalid-feedback" role="alert">
+                            <strong>{{ $message }}</strong>
+                        </span>
+                    @enderror
+                </div>
+                <div class="mb-4 col-md-12">
+                    <label class="form-label" for="phone_number">{{ __('Whatsapp Number') }}</label>
+                    <div class="input-group input-group-merge">
+                        <input type="text" id="phone_number" name="phone_number" class="form-control @error('phone_number') is-invalid @enderror" value="{{$companySetting->phone_number}}" placeholder="i.e. +1 202 555 0111" />
+                        @error('phone_number')
+                            <span class="invalid-feedback" role="alert">
+                                <strong>{{ $message }}</strong>
+                            </span>
+                        @enderror
+                    </div>
+                </div>
+                <div class="mb-4 col-md-12">
+                    <label for="telegram" class="form-label">{{ __('Telegram URL') }}</label>
+                    <input class="form-control @error('telegram') is-invalid @enderror" type="text" id="telegram" name="telegram" value="{{$companySetting->telegram}}" placeholder="{{ __('Enter your Telegram URL') }}" />
+                    @error('telegram')
                         <span class="invalid-feedback" role="alert">
                             <strong>{{ $message }}</strong>
                         </span>

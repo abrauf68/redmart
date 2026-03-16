@@ -25,6 +25,7 @@ return new class extends Migration
             $table->string('zip')->nullable();
             $table->string('address')->nullable();
             $table->string('phone_number')->nullable();
+            $table->string('telegram')->nullable();
             $table->string('email')->nullable();
             $table->timestamps();
         });
