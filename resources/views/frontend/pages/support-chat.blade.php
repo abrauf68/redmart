@@ -15,20 +15,19 @@
 </head>
 <body>
     <div id="crisp-container"></div>
-
     <!-- Crisp Chat Embedded -->
     <script type="text/javascript">
-        window.$crisp=[];
-        window.CRISP_WEBSITE_ID="1f3b7ed9-31fa-4e93-8f8a-e1626b27f811";
+        window.$crisp = [];
+        window.CRISP_WEBSITE_ID = "2b6de554-9720-419a-8d7c-669c0a40917d";
 
         (function() {
-            var d=document;
-            var s=d.createElement("script");
-            s.src="https://client.crisp.chat/l.js";
-            s.async=1;
+            var d = document;
+            var s = d.createElement("script");
+            s.src = "https://client.crisp.chat/l.js";
+            s.async = 1;
             s.onload = function() {
-                // Open chat automatically
-                $crisp.push(["do", "chat:show"]);
+                // 👇 THIS is the correct command
+                $crisp.push(["do", "chat:open"]);
             };
             d.getElementsByTagName("head")[0].appendChild(s);
         })();
