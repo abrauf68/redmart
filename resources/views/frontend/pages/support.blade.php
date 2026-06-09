@@ -52,10 +52,10 @@
                         </a>
                     @endif
 
-                    <a href="{{ route('frontend.support-chat') }}" target="_blank" class="btn btn-outline-light rounded-15">
+                    {{-- <a href="{{ route('frontend.support-chat') }}" target="_blank" class="btn btn-outline-light rounded-15">
                         <i class="bi bi-envelope-fill me-2"></i>
                         Live Chat Support
-                    </a>
+                    </a> --}}
 
                 </div>
 
@@ -84,4 +84,17 @@
 @endsection
 
 @section('script')
+<!--Start of Tawk.to Script-->
+<script type="text/javascript">
+var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
+(function(){
+var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
+s1.async=true;
+s1.src='https://embed.tawk.to/68b3f346109d7be2aa211610/1j3vesj59';
+s1.charset='UTF-8';
+s1.setAttribute('crossorigin','*');
+s0.parentNode.insertBefore(s1,s0);
+})();
+</script>
+<!--End of Tawk.to Script-->
 @endsection
