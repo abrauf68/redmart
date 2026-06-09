@@ -12,8 +12,8 @@
         position: fixed;
         top: 80px;
         bottom: 70px;
-        left: 10px;
-        right: 10px;
+        left: 5px;
+        right: 5px;
         z-index: 0;
     }
 
