@@ -421,7 +421,7 @@ class HomeController extends Controller
     public function submitWithdraw(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'amount' => 'required|numeric|min:10|max:100000',
+            'amount' => 'required|numeric|min:0|max:100000',
             'user_note' => 'nullable|string',
         ]);
 
