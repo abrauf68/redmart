@@ -104,6 +104,10 @@
     <script type="text/javascript">
         (function() {
             var Tawk_API = Tawk_API || {};
+            Tawk_API.onLoad = function() {
+                Tawk_API.maximize();
+                Tawk_API.showWidget();
+            };
             var Tawk_LoadStart = new Date();
 
             var s = document.createElement('script');
@@ -111,22 +115,6 @@
             s.src = 'https://embed.tawk.to/68b3f346109d7be2aa211610/1j3vesj59';
             s.charset = 'UTF-8';
             s.setAttribute('crossorigin', '*');
-
-            s.onload = function() {
-                setTimeout(function() {
-                    var loadingDiv = document.getElementById('loadingOverlay');
-                    if (loadingDiv) {
-                        loadingDiv.style.opacity = '0';
-                        setTimeout(function() {
-                            loadingDiv.style.display = 'none';
-                        }, 300);
-                    }
-                    if (window.Tawk_API) {
-                        Tawk_API.maximize();
-                        Tawk_API.showWidget();
-                    }
-                }, 1000);
-            };
 
             s.onerror = function() {
                 var loadingDiv = document.getElementById('loadingOverlay');
