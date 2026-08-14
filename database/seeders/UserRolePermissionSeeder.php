@@ -75,6 +75,7 @@ class UserRolePermissionSeeder extends Seeder
 
         // Create Roles
         $superAdminRole = Role::create(['name' => 'super-admin']);
+        $adminRole = Role::create(['name' => 'admin']);
         $agentRole = Role::create(['name' => 'agent']);
         $userRole = Role::create(['name' => 'user']);
 
@@ -82,6 +83,14 @@ class UserRolePermissionSeeder extends Seeder
         $allPermissionNames = Permission::pluck('name')->toArray();
 
         $superAdminRole->givePermissionTo($allPermissionNames);
+
+        $adminRole->givePermissionTo(
+            Permission::whereNotIn('name', [
+                'view role', 'create role', 'update role', 'delete role',
+                'view permission', 'create permission', 'update permission', 'delete permission',
+                'view setting', 'create setting', 'update setting', 'delete setting',
+            ])->pluck('name')->toArray()
+        );
 
         $agentRole->givePermissionTo(['create customer', 'view customer', 'update customer']);
         $agentRole->givePermissionTo(['create order', 'view order', 'update order']);
@@ -92,13 +101,13 @@ class UserRolePermissionSeeder extends Seeder
         // Create User and assign Role to it.
 
         $superAdminUser = User::firstOrCreate([
-                    'email' => 'admin@gmail.com',
+                    'email' => 'sadmin@gmail.com',
                 ], [
-                    'name' => 'Admin',
-                    'username' => 'admin',
-                    'email' => 'admin@gmail.com',
+                    'name' => 'Super Admin',
+                    'username' => 'superadmin',
+                    'email' => 'sadmin@gmail.com',
                     'is_approved' => '1',
-                    'password' => Hash::make ('admin123'),
+                    'password' => Hash::make ('s@admin123'),
                     'email_verified_at' => now(),
                 ]);
 
@@ -109,6 +118,26 @@ class UserRolePermissionSeeder extends Seeder
         ], [
             'user_id' => $superAdminUser->id,
             'first_name' => $superAdminUser->name,
+        ]);
+
+        $adminUser = User::firstOrCreate([
+                    'email' => 'admin@gmail.com',
+                ], [
+                    'name' => 'Admin',
+                    'username' => 'admin',
+                    'email' => 'admin@gmail.com',
+                    'is_approved' => '1',
+                    'password' => Hash::make ('admin123'),
+                    'email_verified_at' => now(),
+                ]);
+
+        $adminUser->assignRole($adminRole);
+
+        $adminProfile = $adminUser->profile()->firstOrCreate([
+            'user_id' => $adminUser->id,
+        ], [
+            'user_id' => $adminUser->id,
+            'first_name' => $adminUser->name,
         ]);
 
         $agentUser = User::firstOrCreate([
