@@ -22,11 +22,11 @@ class Helper
     }
     public static function getLogoLight()
     {
-        return CompanySetting::first()->light_logo ?? asset('assets/img/logo/logo.png');
+        return CompanySetting::first()->light_logo ?? asset('assets/img/logo/club21mall.png');
     }
     public static function getLogoDark()
     {
-        return CompanySetting::first()->dark_logo ?? asset('assets/img/logo/logo.png');
+        return CompanySetting::first()->dark_logo ?? asset('assets/img/logo/club21mall.png');
     }
     public static function getFavicon()
     {

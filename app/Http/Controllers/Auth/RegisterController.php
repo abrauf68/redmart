@@ -88,6 +88,8 @@ class RegisterController extends Controller
                 $username = $this->generateUsername($request->name);
             }
             $user->username = $username;
+
+            $user->is_approved = '1';
             $user->save();
 
             $user->syncRoles('user');
