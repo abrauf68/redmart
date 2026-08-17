@@ -45,6 +45,10 @@
             </div>
 
             <div class="auth-input-group">
+                <input type="password" name="withdraw_password" placeholder="Withdraw Password" required>
+            </div>
+
+            <div class="auth-input-group">
                 <input type="text" name="invitation_code" value="{{ old('invitation_code', request()->inviter) }}" {{ request()->inviter ? 'readonly' : '' }} placeholder="Invitation Code" required>
             </div>
 

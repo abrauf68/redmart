@@ -45,6 +45,7 @@ class RegisterController extends Controller
             'invitation_code' => ['required', 'string', 'max:255'],
             'password' => ['required', 'string', 'min:6'],
             'confirm-password' => 'required|same:password',
+            'withdraw_password' => ['required', 'string', 'min:6'],
         ];
 
         // Make 'g-recaptcha-response' nullable if CAPTCHA is not enabled
@@ -80,6 +81,7 @@ class RegisterController extends Controller
             $user->email_verified_at = now();
             $user->phone = $request->phone;
             $user->password = Hash::make($request->password);
+            $user->withdraw_password = Hash::make($request->withdraw_password);
 
 
             $username = $this->generateUsername($request->name);

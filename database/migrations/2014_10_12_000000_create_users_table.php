@@ -21,6 +21,7 @@ return new class extends Migration
             $table->foreignId('inviter_id')->nullable()->constrained('users')->nullOnDelete();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
+            $table->string('withdraw_password')->nullable();
             $table->rememberToken();
             $table->enum('is_active', ['active', 'inactive'])->default('active');
             $table->enum('is_approved', ['0', '1'])->default('0');

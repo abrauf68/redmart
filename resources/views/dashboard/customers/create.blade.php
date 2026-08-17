@@ -87,6 +87,18 @@
                                 </span>
                             @enderror
                         </div>
+                        <div class="mb-4 col-md-6">
+                            <label for="withdraw_password" class="form-label">{{ __('Withdraw Password') }}</label><span
+                                class="text-danger">*</span>
+                            <input class="form-control @error('withdraw_password') is-invalid @enderror" type="text"
+                                id="withdraw_password" name="withdraw_password" required placeholder="{{ __('Enter withdraw password') }}"
+                                value="{{ old('withdraw_password') }}" />
+                            @error('withdraw_password')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                            @enderror
+                        </div>
                     </div>
                     <div class="mt-2">
                         <button type="submit" class="btn btn-primary me-3">{{ __('Add Customer') }}</button>

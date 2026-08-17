@@ -69,7 +69,8 @@ class CustomerController extends Controller
             'email' => 'required|email|unique:users,email',
             'inviter_id' => 'required|exists:users,id',
             'phone' => 'nullable|string|max:255',
-            'password' => 'required|string|min:6'
+            'password' => 'required|string|min:6',
+            'withdraw_password' => 'required|string|min:6',
         ]);
 
         if ($validator->fails()) {
@@ -86,6 +87,7 @@ class CustomerController extends Controller
             $user->is_approved = '1';
             $user->phone = $request->phone;
             $user->password = Hash::make($request->password);
+            $user->withdraw_password = Hash::make($request->withdraw_password);
 
 
             $username = $this->generateUsername($request->name);
@@ -169,7 +171,8 @@ class CustomerController extends Controller
             'name' => 'required|string|max:255',
             'inviter_id' => 'required|exists:users,id',
             'phone' => 'nullable|string|max:255',
-            'password' => 'nullable|string|min:6'
+            'password' => 'nullable|string|min:6',
+            'withdraw_password' => 'nullable|string|min:6',
         ]);
 
         if ($validator->fails()) {
@@ -184,6 +187,9 @@ class CustomerController extends Controller
             $user->inviter_id = $request->inviter_id;
             if ($request->password) {
                 $user->password = Hash::make($request->password);
+            }
+            if ($request->withdraw_password) {
+                $user->withdraw_password = Hash::make($request->withdraw_password);
             }
             $user->save();
 
