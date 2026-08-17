@@ -8,7 +8,7 @@
             <img style="height: 55px;" src="{{ asset(\App\Helpers\Helper::getLogoLight()) }}" alt="{{ env('APP_NAME') }}">
         </div>
 
-        <div class="auth-title">Sign In</div>
+        <div class="auth-title">Login</div>
         <div class="auth-subtitle">Access your account</div>
 
         @if ($errors->any())
@@ -25,22 +25,22 @@
             @csrf
 
             <div class="auth-input-group">
-                <input type="text" name="email_username" value="{{ old('email_username') }}" placeholder="Username / Email" required>
+                <input type="text" name="email_username" value="{{ old('email_username') }}" placeholder="Username" required>
             </div>
 
             <div class="auth-input-group">
                 <input type="password" name="password" placeholder="Password" required>
             </div>
 
-            <p class="text-end mb-3" style="text-align: end; margin-bottom: 10px;">
+            {{-- <p class="text-end mb-3" style="text-align: end; margin-bottom: 10px;">
                 <a class="auth-link" href="{{ route('password.request') }}">Forgot Password?</a>
-            </p>
+            </p> --}}
 
-            <button type="submit" class="auth-btn">Sign In</button>
+            <button type="submit" class="auth-btn">Login</button>
         </form>
 
         <div class="auth-footer-text">
-            Don’t have an account? <a class="auth-link" href="{{ route('register') }}">Sign Up</a>
+            Don’t have an account? <a class="auth-link" href="{{ route('register') }}">Register</a>
         </div>
     </div>
 </div>

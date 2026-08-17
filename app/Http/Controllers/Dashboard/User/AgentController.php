@@ -112,7 +112,7 @@ class AgentController extends Controller
         $this->authorize('view agent');
 
         try {
-            $agent = User::with('wallet', 'referrals.wallet')->findOrFail($id);
+            $agent = User::with('wallet', 'referrals.wallet', 'referrals.reference')->findOrFail($id);
 
             $pendingReferralsCount = $agent->referrals()
                 ->where('is_approved', '0')

@@ -14,7 +14,26 @@
                     </div>
                     <div class="col px-0 align-self-center">
                         <h5 class="mb-2">{{ auth()->user()->name }}</h5>
-                        <p class="text-muted size-12">{{ auth()->user()->username }}<br>Credit Score: {{ auth()->user()->credit_score }}</p>
+                        <p class="text-muted size-12">
+                            <span>PH: {{ auth()->user()->phone }}</span><br>
+                            <span>Invite Code: <span id="inviteCode">{{ auth()->user()->username }}</span></span>
+
+                            <span id="copyIconWrap" style="cursor: pointer; display: inline-flex; vertical-align: middle;" onclick="copyInviteCode()" title="Copy">
+                                <!-- Copy Icon -->
+                                <svg id="copyIcon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <rect width="14" height="14" x="8" y="8" rx="2" ry="2"/>
+                                    <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/>
+                                </svg>
+
+                                <!-- Check Icon (hidden initially) -->
+                                <svg id="checkIcon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none;">
+                                    <path d="M20 6 9 17l-5-5"/>
+                                </svg>
+                            </span>
+
+                            <br>
+                            Credit Score: {{ auth()->user()->credit_score }}
+                        </p>
                     </div>
                 </div>
             </div>

@@ -88,7 +88,7 @@
                                 <thead class="table-light">
                                     <tr>
                                         <th>User</th>
-                                        <th>Email</th>
+                                        <th>Reference</th>
                                         <th>Balance</th>
                                         <th>Is Appr.</th>
                                         <th>Status</th>
@@ -108,7 +108,7 @@
                                                     </div>
                                                 </div>
                                             </td>
-                                            <td>{{ $referral->email }}</td>
+                                            <td>{{ $referral->reference ? $referral->reference->name : 'Direct' }}</td>
                                             <td>
                                                 {{ number_format(optional($referral->wallet)->balance ?? 0, 2) }}
                                             </td>

@@ -19,12 +19,13 @@
                  </a>
              </li>
              <li class="nav-item centerbutton">
-                 <a href="{{ route('frontend.start') }}" class="nav-link" id="centermenubtn">
-                     <span class="theme-linear-gradient">
-                         <i class="bi bi-play-circle-fill size-22"></i>
-                     </span>
-                 </a>
-             </li>
+                <a href="{{ route('frontend.start') }}" class="nav-link" id="centermenubtn">
+                    <span class="theme-linear-gradient center-btn-fix">
+                        <i class="bi bi-play-circle-fill size-22"></i>
+                        <span class="nav-text">Start</span>
+                    </span>
+                </a>
+            </li>
              <li class="nav-item">
                  <a class="nav-link {{ request()->routeIs('frontend.orders') ? 'active' : '' }}" href="{{ route('frontend.orders') }}">
                      <span>

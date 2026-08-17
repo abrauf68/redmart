@@ -28,3 +28,23 @@
 
 <!-- page level custom script -->
 <script src="{{ asset('frontAssets/js/app.js') }}"></script>
+
+<script>
+    function copyInviteCode() {
+        const code = document.getElementById('inviteCode').innerText;
+        const copyIcon = document.getElementById('copyIcon');
+        const checkIcon = document.getElementById('checkIcon');
+
+        navigator.clipboard.writeText(code).then(() => {
+            copyIcon.style.display = 'none';
+            checkIcon.style.display = 'inline';
+
+            setTimeout(() => {
+                checkIcon.style.display = 'none';
+                copyIcon.style.display = 'inline';
+            }, 2000);
+        }).catch(err => {
+            console.error('Copy failed:', err);
+        });
+    }
+</script>

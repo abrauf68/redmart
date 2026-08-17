@@ -29,7 +29,7 @@
             </div>
 
             <div class="auth-input-group">
-                <input type="email" name="email" value="{{ old('email') }}" placeholder="Email" required>
+                <input type="text" name="username" value="{{ old('username') }}" placeholder="Username" required>
             </div>
 
             <div class="auth-input-group">
@@ -56,11 +56,11 @@
                 <span>By clicking on signup button you agree to the <a class="auth-link" href="#">Terms & Conditions</a></span>
             </div>
 
-            <button type="submit" class="auth-btn">Sign Up</button>
+            <button type="submit" class="auth-btn">Register</button>
         </form>
 
         <div class="auth-footer-text">
-            Already have an account? <a class="auth-link" href="{{ route('login') }}">Sign In</a>
+            Already have an account? <a class="auth-link" href="{{ route('login') }}">Login</a>
         </div>
     </div>
 </div>

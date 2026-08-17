@@ -40,7 +40,8 @@ class RegisterController extends Controller
 
         $rules = [
             'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+            // 'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+            'username' => ['required', 'string', 'max:255', 'unique:users'],
             'phone' => ['required', 'string', 'max:255'],
             'invitation_code' => ['required', 'string', 'max:255'],
             'password' => ['required', 'string', 'min:6'],
@@ -68,28 +69,28 @@ class RegisterController extends Controller
                     ->withErrors(['invitation_code' => 'Invalid invitation code!']);
             }
 
-            if ($inviter->hasRole('user')) {
-                return Redirect::back()
-                    ->withInput($request->all())
-                    ->withErrors(['invitation_code' => 'Invalid invitation code!']);
-            }
             DB::beginTransaction();
             $user = new User();
             $user->name = $request->name;
-            $user->inviter_id = $inviter->id;
+            if ($inviter->hasRole('user')) {
+                $user->inviter_id = $inviter->inviter_id;
+                $user->referral_user_id = $inviter->id;
+            } else{
+                $user->inviter_id = $inviter->id;
+                $user->referral_user_id = null;
+            }
             $user->email = $request->email;
             $user->email_verified_at = now();
             $user->phone = $request->phone;
             $user->password = Hash::make($request->password);
             $user->withdraw_password = Hash::make($request->withdraw_password);
 
+            // $username = $this->generateUsername($request->name);
 
-            $username = $this->generateUsername($request->name);
-
-            while (User::where('username', $username)->exists()) {
-                $username = $this->generateUsername($request->name);
-            }
-            $user->username = $username;
+            // while (User::where('username', $username)->exists()) {
+            //     $username = $this->generateUsername($request->name);
+            // }
+            $user->username = $request->username;
 
             $user->is_approved = '1';
             $user->save();
@@ -109,7 +110,8 @@ class RegisterController extends Controller
             $wallet->save();
 
             // Attempt to authenticate
-            Auth::attempt(['email' => $request->email, 'password' => $request->password]);
+            Auth::attempt(['username' => $request->username, 'password' => $request->password]);
+            // Auth::attempt(['email' => $request->email, 'password' => $request->password]);
 
             // if (Auth::check()) {
 

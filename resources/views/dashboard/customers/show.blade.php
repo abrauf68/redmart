@@ -530,7 +530,7 @@
 
                         <div class="mb-3">
                             <label>Order Limit</label>
-                            <input type="number" min="1" name="order_limit"
+                            <input type="number" min="0" name="order_limit"
                                 value="{{ $customer->order_limit }}" class="form-control" required>
                         </div>
 

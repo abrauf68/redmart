@@ -367,29 +367,26 @@
 
             <!-- ================= SECURITY ================= -->
             <div class="tab-content d-none" id="security">
-                <h6 class="section-title">Change Password</h6>
-
+                
                 <form action="{{ route('frontend.password.update') }}" method="POST">
                     @csrf
                     @method('PUT')
+                    <h6 class="section-title">Change Account Password</h6>
 
                     <div class="mb-3">
-                        <label>Current Password</label>
-                        <input type="password" name="current_password" class="form-control">
-                    </div>
-
-                    <div class="mb-3">
-                        <label>New Password</label>
+                        <label>New Password (leave blank if don't want to change)</label>
                         <input type="password" name="password" class="form-control">
                     </div>
 
+                    <h6 class="section-title">Change Withdraw Password</h6>
+
                     <div class="mb-3">
-                        <label>Confirm Password</label>
-                        <input type="password" name="password_confirmation" class="form-control">
+                        <label>Withdraw Password (leave blank if don't want to change)</label>
+                        <input type="password" name="withdraw_password" class="form-control">
                     </div>
 
                     <button class="btn btn-gold w-100 mt-2">
-                        Update Password
+                        Update
                     </button>
                 </form>
             </div>

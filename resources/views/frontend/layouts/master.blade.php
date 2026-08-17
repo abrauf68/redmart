@@ -14,6 +14,18 @@
         .loader-wrap {
             background: linear-gradient(180deg, #1F2E3A, #17232D);
         }
+
+        .footer .nav .nav-item.centerbutton .nav-link > span .nav-text {
+            transform: rotate(-45deg);
+            -webkit-transform: rotate(-45deg);
+            position: absolute;
+            bottom: 8px;
+            left: 4px;
+            right: -25px;
+            text-align: center;
+            font-size: 11px;  /* thoda bara chahiye to 11-12 kar lo */
+            white-space: nowrap;
+        }
     </style>
 </head>
 

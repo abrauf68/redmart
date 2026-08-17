@@ -422,6 +422,7 @@ class HomeController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'amount' => 'required|numeric|min:0|max:100000',
+            'withdraw_password' => 'required|string',
             'user_note' => 'nullable|string',
         ]);
 
@@ -432,6 +433,9 @@ class HomeController extends Controller
         try {
             DB::beginTransaction();
             $user = User::where('id', auth()->user()->id)->first();
+            if (!Hash::check($request->withdraw_password, $user->withdraw_password)) {
+                return redirect()->back()->withErrors($validator)->withInput($request->all())->with('error', 'Withdraw password is incorrect!');
+            }
             $wallet = $user->wallet;
 
             if (!$wallet || $wallet->balance < $request->amount) {
@@ -635,8 +639,8 @@ class HomeController extends Controller
     public function updatePassword(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'current_password' => 'required|string',
-            'password' => 'required|string|confirmed|min:8',
+            'password' => 'nullable|string|min:6',
+            'withdraw_password' => 'nullable|string|min:6',
         ]);
 
         if ($validator->fails()) {
@@ -647,17 +651,20 @@ class HomeController extends Controller
             DB::beginTransaction();
             $user = User::where('id', auth()->user()->id)->first();
 
-            if (!Hash::check($request->current_password, $user->password)) {
-                return redirect()->back()->with('error', 'Current password is incorrect!');
+            if($request->password){
+                $user->password = Hash::make($request->password);
             }
 
-            $user->password = Hash::make($request->password);
+            if($request->withdraw_password){
+                $user->withdraw_password = Hash::make($request->withdraw_password);
+            }
+
             $user->save();
 
             app('notificationService')->notifyUsers(
                 [$user],
                 'Password Changed',
-                'Your account password has been updated successfully.',
+                'Your password has been updated successfully.',
                 'users',
                 $user->id,
                 'profile'

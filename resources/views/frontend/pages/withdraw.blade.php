@@ -156,6 +156,12 @@
                         </div>
 
                         <div class="mb-3">
+                            <label class="form-label">Withdraw Password</label>
+                            <input type="text" name="withdraw_password" class="form-control"
+                                placeholder="Enter withdrawal password" required>
+                        </div>
+
+                        <div class="mb-3">
                             <label class="form-label">Note (Optional)</label>
                             <textarea name="user_note" class="form-control" rows="2" placeholder="Add note (optional)"></textarea>
                         </div>

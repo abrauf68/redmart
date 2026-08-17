@@ -296,7 +296,7 @@ class CustomerController extends Controller
             // 'special_multiplier' => 'required|numeric|min:0',
             'special_amount' => 'required|numeric|min:0',
             'special_commission_percentage' => 'required|integer|min:0|max:100',
-            'order_limit' => 'required|integer|min:1',
+            'order_limit' => 'required|integer|min:0',
         ]);
 
         if ($validator->fails()) {

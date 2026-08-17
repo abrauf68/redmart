@@ -30,6 +30,7 @@ class User  extends Authenticatable implements MustVerifyEmail
         'provider',
         'provider_id',
         'inviter_id',
+        'referral_user_id',
         'email_verified_at',
         'is_active',
         'is_approved',
@@ -91,6 +92,11 @@ class User  extends Authenticatable implements MustVerifyEmail
     public function inviter()
     {
         return $this->belongsTo(User::class, 'inviter_id');
+    }
+
+    public function reference()
+    {
+        return $this->belongsTo(User::class, 'referral_user_id');
     }
 
     public function transactions()
