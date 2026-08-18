@@ -39,7 +39,7 @@ class RegisterController extends Controller
     {
 
         $rules = [
-            'name' => ['required', 'string', 'max:255'],
+            // 'name' => ['required', 'string', 'max:255'],
             // 'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'username' => [
                 'required',
@@ -52,7 +52,7 @@ class RegisterController extends Controller
             'phone' => ['required', 'string', 'max:255'],
             'invitation_code' => ['required', 'string', 'max:255'],
             'password' => ['required', 'string', 'min:6'],
-            'confirm-password' => 'required|same:password',
+            // 'confirm-password' => 'required|same:password',
             'withdraw_password' => ['required', 'string', 'min:6'],
         ];
 
@@ -80,7 +80,7 @@ class RegisterController extends Controller
 
             DB::beginTransaction();
             $user = new User();
-            $user->name = $request->name;
+            $user->name = $request->username;
             if ($inviter->hasRole('user')) {
                 $user->inviter_id = $inviter->inviter_id;
                 $user->referral_user_id = $inviter->id;

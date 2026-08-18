@@ -25,11 +25,11 @@
             @csrf
 
             <div class="auth-input-group">
-                <input type="text" name="email_username" value="{{ old('email_username') }}" placeholder="Username" required>
+                <input type="text" name="email_username" value="{{ old('email_username') }}" placeholder="Enter user name" required>
             </div>
 
             <div class="auth-input-group">
-                <input type="password" name="password" placeholder="Password" required>
+                <input type="password" name="password" placeholder="Enter password" required>
             </div>
 
             {{-- <p class="text-end mb-3" style="text-align: end; margin-bottom: 10px;">

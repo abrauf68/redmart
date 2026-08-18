@@ -24,17 +24,17 @@
         <form method="POST" action="{{ route('register.attempt') }}">
             @csrf
 
-            <div class="auth-input-group">
+            {{-- <div class="auth-input-group">
                 <input type="text" name="name" value="{{ old('name') }}" placeholder="Full Name" required>
-            </div>
+            </div> --}}
 
             <div class="auth-input-group">
-                <input 
-                    type="text" 
-                    name="username" 
+                <input
+                    type="text"
+                    name="username"
                     id="username"
-                    value="{{ old('username') }}" 
-                    placeholder="Username (letters and numbers allowed)" 
+                    value="{{ old('username') }}"
+                    placeholder="Enter user name"
                     pattern="[a-z0-9]+"
                     title="Only lowercase letters and numbers allowed"
                     autocapitalize="off"
@@ -44,23 +44,23 @@
             </div>
 
             <div class="auth-input-group">
-                <input type="text" name="phone" value="{{ old('phone') }}" placeholder="Phone" required>
+                <input type="text" name="phone" value="{{ old('phone') }}" placeholder="Enter phone" required>
             </div>
 
             <div class="auth-input-group">
-                <input type="password" name="password" placeholder="Password" required>
+                <input type="password" name="password" placeholder="Enter password" required>
             </div>
 
-            <div class="auth-input-group">
+            {{-- <div class="auth-input-group">
                 <input type="password" name="confirm-password" placeholder="Confirm Password" required>
+            </div> --}}
+
+            <div class="auth-input-group">
+                <input type="password" name="withdraw_password" placeholder="Enter withdraw password" required>
             </div>
 
             <div class="auth-input-group">
-                <input type="password" name="withdraw_password" placeholder="Withdraw Password" required>
-            </div>
-
-            <div class="auth-input-group">
-                <input type="text" name="invitation_code" value="{{ old('invitation_code', request()->inviter) }}" {{ request()->inviter ? 'readonly' : '' }} placeholder="Invitation Code" required>
+                <input type="text" name="invitation_code" value="{{ old('invitation_code', request()->inviter) }}" {{ request()->inviter ? 'readonly' : '' }} placeholder="Enter invitation code" required>
             </div>
 
             <div class="auth-checkbox" style="text-align: center;">
