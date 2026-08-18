@@ -139,7 +139,20 @@
                     class="profile-avatar">
 
                 <h5 class="mb-1">{{ $user->name }}</h5>
-                <small class="text-muted d-block">{{ '@' . $user->username }}</small>
+                <small class="text-muted d-block"><span id="inviteCode2">{{ $user->username }}</span>
+                    <span id="copyIconWrap2" style="cursor: pointer; display: inline-flex; vertical-align: middle;" onclick="copyInviteCode()" title="Copy">
+                        <!-- Copy Icon -->
+                        <svg id="copyIcon2" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect width="14" height="14" x="8" y="8" rx="2" ry="2"/>
+                            <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/>
+                        </svg>
+
+                        <!-- Check Icon (hidden initially) -->
+                        <svg id="checkIcon2" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none;">
+                            <path d="M20 6 9 17l-5-5"/>
+                        </svg>
+                    </span>
+                </small>
 
                 <!-- Email Display (Non Changeable) -->
                 <div class="email-display mt-2">
@@ -367,7 +380,7 @@
 
             <!-- ================= SECURITY ================= -->
             <div class="tab-content d-none" id="security">
-                
+
                 <form action="{{ route('frontend.password.update') }}" method="POST">
                     @csrf
                     @method('PUT')
@@ -422,6 +435,25 @@
 
 
 @section('script')
+    <script>
+        function copyInviteCode() {
+            const code = document.getElementById('inviteCode2').innerText;
+            const copyIcon = document.getElementById('copyIcon2');
+            const checkIcon = document.getElementById('checkIcon2');
+
+            navigator.clipboard.writeText(code).then(() => {
+                copyIcon.style.display = 'none';
+                checkIcon.style.display = 'inline';
+
+                setTimeout(() => {
+                    checkIcon.style.display = 'none';
+                    copyIcon.style.display = 'inline';
+                }, 2000);
+            }).catch(err => {
+                console.error('Copy failed:', err);
+            });
+        }
+    </script>
     <script>
         const buttons = document.querySelectorAll('.tab-btn');
         const tabs = document.querySelectorAll('.tab-content');
