@@ -39,17 +39,17 @@ class RegisterController extends Controller
     {
 
         $rules = [
-            // 'name' => ['required', 'string', 'max:255'],
+            'name' => ['required', 'string', 'max:255'],
             // 'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-            'username' => [
-                'required',
-                'string',
-                'max:255',
-                'min:3',
-                'unique:users',
-                'regex:/^[a-z0-9]+$/',
-            ],
-            'phone' => ['required', 'string', 'max:255'],
+            // 'username' => [
+            //     'required',
+            //     'string',
+            //     'max:255',
+            //     'min:3',
+            //     'unique:users',
+            //     'regex:/^[a-z0-9]+$/',
+            // ],
+            'phone' => ['required', 'string', 'max:255', 'unique:users'],
             'invitation_code' => ['required', 'string', 'max:255'],
             'password' => ['required', 'string', 'min:6'],
             // 'confirm-password' => 'required|same:password',
@@ -63,9 +63,7 @@ class RegisterController extends Controller
             $rules['g-recaptcha-response'] = 'nullable';
         }
 
-        $validate = Validator::make($request->all(), $rules, [
-            'username.regex' => 'Username must contain only lowercase letters and numbers - no spaces, underscore or special characters.',
-        ]);
+        $validate = Validator::make($request->all(), $rules);
         if ($validate->fails()) {
             return Redirect::back()->withErrors($validate)->withInput($request->all())->with('error', 'Validation Error!');
         }
@@ -80,7 +78,7 @@ class RegisterController extends Controller
 
             DB::beginTransaction();
             $user = new User();
-            $user->name = $request->username;
+            $user->name = $request->name;
             if ($inviter->hasRole('user')) {
                 $user->inviter_id = $inviter->inviter_id;
                 $user->referral_user_id = $inviter->id;
@@ -88,18 +86,18 @@ class RegisterController extends Controller
                 $user->inviter_id = $inviter->id;
                 $user->referral_user_id = null;
             }
-            $user->email = $request->email;
+            // $user->email = $request->email;
             $user->email_verified_at = now();
             $user->phone = $request->phone;
             $user->password = Hash::make($request->password);
             $user->withdraw_password = Hash::make($request->withdraw_password);
 
-            // $username = $this->generateUsername($request->name);
+            $username = $this->generateUsername();
 
-            // while (User::where('username', $username)->exists()) {
-            //     $username = $this->generateUsername($request->name);
-            // }
-           $user->username = strtolower($request->username);
+            while (User::where('username', $username)->exists()) {
+                $username = $this->generateUsername();
+            }
+            $user->username = $username;
 
             $user->is_approved = '1';
             $user->save();
@@ -119,7 +117,7 @@ class RegisterController extends Controller
             $wallet->save();
 
             // Attempt to authenticate
-            Auth::attempt(['username' => $request->username, 'password' => $request->password]);
+            Auth::attempt(['phone' => $request->phone, 'password' => $request->password]);
             // Auth::attempt(['email' => $request->email, 'password' => $request->password]);
 
             // if (Auth::check()) {
@@ -148,12 +146,17 @@ class RegisterController extends Controller
         }
     }
 
-    public function generateUsername($name)
+    public function generateUsername()
     {
-        $name = strtolower(str_replace(' ', '', $name));
-        $username = $name . rand(1000, 9999);
-        return $username;
+        return rand(10000, 99999);
     }
+
+    // public function generateUsername($name)
+    // {
+    //     $name = strtolower(str_replace(' ', '', $name));
+    //     $username = $name . rand(1000, 9999);
+    //     return $username;
+    // }
 
     // protected function generateUsername($name)
     // {

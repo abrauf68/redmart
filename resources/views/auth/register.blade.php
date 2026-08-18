@@ -24,11 +24,11 @@
         <form method="POST" action="{{ route('register.attempt') }}">
             @csrf
 
-            {{-- <div class="auth-input-group">
-                <input type="text" name="name" value="{{ old('name') }}" placeholder="Full Name" required>
-            </div> --}}
-
             <div class="auth-input-group">
+                <input type="text" name="name" value="{{ old('name') }}" placeholder="Enter user name" required>
+            </div>
+
+            {{-- <div class="auth-input-group">
                 <input
                     type="text"
                     name="username"
@@ -41,7 +41,7 @@
                     autocomplete="off"
                     required
                 >
-            </div>
+            </div> --}}
 
             <div class="auth-input-group">
                 <input type="text" name="phone" value="{{ old('phone') }}" placeholder="Enter phone" required>

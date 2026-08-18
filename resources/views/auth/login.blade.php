@@ -24,8 +24,12 @@
         <form method="POST" action="{{ route('login.attempt') }}">
             @csrf
 
-            <div class="auth-input-group">
+            {{-- <div class="auth-input-group">
                 <input type="text" name="email_username" value="{{ old('email_username') }}" placeholder="Enter user name" required>
+            </div> --}}
+
+            <div class="auth-input-group">
+                <input type="text" name="phone" value="{{ old('phone') }}" placeholder="Enter phone" required>
             </div>
 
             <div class="auth-input-group">

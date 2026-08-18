@@ -104,6 +104,7 @@ class UserRolePermissionSeeder extends Seeder
                     'email' => 'sadmin@gmail.com',
                 ], [
                     'name' => 'Super Admin',
+                    'phone' => '9200000000',
                     'username' => 'superadmin',
                     'email' => 'sadmin@gmail.com',
                     'is_approved' => '1',
@@ -124,6 +125,7 @@ class UserRolePermissionSeeder extends Seeder
                     'email' => 'admin@gmail.com',
                 ], [
                     'name' => 'Admin',
+                    'phone' => '9211111111',
                     'username' => 'admin',
                     'email' => 'admin@gmail.com',
                     'is_approved' => '1',
@@ -141,15 +143,16 @@ class UserRolePermissionSeeder extends Seeder
         ]);
 
         $agentUser = User::firstOrCreate([
-                            'email' => 'agent@gmail.com'
-                        ], [
-                            'name' => 'agent',
-                            'username' => 'agent',
-                            'email' => 'agent@gmail.com',
-                            'is_approved' => '1',
-                            'password' => Hash::make ('12345678'),
-                            'email_verified_at' => now(),
-                        ]);
+            'email' => 'agent@gmail.com'
+        ], [
+            'name' => 'agent',
+            'phone' => '9222222222',
+            'username' => 'agent',
+            'email' => 'agent@gmail.com',
+            'is_approved' => '1',
+            'password' => Hash::make ('12345678'),
+            'email_verified_at' => now(),
+        ]);
 
         $agentUser->assignRole($agentRole);
 

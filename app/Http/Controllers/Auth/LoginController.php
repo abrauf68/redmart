@@ -35,7 +35,8 @@ class LoginController extends Controller
     {
         // Validate the form
         $rules = [
-            'email_username' => 'required|max:50',
+            'phone' => 'required|string|max:50',
+            // 'email_username' => 'required|max:50',
             'password' => 'required',
         ];
 
@@ -54,20 +55,22 @@ class LoginController extends Controller
         try {
             // Determine whether the input is an email or username
             $userfind = null;
-            if (filter_var($request->email_username, FILTER_VALIDATE_EMAIL)) {
-                // If it's an email, search by email
-                $userfind = User::where('email', $request->email_username)->first();
-            } else {
-                // If it's not an email, assume it's a username and search by username
-                $userfind = User::where('username', $request->email_username)->first();
-            }
+            // if (filter_var($request->email_username, FILTER_VALIDATE_EMAIL)) {
+            //     // If it's an email, search by email
+            //     $userfind = User::where('email', $request->email_username)->first();
+            // } else {
+            //     // If it's not an email, assume it's a username and search by username
+            //     $userfind = User::where('username', $request->email_username)->first();
+            // }
+
+            $userfind = User::where('phone', $request->phone)->first();
 
             if ($userfind) {
                 // Check if the password is correct
                 if (Hash::check($request->password, $userfind->password)) {
                     // Password matched
                     $remember_me = $request->remember ? true : false;
-                    Auth::attempt(['email' => $userfind->email, 'password' => $request->password], $remember_me);
+                    Auth::login($userfind, $remember_me);
 
                     if (Auth::check()) {
                         $user = User::findOrFail(auth()->user()->id);
