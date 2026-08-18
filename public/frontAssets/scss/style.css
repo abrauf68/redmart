@@ -14120,7 +14120,7 @@ a.card {
   -moz-align-self: center;
   height: 100%;
   line-height: 44px;
-  color: var(--oneuiux-theme-text-secondary);
+  color: #000;
   padding: calc(var(--oneuiux-padding) - 5px) calc(var(--oneuiux-padding) - 10px);
 }
 .footer .nav .nav-item .nav-link span {
