@@ -29,7 +29,18 @@
             </div>
 
             <div class="auth-input-group">
-                <input type="text" name="username" value="{{ old('username') }}" placeholder="Username" required>
+                <input 
+                    type="text" 
+                    name="username" 
+                    id="username"
+                    value="{{ old('username') }}" 
+                    placeholder="Username (letters and numbers allowed)" 
+                    pattern="[a-z0-9]+"
+                    title="Only lowercase letters and numbers allowed"
+                    autocapitalize="off"
+                    autocomplete="off"
+                    required
+                >
             </div>
 
             <div class="auth-input-group">
@@ -64,4 +75,19 @@
         </div>
     </div>
 </div>
+<script>
+document.getElementById('username').addEventListener('input', function (e) {
+    let cursorPos = e.target.selectionStart;
+    let original = e.target.value;
+
+    // Lowercase + remove anything that's not a-z or 0-9
+    let cleaned = original.toLowerCase().replace(/[^a-z0-9]/g, '');
+
+    if (original !== cleaned) {
+        e.target.value = cleaned;
+        let diff = original.length - cleaned.length;
+        e.target.setSelectionRange(cursorPos - diff, cursorPos - diff);
+    }
+});
+</script>
 @endsection

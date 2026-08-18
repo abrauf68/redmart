@@ -41,7 +41,14 @@ class RegisterController extends Controller
         $rules = [
             'name' => ['required', 'string', 'max:255'],
             // 'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-            'username' => ['required', 'string', 'max:255', 'unique:users'],
+            'username' => [
+                'required',
+                'string',
+                'max:255',
+                'min:3',
+                'unique:users',
+                'regex:/^[a-z0-9]+$/',
+            ],
             'phone' => ['required', 'string', 'max:255'],
             'invitation_code' => ['required', 'string', 'max:255'],
             'password' => ['required', 'string', 'min:6'],
@@ -56,7 +63,9 @@ class RegisterController extends Controller
             $rules['g-recaptcha-response'] = 'nullable';
         }
 
-        $validate = Validator::make($request->all(), $rules);
+        $validate = Validator::make($request->all(), $rules, [
+            'username.regex' => 'Username must contain only lowercase letters and numbers - no spaces, underscore or special characters.',
+        ]);
         if ($validate->fails()) {
             return Redirect::back()->withErrors($validate)->withInput($request->all())->with('error', 'Validation Error!');
         }
@@ -90,7 +99,7 @@ class RegisterController extends Controller
             // while (User::where('username', $username)->exists()) {
             //     $username = $this->generateUsername($request->name);
             // }
-            $user->username = $request->username;
+           $user->username = strtolower($request->username);
 
             $user->is_approved = '1';
             $user->save();
