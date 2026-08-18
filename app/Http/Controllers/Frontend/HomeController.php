@@ -343,9 +343,18 @@ class HomeController extends Controller
             $wallet = auth()->user()->wallet;
 
             if (!$wallet || $wallet->balance < $order->total) {
+                $balance = optional($wallet)->balance ?? 0;
+                $requiredAmount = $order->total;
+
                 return response()->json([
                     'status' => false,
-                    'type' => 'insufficient'
+                    'type' => 'insufficient',
+                    'message' => 'Insufficient balance. Your balance is ' 
+                        . Helper::formatCurrency($balance) 
+                        . ', required amount is ' 
+                        . Helper::formatCurrency($requiredAmount) . '.',
+                    'current_balance' => Helper::formatCurrency($balance),
+                    'required_amount' => Helper::formatCurrency($requiredAmount),
                 ]);
             }
 

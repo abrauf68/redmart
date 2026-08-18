@@ -478,11 +478,13 @@
                         setTimeout(() => location.reload(), 2500);
 
                     } else if (data.type === 'insufficient') {
-
-                        new bootstrap.Modal(
-                            document.getElementById('insufficientModal')
-                        ).show();
-
+                        // agar message dikhana ho insufficientModal ke andar
+                        const insufficientBody = document.querySelector('#insufficientModal .modal-body') 
+                            || document.querySelector('#insufficientModal p.small');
+                        if (insufficientBody) {
+                            insufficientBody.innerText = data.message || 'Please recharge your account to proceed this order.';
+                        }
+                        new bootstrap.Modal(document.getElementById('insufficientModal')).show();
                     } else {
                         alert("Something went wrong.");
                     }
