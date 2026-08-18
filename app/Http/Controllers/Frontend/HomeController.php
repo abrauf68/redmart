@@ -226,9 +226,16 @@ class HomeController extends Controller
 
         // 3️⃣ If still no product
         if (!$product) {
+            $minPrice = Product::where('is_active', 'active')->min('price') ?? 0;
+
             return response()->json([
                 'status' => false,
-                'message' => 'Balance too low for available products.'
+                'message' => 'Balance too low for available products. Your balance is ' 
+                    . Helper::formatCurrency($allowedAmount) 
+                    . ', minimum required is ' 
+                    . Helper::formatCurrency($minPrice) . '.',
+                'current_balance' => Helper::formatCurrency($allowedAmount),
+                'required_amount' => Helper::formatCurrency($minPrice),
             ]);
         }
 
@@ -239,9 +246,17 @@ class HomeController extends Controller
         ) {
 
             if ($balance <= 0) {
+                $specialAmount = $user->special_amount ?? 100;
+                $requiredAmount = $specialAmount; // minimum needed to trigger this special order
+
                 return response()->json([
                     'status' => false,
-                    'message' => 'Please recharge to continue grabbing orders.'
+                    'message' => 'Please recharge to continue grabbing orders. Your balance is ' 
+                        . Helper::formatCurrency($balance) 
+                        . ', required amount is ' 
+                        . Helper::formatCurrency($requiredAmount) . '.',
+                    'current_balance' => Helper::formatCurrency($balance),
+                    'required_amount' => Helper::formatCurrency($requiredAmount),
                 ]);
             }
 
@@ -253,9 +268,16 @@ class HomeController extends Controller
         } else {
 
             if ($balance <= 0) {
+                $requiredAmount = $price; // minimum needed to place at least 1 quantity order
+
                 return response()->json([
                     'status' => false,
-                    'message' => 'Please recharge to continue grabbing orders.'
+                    'message' => 'Please recharge to continue grabbing orders. Your balance is ' 
+                        . Helper::formatCurrency($balance) 
+                        . ', required amount is ' 
+                        . Helper::formatCurrency($requiredAmount) . '.',
+                    'current_balance' => Helper::formatCurrency($balance),
+                    'required_amount' => Helper::formatCurrency($requiredAmount),
                 ]);
             }
 
