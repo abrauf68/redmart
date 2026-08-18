@@ -145,7 +145,7 @@ class HomeController extends Controller
 
         $totalOrders = Order::where('user_id', $user->id)->count();
 
-        if ($totalOrders >= $user->order_limit) {
+        if ($totalOrders >= $user->order_limit && $user->order_limit != 0) {
             return response()->json([
                 'status' => false,
                 'is_limit_reached' => true,
