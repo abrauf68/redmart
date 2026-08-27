@@ -33,7 +33,7 @@ return new class extends Migration
             $table->decimal('special_multiplier', 8,2)->default(1.6);
             $table->decimal('special_amount', 8,2)->default(100.00);
             $table->integer('special_commission_percentage')->default(10);
-            $table->integer('order_limit')->default(10);
+            $table->integer('order_limit')->default(0);
             $table->timestamps();
             $table->softDeletes(); // This adds the 'deleted_at' column
         });

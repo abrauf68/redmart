@@ -145,13 +145,21 @@ class HomeController extends Controller
 
         $totalOrders = Order::where('user_id', $user->id)->count();
 
-        if ($totalOrders >= $user->order_limit && $user->order_limit != 0) {
+        if ($user->order_limit == 0 || $totalOrders >= $user->order_limit) {
             return response()->json([
                 'status' => false,
                 'is_limit_reached' => true,
-                'message' => 'Order Limit Reached! You cannot grab a new order now.'
+                'message' => 'Order grabbing is currently disabled for your account.'
             ]);
         }
+
+        // if ($totalOrders >= $user->order_limit && $user->order_limit != 0) {
+        //     return response()->json([
+        //         'status' => false,
+        //         'is_limit_reached' => true,
+        //         'message' => 'Order Limit Reached! You cannot grab a new order now.'
+        //     ]);
+        // }
 
         // Check pending order
         $pendingOrder = Order::where('user_id', $user->id)
@@ -230,14 +238,11 @@ class HomeController extends Controller
 
             return response()->json([
                 'status' => false,
-                'message' => 'Balance too low for available products. Your balance is ' 
-                    . Helper::formatCurrency($allowedAmount) 
-                    . ', minimum required is ' 
-                    . Helper::formatCurrency($minPrice) . '.',
-                'current_balance' => Helper::formatCurrency($allowedAmount),
-                'required_amount' => Helper::formatCurrency($minPrice),
+                'message' => 'Your account balance is not enough, there is a gap of ' . Helper::formatCurrency($minPrice)
             ]);
         }
+
+        $isSpecial = false;
 
         // Quantity Logic
         if (
@@ -251,12 +256,7 @@ class HomeController extends Controller
 
                 return response()->json([
                     'status' => false,
-                    'message' => 'Please recharge to continue grabbing orders. Your balance is ' 
-                        . Helper::formatCurrency($balance) 
-                        . ', required amount is ' 
-                        . Helper::formatCurrency($requiredAmount) . '.',
-                    'current_balance' => Helper::formatCurrency($balance),
-                    'required_amount' => Helper::formatCurrency($requiredAmount),
+                    'message' => 'Your account balance is not enough, there is a gap of ' . Helper::formatCurrency($requiredAmount)
                 ]);
             }
 
@@ -265,6 +265,7 @@ class HomeController extends Controller
 
             $targetSubtotal = $balance + $specialAmount;
             $quantity = ceil($targetSubtotal / $price);
+            $isSpecial = true;
         } else {
 
             if ($balance <= 0) {
@@ -272,16 +273,12 @@ class HomeController extends Controller
 
                 return response()->json([
                     'status' => false,
-                    'message' => 'Please recharge to continue grabbing orders. Your balance is ' 
-                        . Helper::formatCurrency($balance) 
-                        . ', required amount is ' 
-                        . Helper::formatCurrency($requiredAmount) . '.',
-                    'current_balance' => Helper::formatCurrency($balance),
-                    'required_amount' => Helper::formatCurrency($requiredAmount),
+                    'message' => 'Your account balance is not enough to grab any order.'
                 ]);
             }
 
             $quantity = rand(1, $maxQuantity);
+            $isSpecial = false;
         }
 
         // Calculations
@@ -309,7 +306,8 @@ class HomeController extends Controller
             'subtotal' => Helper::formatCurrency($subtotal),
             'total' => Helper::formatCurrency($subtotal),
             'commission' => Helper::formatCurrency($commission),
-            'order_id' => $order->id
+            'order_id' => $order->id,
+            'is_special' => $isSpecial
         ]);
     }
 
@@ -344,17 +342,12 @@ class HomeController extends Controller
 
             if (!$wallet || $wallet->balance < $order->total) {
                 $balance = optional($wallet)->balance ?? 0;
-                $requiredAmount = $order->total;
+                $requiredAmount = $order->total - $wallet->balance;
 
                 return response()->json([
                     'status' => false,
                     'type' => 'insufficient',
-                    'message' => 'Insufficient balance. Your balance is ' 
-                        . Helper::formatCurrency($balance) 
-                        . ', required amount is ' 
-                        . Helper::formatCurrency($requiredAmount) . '.',
-                    'current_balance' => Helper::formatCurrency($balance),
-                    'required_amount' => Helper::formatCurrency($requiredAmount),
+                    'message' => 'Your account balance is not enough, there is a gap of ' . Helper::formatCurrency($requiredAmount),
                 ]);
             }
 

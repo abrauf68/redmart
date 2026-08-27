@@ -305,6 +305,24 @@
             </div>
         </div>
     </div>
+
+    <!-- Special Order Congrats Modal -->
+    <div class="modal fade" id="specialModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered modal-sm">
+            <div class="modal-content rounded-20 text-center p-4" style="background:#1F2E3A;color:#fff;">
+                <div class="mb-3">
+                    <i class="bi bi-stars" style="font-size:50px;color:#ffc107;"></i>
+                </div>
+                <h5 class="text-warning mb-2">Congratulations!</h5>
+                <p class="small mb-3">
+                    You got a special order 🎉
+                </p>
+                <button type="button" class="btn btn-warning rounded-15 w-100" data-bs-dismiss="modal">
+                    OK
+                </button>
+            </div>
+        </div>
+    </div>
 @endsection
 
 @section('script')
@@ -348,7 +366,20 @@
                             .order_id);
 
                         // Show order modal
-                        new bootstrap.Modal(document.getElementById('orderModal')).show();
+                        if (data.is_special) {
+                            // Pehle congrats modal dikhao
+                            const specialModalEl = document.getElementById('specialModal');
+                            new bootstrap.Modal(specialModalEl).show();
+
+                            // Jab OK dabey (modal close ho) tou order modal dikhao
+                            specialModalEl.addEventListener('hidden.bs.modal', function handler() {
+                                new bootstrap.Modal(document.getElementById('orderModal')).show();
+                                specialModalEl.removeEventListener('hidden.bs.modal', handler);
+                            });
+                        } else {
+                            // Pehle jesa hi behavior
+                            new bootstrap.Modal(document.getElementById('orderModal')).show();
+                        }
 
                     } else {
                         if (data.is_limit_reached) {
